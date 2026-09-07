@@ -2,7 +2,7 @@
 
 ## Brand hero (home page first screen)
 
-The home hero no longer uses the featured event image. It shows a fixed brand image: `public/brand/hero-portrait.webp` (phones, portrait, ~1080×1920) and `public/brand/hero-landscape.webp` (≥700px, ~2400×1350). Both were generated with AI (a women's night walk through an old Jerusalem alley under string lights), converted to WebP at quality 82. `hero-portrait-rooftop.webp` is an alternative portrait (rooftop dinner with city lights) kept for the client to choose from. Text is overlaid on the lower 45% of the portrait crop, so keep that area darker.
+The home hero no longer uses the featured event image. It cross-fades three brand scenes every 4 seconds (`components/HeroSlides.tsx`): `public/brand/hero-{rooftop,alley,beach}-portrait.webp` for phones and `hero-*-landscape.webp` from 700px up. Only the first scene loads before first paint; the others are fetched about a second later. Reduced-motion users get a single still image. Both were generated with AI (a women's night walk through an old Jerusalem alley under string lights), converted to WebP at quality 82. `hero-portrait-rooftop.webp` is an alternative portrait (rooftop dinner with city lights) kept for the client to choose from. Text is overlaid on the lower 45% of the portrait crop, so keep that area darker.
 
 ## Current night identity
 

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getEvents } from "@/lib/events";
 import { dateLabel } from "@/lib/types";
 import { Header, Footer, EventCard } from "@/components/Public";
+import { HeroSlides } from "@/components/HeroSlides";
 
 export const dynamic = "force-dynamic";
 
@@ -17,17 +18,7 @@ export default async function Home() {
       <main id="main">
         <section className="show-hero">
           <div className="show-hero-image">
-            <picture>
-              <source
-                media="(min-width: 700px)"
-                srcSet="/brand/hero-landscape.webp"
-              />
-              <img
-                src="/brand/hero-portrait.webp"
-                alt=""
-                fetchPriority="high"
-              />
-            </picture>
+            <HeroSlides />
           </div>
           <div className="show-hero-shade" />
           <div className="show-hero-content page-width">
