@@ -4,6 +4,10 @@
 
 The home hero no longer uses the featured event image. It cross-fades three brand scenes every 4 seconds (`components/HeroSlides.tsx`): `public/brand/hero-{rooftop,alley,beach}-portrait.webp` for phones and `hero-*-landscape.webp` from 700px up. Only the first scene loads before first paint; the others are fetched about a second later. Reduced-motion users get a single still image. Both were generated with AI (a women's night walk through an old Jerusalem alley under string lights), converted to WebP at quality 82. `hero-portrait-rooftop.webp` is an alternative portrait (rooftop dinner with city lights) kept for the client to choose from. Text is overlaid on the lower 45% of the portrait crop, so keep that area darker.
 
+## Demo event images (temporary)
+
+`public/demo/event-torah.webp`, `event-challah.webp` and `event-empowerment.webp` back the three newer demo events (Torah class with a rabbanit, challah separation, women's empowerment evening). They are temporary copies of the brand hero scenes until dedicated images are generated; see the prompts the client received in chat. Event images are a single file per event, used as a portrait poster on phones and a wide poster on desktop, so a 4:5 composition with the subject centred crops best.
+
 ## Current night identity
 
 Active assets: `public/demo/women-kotel-night.webp` and `public/demo/women-purim.webp`. The daytime Western Wall photograph is retained as an unused earlier variant. The night photograph was created with the built-in imagegen tool and optimized to WebP. Final prompt:

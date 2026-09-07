@@ -15,14 +15,14 @@ async function main() {
   if (process.env.NODE_ENV === "production")
     throw Error("Demo seeding is disabled in production.");
   process.env.DATABASE_PATH = path.resolve("data/demo.sqlite");
-  const existing = await query<{ n: number }>(
-    "SELECT count(*) AS n FROM events",
-  );
-  if (existing.rows[0].n) {
+  // Idempotent per event: only titles that are not in the demo database yet are created.
+  const existing = await query<{ title: string }>("SELECT title FROM events");
+  const known = new Set(existing.rows.map((r) => r.title));
+  const definitions = demoEvents.filter((d) => !known.has(d.title));
+  if (!definitions.length) {
     console.log("Demo data already exists; no changes made.");
     return;
   }
-  const definitions = demoEvents;
   for (const def of definitions) {
     const uploadDir = process.env.UPLOAD_DIR || "uploads";
     fs.mkdirSync(uploadDir, { recursive: true });
