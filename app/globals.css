@@ -3480,3 +3480,29 @@ button.roster-fact {
     top: 0;
   }
 }
+
+/* Roster colour pass: one loud action per screen, not per row. */
+.row-action.approve {
+  background: #ff5c8a14;
+  border: 1.5px solid #ff5c8a99;
+  color: var(--gold);
+}
+.row-action.approve:hover,
+.row-action.approve:focus-visible {
+  background: var(--gold);
+  color: var(--ink);
+}
+.row-pending .avatar,
+.row-waitlist .avatar {
+  color: var(--muted);
+  border-color: #d9c6ff22;
+}
+.roster-bulk .button:first-child:has(svg.lucide-check-check) {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  font-weight: 800;
+}
+.roster-bulk .button:first-child:has(svg.lucide-check-check):hover {
+  background: #ff7aa0;
+}
