@@ -5,12 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import {
   ArrowUpLeft,
   CalendarPlus,
-  Check,
   Heart,
   Loader2,
   MessageCircle,
 } from "lucide-react";
-import { Spark } from "./Brand";
+import { SuccessCheck } from "./SuccessCheck";
 import { GuestStepper } from "./GuestStepper";
 import { KoralEvent, dateLabel, timeLabel } from "@/lib/types";
 function calendarStamp(iso: string, plusHours = 0) {
@@ -69,7 +68,12 @@ export function RegistrationForm({
       const data = await r.json();
       if (!r.ok) throw Error(data.error);
       setSuccess(data.status);
-      box.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+      box.current?.scrollIntoView({
+        block: "center",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+      });
     } catch (e) {
       setError(
         e instanceof Error
@@ -113,17 +117,12 @@ export function RegistrationForm({
       <div id="registration" className="registration-box" ref={box}>
         {success ? (
           <div className="registration-success" role="status">
-            <span className="success-icon">
-              <Check />
-            </span>
+            <SuccessCheck waitlist={success === "waitlist"} />
             <h3>
               {success === "waitlist" ? (
                 <>את ברשימת ההמתנה.</>
               ) : (
-                <>
-                  נתראה ב{dateLabel(event.starts_at, { weekday: "long" })}
-                  <Spark className="success-spark" />
-                </>
+                <>הבקשה שלך נשלחה.</>
               )}
             </h3>
             <p>
@@ -186,7 +185,9 @@ export function RegistrationForm({
               value={guests}
               onChange={setGuests}
               max={6}
-              hint={guests === 1 ? "רק אני" : `אני ועוד ${guests - 1}, על השם שלי`}
+              hint={
+                guests === 1 ? "רק אני" : `אני ועוד ${guests - 1}, על השם שלי`
+              }
             />
             {error && (
               <p className="error-message" role="alert">

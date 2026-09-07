@@ -5,6 +5,7 @@ import { getEvent, getEvents } from "@/lib/events";
 import { Header, Footer, EventImage, EventCard } from "@/components/Public";
 import { dateLabel, timeLabel, priceLabel } from "@/lib/types";
 import { RegistrationForm } from "@/components/RegistrationForm";
+import { ScrollReveal } from "@/components/ScrollReveal";
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
   params,
@@ -71,9 +72,14 @@ export default async function EventPage({
           {flyer && <div className="page-width">{title}</div>}
         </section>
         <div className="detail-info page-width">
-          {e.subtitle && <p className="detail-subtitle">{e.subtitle}</p>}
+          {e.subtitle && (
+            <p className="detail-subtitle" data-reveal>
+              {e.subtitle}
+            </p>
+          )}
           {e.address && (
             <a
+              data-reveal
               className="poster-map"
               href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}`}
               target="_blank"
@@ -84,9 +90,11 @@ export default async function EventPage({
               <ArrowUpLeft size={16} />
             </a>
           )}
-          <p className="detail-description">{e.description}</p>
+          <p className="detail-description" data-reveal>
+            {e.description}
+          </p>
           {e.price > 0 && (
-            <p className="field-hint">
+            <p className="field-hint" data-reveal>
               התשלום לא באתר. מסדרים אותו עם המנהלת אחרי האישור.
             </p>
           )}
@@ -94,18 +102,25 @@ export default async function EventPage({
         </div>
         {others.length > 0 && (
           <section className="related page-width">
-            <div className="section-heading">
+            <div className="section-heading" data-reveal>
               <h2>עוד אירועים שמחכים לנו.</h2>
             </div>
             <div className="event-list">
-              {others.map((event) => (
-                <EventCard key={event.id} event={event} variant="compact" />
+              {others.map((event, index) => (
+                <EventCard
+                  key={event.id}
+                  event={event}
+                  index={index}
+                  variant="compact"
+                  reveal
+                />
               ))}
             </div>
           </section>
         )}
       </main>
       <Footer />
+      <ScrollReveal />
     </div>
   );
 }

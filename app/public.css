@@ -183,7 +183,7 @@
   margin: 24px 0 30px;
   max-width: 720px;
 }
-.show-hero h1 > span,
+.show-hero h1 .hero-rose,
 .show-hero h1 .hero-period {
   color: var(--rose-text);
 }

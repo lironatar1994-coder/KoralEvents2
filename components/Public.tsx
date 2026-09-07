@@ -86,18 +86,25 @@ export function EventCard({
   event,
   index = 0,
   variant = "featured",
+  reveal = false,
 }: {
   event: KoralEvent;
   index?: number;
   variant?: "featured" | "compact";
+  reveal?: boolean;
 }) {
-  const style = { "--delay": `${index * 80}ms` } as React.CSSProperties;
+  const style = {
+    "--delay": `${index * 80}ms`,
+    "--reveal-delay": `${Math.min(index, 3) * 40}ms`,
+  } as React.CSSProperties;
+  const revealAttr = reveal ? { "data-reveal": "" } : {};
   if (variant === "compact")
     return (
       <Link
         href={`/events/${event.id}`}
         className="event-card card-compact"
         style={style}
+        {...revealAttr}
       >
         <div className="card-thumb">
           <EventImage event={event} compact />
@@ -123,6 +130,7 @@ export function EventCard({
       href={`/events/${event.id}`}
       className="event-card card-featured"
       style={style}
+      {...revealAttr}
     >
       <div className="card-image">
         <EventImage event={event} priority={index === 0} />

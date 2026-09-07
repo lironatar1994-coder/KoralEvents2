@@ -24,7 +24,11 @@ export function GuestStepper({
         >
           −
         </button>
-        <output aria-live="polite">{value}</output>
+        <output aria-live="polite">
+          <span key={value} className="guest-count">
+            {value}
+          </span>
+        </output>
         <button
           type="button"
           aria-label="יותר"

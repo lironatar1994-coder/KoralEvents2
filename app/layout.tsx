@@ -2,6 +2,7 @@ import { appPath } from "@/lib/paths";
 import type { Metadata } from "next";
 import "./globals.css";
 import "./public.css";
+import "./motion.css";
 import "./typography.css";
 import "./dashboard.css";
 export const metadata: Metadata = {
@@ -9,7 +10,11 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: appPath("/icon.svg?v=2"), type: "image/svg+xml" },
-      { url: appPath("/icon-512.png?v=2"), type: "image/png", sizes: "512x512" },
+      {
+        url: appPath("/icon-512.png?v=2"),
+        type: "image/png",
+        sizes: "512x512",
+      },
     ],
     apple: appPath("/apple-touch-icon.png?v=2"),
   },
