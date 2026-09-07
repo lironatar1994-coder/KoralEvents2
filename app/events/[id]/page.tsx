@@ -95,7 +95,7 @@ export default async function EventPage({
         {others.length > 0 && (
           <section className="related page-width">
             <div className="section-heading">
-              <h2>עוד ערבים שמחכים לך.</h2>
+              <h2>עוד ערבים שמחכים לנו.</h2>
             </div>
             <div className="event-list">
               {others.map((event) => (

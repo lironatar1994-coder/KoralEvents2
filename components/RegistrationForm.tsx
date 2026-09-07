@@ -84,7 +84,7 @@ export function RegistrationForm({
       <div className="registration-closed">
         <Heart size={22} />
         <h3>ההרשמה לערב הזה נסגרה.</h3>
-        <p>הערב הבא כבר מחכה לך למטה.</p>
+        <p>הערב הבא כבר מחכה לנו למטה.</p>
       </div>
     );
   const when = `${dateLabel(event.starts_at, { weekday: "long" })} · ${timeLabel(event.starts_at)}`;
