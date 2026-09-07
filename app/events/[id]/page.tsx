@@ -37,6 +37,7 @@ export default async function EventPage({
   const flyer = e.image_mode === "contain";
   const title = (
     <div className="poster-title">
+      <span className="detail-category glass-tag">{e.category}</span>
       <h1>{e.title}</h1>
       <p className="poster-facts">
         <span>{dateLabel(e.starts_at, { weekday: "long" })}</span>
@@ -65,7 +66,6 @@ export default async function EventPage({
             >
               <ArrowRight size={22} />
             </Link>
-            <span className="detail-category glass-tag">{e.category}</span>
             {!flyer && title}
           </div>
           {flyer && <div className="page-width">{title}</div>}

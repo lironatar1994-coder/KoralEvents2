@@ -229,7 +229,6 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           hidden={step !== 0}
         >
           <div className="panel-title">
-            <span>01</span>
             <h2>מתחילות באווירה</h2>
           </div>
           <label className={`upload-zone ${form.image ? "has-image" : ""}`}>
@@ -314,7 +313,6 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           hidden={step !== 1}
         >
           <div className="panel-title">
-            <span>02</span>
             <h2>מתי ואיפה נפגשות?</h2>
           </div>
           <label>
@@ -367,7 +365,6 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           hidden={step !== 2}
         >
           <div className="panel-title">
-            <span>03</span>
             <h2>מכינות מקום לכולן</h2>
           </div>
           <label>

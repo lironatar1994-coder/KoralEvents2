@@ -237,7 +237,12 @@
   object-fit: contain;
 }
 .public-site .card-image:after {
-  background: linear-gradient(0deg, #120e17f5 0%, #120e1780 32%, transparent 62%);
+  background: linear-gradient(
+    0deg,
+    #120e17f5 0%,
+    #120e1780 32%,
+    transparent 62%
+  );
 }
 .public-site .card-category {
   border: 0;
@@ -909,4 +914,19 @@
   .ribbon-track {
     animation: none;
   }
+}
+.public-event .mobile-register-bar {
+  transition:
+    transform 0.25s,
+    opacity 0.25s;
+}
+.public-event .mobile-register-bar.is-hidden {
+  transform: translateY(110%);
+  opacity: 0;
+  pointer-events: none;
+}
+.poster-title .detail-category {
+  position: static;
+  display: inline-block;
+  margin-bottom: 14px;
 }

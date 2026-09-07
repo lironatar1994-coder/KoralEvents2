@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpLeft, Check, Heart, Loader2 } from "lucide-react";
 export function RegistrationForm({
   eventId,
@@ -15,6 +15,18 @@ export function RegistrationForm({
   const [success, setSuccess] = useState("");
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
+  const [formOnScreen, setFormOnScreen] = useState(false);
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = box.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setFormOnScreen(entry.isIntersecting),
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [open]);
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
@@ -49,7 +61,7 @@ export function RegistrationForm({
   const cta = full ? "בקשת הצטרפות להמתנה" : "שליחת בקשת הרשמה";
   return (
     <>
-      <div id="registration" className="registration-box">
+      <div id="registration" className="registration-box" ref={box}>
         {success ? (
           <div className="registration-success" role="status">
             <span className="success-icon">
@@ -119,7 +131,9 @@ export function RegistrationForm({
         )}
       </div>
       {!success && (
-        <div className="mobile-register-bar">
+        <div
+          className={`mobile-register-bar ${formOnScreen ? "is-hidden" : ""}`}
+        >
           <a className="button gold-button" href="#registration">
             {full ? "לרשימת ההמתנה" : "אני באה"}
             <ArrowUpLeft size={19} />
