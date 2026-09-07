@@ -1,7 +1,16 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { Plus, ArrowLeft, Users, Clock3, CalendarDays } from "lucide-react";
+import {
+  Plus,
+  ArrowLeft,
+  Users,
+  Clock3,
+  CalendarDays,
+  ImagePlus,
+  MapPin,
+  Sparkles,
+} from "lucide-react";
 import {
   KoralEvent,
   dateLabel,
@@ -23,6 +32,10 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
           e.state !== "draft" &&
           new Date(e.starts_at) > new Date(),
   );
+  const live = upcoming.filter((e) => e.state !== "draft");
+  const pending = upcoming.reduce((n, e) => n + e.pending, 0);
+  const approved = upcoming.reduce((n, e) => n + e.approved, 0);
+  const firstTime = live.length === 0 && tab === "upcoming";
   return (
     <main id="main" className="admin-main">
       <div className="admin-title-row">
@@ -36,23 +49,25 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
           <Plus size={19} /> יצירת אירוע
         </Link>
       </div>
-      <section className="stats-grid" aria-label="סיכום האירועים הקרובים">
-        <div className="stat-card">
-          <CalendarDays />
-          <strong>{upcoming.filter((e) => e.state !== "draft").length}</strong>
-          <span>אירועים קרובים</span>
-        </div>
-        <div className="stat-card">
-          <Clock3 />
-          <strong>{upcoming.reduce((n, e) => n + e.pending, 0)}</strong>
-          <span>בקשות שמחכות לך</span>
-        </div>
-        <div className="stat-card">
-          <Users />
-          <strong>{upcoming.reduce((n, e) => n + e.approved, 0)}</strong>
-          <span>משתתפות מאושרות</span>
-        </div>
-      </section>
+      {live.length > 0 && (
+        <section className="overview" aria-label="סיכום האירועים הקרובים">
+          <div>
+            <CalendarDays />
+            <strong>{live.length}</strong>
+            <span>אירועים קרובים</span>
+          </div>
+          <div className={pending ? "is-hot" : ""}>
+            <Clock3 />
+            <strong>{pending}</strong>
+            <span>בקשות שמחכות לך</span>
+          </div>
+          <div>
+            <Users />
+            <strong>{approved}</strong>
+            <span>משתתפות מאושרות</span>
+          </div>
+        </section>
+      )}
       <div className="tabs" aria-label="סינון אירועים">
         {[
           ["upcoming", "קרובים"],
@@ -69,65 +84,93 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
           </button>
         ))}
       </div>
-      <div className="admin-events">
-        {filtered.map((e) => (
-          <Link
-            className="admin-event-card"
-            key={e.id}
-            href={`/admin/events/${e.id}`}
-          >
-            <div className="admin-event-image">
-              <EventImage event={e} />
-            </div>
-            <div className="admin-event-body">
-              <span className={`badge state-${e.state}`}>
-                {eventStateLabels[e.state]}
-              </span>
-              <h2>{e.title}</h2>
-              <p>
-                {dateLabel(e.starts_at)} · {timeLabel(e.starts_at)} ·{" "}
-                {e.location}
-              </p>
-              <div className="admin-event-counts">
-                <span>
-                  <b>{e.approved}</b> מאושרות
-                </span>
-                <span>
-                  <b>{e.pending}</b> ממתינות
-                </span>
-                <span>
-                  {e.capacity === null ? (
-                    "ללא מכסה"
-                  ) : (
-                    <>
-                      <b>{Math.max(0, e.capacity - e.approved)}</b> מקומות
-                      פנויים
-                    </>
-                  )}
-                </span>
-              </div>
-            </div>
-            <ArrowLeft className="admin-event-arrow" size={22} />
-          </Link>
-        ))}
-        {!filtered.length && (
-          <div className="admin-empty">
-            <CalendarDays size={32} />
-            <h2>
-              {tab === "draft"
-                ? "אין טיוטות כרגע"
-                : tab === "archive"
-                  ? "הארכיון ריק"
-                  : "הערב הבא מתחיל כאן"}
-            </h2>
-            <p>תמונה, כמה פרטים, ואפשר להזמין.</p>
-            <Link className="button outline-button" href="/admin/events/new">
-              <Plus size={18} />
-              יצירת אירוע חדש
+      {firstTime ? (
+        <section className="admin-onboarding">
+          <div className="onboarding-copy">
+            <span className="onboarding-spark" aria-hidden="true">
+              <Sparkles size={22} />
+            </span>
+            <h2>הערב הראשון מתחיל כאן.</h2>
+            <p>
+              שלושה מסכים קצרים, ויש לך עמוד אירוע מעוצב עם הרשמה. משתפות את
+              הקישור, ומכאן את מאשרת.
+            </p>
+            <Link className="button gold-button" href="/admin/events/new">
+              <Plus size={19} /> יצירת האירוע הראשון
             </Link>
           </div>
-        )}
-      </div>
+          <ol className="onboarding-steps" aria-label="איך זה עובד">
+            <li>
+              <ImagePlus size={20} />
+              <b>תמונה ושם</b>
+              <span>צילום או פלייר, ושם שעושה חשק</span>
+            </li>
+            <li>
+              <MapPin size={20} />
+              <b>מתי ואיפה</b>
+              <span>תאריך, שעה ומקום. הכתובת פותחת ניווט</span>
+            </li>
+            <li>
+              <Users size={20} />
+              <b>מקומות ועלות</b>
+              <span>כמה מקומות, ואם יש עלות. מלא? רשימת המתנה</span>
+            </li>
+          </ol>
+        </section>
+      ) : (
+        <div className="admin-events">
+          {filtered.map((e) => (
+            <Link
+              className="admin-event-card"
+              key={e.id}
+              href={`/admin/events/${e.id}`}
+            >
+              <div className="admin-event-image">
+                <EventImage event={e} />
+                <span className={`badge state-${e.state}`}>
+                  {eventStateLabels[e.state]}
+                </span>
+              </div>
+              <div className="admin-event-body">
+                <h2>{e.title}</h2>
+                <p>
+                  {dateLabel(e.starts_at, { weekday: "long" })} ·{" "}
+                  {timeLabel(e.starts_at)} · {e.location}
+                </p>
+                <div className="admin-event-counts">
+                  <span>
+                    <b>{e.approved}</b> מאושרות
+                  </span>
+                  <span className={e.pending ? "is-hot" : ""}>
+                    <b>{e.pending}</b> ממתינות
+                  </span>
+                  <span>
+                    {e.capacity === null ? (
+                      "ללא מכסה"
+                    ) : (
+                      <>
+                        <b>{Math.max(0, e.capacity - e.approved)}</b> פנויים
+                      </>
+                    )}
+                  </span>
+                </div>
+              </div>
+              <ArrowLeft className="admin-event-arrow" size={22} />
+            </Link>
+          ))}
+          {!filtered.length && (
+            <div className="admin-empty">
+              <CalendarDays size={28} />
+              <h2>{tab === "draft" ? "אין טיוטות כרגע" : "הארכיון ריק"}</h2>
+              <p>
+                {tab === "draft"
+                  ? "אירוע ששמרת בלי לפרסם יופיע כאן."
+                  : "אירועים שעברו או שהועברו לארכיון יופיעו כאן."}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }

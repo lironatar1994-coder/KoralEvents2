@@ -2703,3 +2703,359 @@ body {
     height: 116px;
   }
 }
+
+/* ===== Admin dashboard, second pass: one header row, overview strip,
+   onboarding for the first event, card grid on wide screens. ===== */
+.admin-app {
+  background:
+    radial-gradient(ellipse 60% 40% at 100% 0%, #a12d8a2e, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 0% 100%, #5b2a8a26, transparent 70%),
+    var(--bg);
+}
+.admin-header {
+  height: 74px;
+  gap: 22px;
+  border-bottom: 1px solid #d9c6ff1a;
+  background: #160c1dcc;
+  backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.admin-wordmark {
+  display: none;
+}
+.admin-header .admin-nav {
+  padding: 0;
+  border: 0;
+  background: none;
+  gap: 4px;
+  margin-inline-start: 10px;
+}
+.admin-header .admin-nav a {
+  min-height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  gap: 8px;
+}
+.admin-header .admin-nav a:hover {
+  color: var(--text);
+  background: #d9c6ff12;
+}
+.admin-header .admin-nav a.active {
+  color: var(--text);
+  background: #ff5c8a24;
+}
+.admin-header .admin-nav a.active svg {
+  color: var(--gold);
+}
+.admin-title-row {
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 28px;
+  margin-bottom: 26px;
+}
+.admin-title-row h1 {
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -0.04em;
+  margin: 0 0 6px;
+}
+.admin-title-row p {
+  font-size: 14px;
+}
+.admin-title-row > .button {
+  margin-bottom: 8px;
+}
+/* Overview strip: one quiet panel, three facts. */
+.overview {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+}
+.overview > div {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 4px 14px;
+  padding: 18px 22px;
+}
+.overview > div + div {
+  border-inline-start: 1px solid var(--line);
+}
+.overview svg {
+  grid-row: 1 / span 2;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border-radius: 50%;
+  background: #ff5c8a1a;
+  color: var(--gold);
+}
+.overview strong {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+}
+.overview span {
+  grid-column: 2 / span 2;
+  font-size: 12px;
+  color: var(--muted);
+}
+.overview .is-hot strong {
+  color: var(--gold);
+}
+.tabs {
+  margin-bottom: 20px;
+}
+/* Onboarding: the empty dashboard is an invitation, not a dashed box. */
+.admin-onboarding {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  padding: 44px;
+  border-radius: 26px;
+  border: 1px solid #ff5c8a2e;
+  background:
+    radial-gradient(ellipse 60% 80% at 15% 100%, #ff5c8a22, transparent 70%),
+    radial-gradient(ellipse 50% 70% at 100% 0%, #8a2be233, transparent 70%),
+    #1d1024;
+}
+.onboarding-spark {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #ff5c8a22;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.onboarding-copy h2 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 0 0 12px;
+}
+.onboarding-copy p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 22px;
+  max-width: 420px;
+}
+.onboarding-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+  counter-reset: step;
+}
+.onboarding-steps li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #160c1d99;
+  border: 1px solid #d9c6ff1a;
+  position: relative;
+}
+.onboarding-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  top: -8px;
+  inset-inline-end: 12px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+.onboarding-steps svg {
+  grid-row: 1 / span 2;
+  color: var(--gold);
+}
+.onboarding-steps b {
+  font-size: 15px;
+}
+.onboarding-steps span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.admin-empty {
+  border-style: solid;
+  border-color: var(--line);
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 44px 20px;
+}
+.admin-empty h2 {
+  font-weight: 700;
+  font-size: 22px;
+}
+/* Event cards: image with the state badge on it, counts underneath. */
+.admin-event-image {
+  position: relative;
+}
+.admin-event-image .badge {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  background: #160c1dd9;
+  backdrop-filter: blur(8px);
+}
+.admin-event-body h2 {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.admin-event-counts .is-hot b {
+  color: var(--gold);
+}
+@media (min-width: 1000px) {
+  .admin-events {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .admin-event-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .admin-event-image {
+    width: 100%;
+    height: 210px;
+    border-radius: 0;
+  }
+  .admin-event-body {
+    padding: 18px 20px 20px;
+  }
+  .admin-event-body h2 {
+    font-size: 24px;
+    margin: 0 0 6px;
+  }
+  .admin-event-arrow {
+    position: absolute;
+    bottom: 18px;
+    inset-inline-start: 18px;
+    margin: 0;
+  }
+}
+@media (max-width: 700px) {
+  .admin-header {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 8px 16px 0;
+    gap: 10px;
+    row-gap: 0;
+  }
+  .admin-header .brand {
+    margin-inline-end: auto;
+  }
+  .admin-header .admin-nav {
+    order: 3;
+    flex-basis: 100%;
+    margin: 0;
+    padding: 6px 0 8px;
+    gap: 6px;
+  }
+  .admin-header .admin-nav a {
+    min-height: 40px;
+    font-size: 13px;
+    padding: 0 14px;
+  }
+  .admin-header-actions {
+    margin: 0;
+  }
+  .admin-title-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .admin-title-row h1 {
+    font-size: 32px;
+  }
+  .admin-title-row > .button {
+    margin-bottom: 0;
+  }
+  .overview {
+    grid-template-columns: 1fr;
+  }
+  .overview > div {
+    padding: 12px 16px;
+    grid-template-columns: auto auto 1fr;
+    gap: 0 12px;
+  }
+  .overview > div + div {
+    border-inline-start: 0;
+    border-top: 1px solid var(--line);
+  }
+  .overview svg {
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+  }
+  .overview strong {
+    font-size: 22px;
+  }
+  .overview span {
+    grid-column: 3;
+    grid-row: 1;
+    font-size: 12px;
+  }
+  .admin-onboarding {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
+  .onboarding-copy h2 {
+    font-size: 28px;
+  }
+  .onboarding-copy p {
+    font-size: 14px;
+  }
+  .onboarding-copy .button {
+    width: 100%;
+  }
+  .admin-event-image .badge {
+    font-size: 10px;
+    top: 6px;
+    inset-inline-end: 6px;
+  }
+}
+@media (min-width: 1000px) {
+  .admin-event-body {
+    padding-inline-start: 64px;
+  }
+}
+@media (max-width: 700px) {
+  .admin-event-image .badge {
+    inset: auto 0 0 0;
+    border-radius: 0;
+    justify-content: center;
+    padding: 4px 6px;
+    font-size: 10px;
+    white-space: nowrap;
+    background: #160c1de6;
+  }
+}

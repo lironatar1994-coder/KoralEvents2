@@ -13,7 +13,22 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     <div className="admin-app">
       <header className="admin-header">
         <Brand small />
-        <span className="admin-wordmark">המרחב שלך</span>
+        {!login && (
+          <nav className="admin-nav" aria-label="ניווט ניהול">
+            <Link
+              className={pathname === "/admin" ? "active" : ""}
+              href="/admin"
+            >
+              <LayoutDashboard size={17} /> האירועים שלי
+            </Link>
+            <Link
+              className={pathname === "/admin/events/new" ? "active" : ""}
+              href="/admin/events/new"
+            >
+              <Plus size={18} /> אירוע חדש
+            </Link>
+          </nav>
+        )}
         <div className="admin-header-actions">
           <Link href="/" className="text-link">
             לאתר <ArrowUpLeft size={16} />
@@ -33,19 +48,6 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           )}
         </div>
       </header>
-      {!login && (
-        <nav className="admin-nav">
-          <Link className={pathname === "/admin" ? "active" : ""} href="/admin">
-            <LayoutDashboard size={17} /> האירועים שלי
-          </Link>
-          <Link
-            className={pathname === "/admin/events/new" ? "active" : ""}
-            href="/admin/events/new"
-          >
-            <Plus size={18} /> אירוע חדש
-          </Link>
-        </nav>
-      )}
       {children}
     </div>
   );
