@@ -52,7 +52,7 @@ export default async function Home() {
               </Link>
             )}
             <a href="#events" className="button show-button">
-              הערב הבא שלי <ArrowDown size={20} />
+              הערב הבא שלנו <ArrowDown size={20} />
             </a>
           </div>
         </section>
