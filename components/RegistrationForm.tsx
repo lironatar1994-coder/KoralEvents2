@@ -11,6 +11,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { Spark } from "./Brand";
+import { GuestStepper } from "./GuestStepper";
 import { KoralEvent, dateLabel, timeLabel } from "@/lib/types";
 function calendarStamp(iso: string, plusHours = 0) {
   const d = new Date(new Date(iso).getTime() + plusHours * 3600_000);
@@ -181,35 +182,12 @@ export function RegistrationForm({
                 required
               />
             </label>
-            <div className="guests-field">
-              <span id="guests-label">כמה אתן?</span>
-              <div
-                className="stepper"
-                role="group"
-                aria-labelledby="guests-label"
-              >
-                <button
-                  type="button"
-                  aria-label="פחות"
-                  disabled={guests <= 1}
-                  onClick={() => setGuests((g) => Math.max(1, g - 1))}
-                >
-                  −
-                </button>
-                <output aria-live="polite">{guests}</output>
-                <button
-                  type="button"
-                  aria-label="יותר"
-                  disabled={guests >= 6}
-                  onClick={() => setGuests((g) => Math.min(6, g + 1))}
-                >
-                  +
-                </button>
-              </div>
-              <small>
-                {guests === 1 ? "רק אני" : `אני ועוד ${guests - 1}, על השם שלי`}
-              </small>
-            </div>
+            <GuestStepper
+              value={guests}
+              onChange={setGuests}
+              max={6}
+              hint={guests === 1 ? "רק אני" : `אני ועוד ${guests - 1}, על השם שלי`}
+            />
             {error && (
               <p className="error-message" role="alert">
                 {error}

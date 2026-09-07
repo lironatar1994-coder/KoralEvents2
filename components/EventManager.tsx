@@ -37,6 +37,7 @@ import {
 import { api } from "@/lib/client";
 import { EventImage } from "./Public";
 import { Modal } from "./Modal";
+import { GuestStepper } from "./GuestStepper";
 export function EventManager({
   initialEvent,
   initialRegistrations,
@@ -55,6 +56,12 @@ export function EventManager({
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [editing, setEditing] = useState<Registration | "new" | null>(null);
+  const [guests, setGuests] = useState(1);
+  function open(target: Registration | "new") {
+    setError("");
+    setGuests(target === "new" ? 1 : target.guests);
+    setEditing(target);
+  }
   const base = `/api/admin/events/${event.id}`;
   async function refresh() {
     const [e, r] = await Promise.all([
@@ -264,10 +271,7 @@ export function EventManager({
               </div>
               <button
                 className="button gold-button"
-                onClick={() => {
-                  setError("");
-                  setEditing("new");
-                }}
+                onClick={() => open("new")}
               >
                 <Plus size={18} />
                 הוספת משתתפת
@@ -502,10 +506,7 @@ export function EventManager({
                 aria-label={`עריכת ${row.name}`}
                 title="עריכה, ביטול והסרה"
                 disabled={busy}
-                onClick={() => {
-                  setError("");
-                  setEditing(row);
-                }}
+                onClick={() => open(row)}
               >
                 <MoreHorizontal size={19} />
               </button>
@@ -608,7 +609,7 @@ export function EventManager({
               const payload = {
                 name: data.get("name"),
                 phone: data.get("phone"),
-                guests: Number(data.get("guests") || 1),
+                guests,
                 ...(editing !== "new"
                   ? { status: data.get("status"), paid: editing.paid }
                   : {}),
@@ -649,17 +650,13 @@ export function EventManager({
                 defaultValue={editing === "new" ? "" : editing.phone}
               />
             </label>
-            <label>
-              כמה מוזמנות על השם הזה (כולל אותה)
-              <input
-                type="number"
-                name="guests"
-                min={1}
-                max={10}
-                step={1}
-                defaultValue={editing === "new" ? 1 : editing.guests}
-              />
-            </label>
+            <GuestStepper
+              value={guests}
+              onChange={setGuests}
+              max={10}
+              label="כמה מוזמנות על השם הזה?"
+              hint={guests === 1 ? "היא לבד" : `היא ועוד ${guests - 1}`}
+            />
             {editing !== "new" && (
               <label>
                 מצב ההרשמה
