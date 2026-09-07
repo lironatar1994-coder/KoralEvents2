@@ -108,12 +108,15 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
   await page.getByLabel("איך להציג את התמונה?").selectOption("contain");
   await page.getByLabel("שם האירוע", { exact: true }).fill("אירוע בדיקת דפדפן");
   await page.getByLabel("משפט קצר שעושה חשק").fill("בדיקה אוטומטית בלבד");
+  await page.getByRole("button", { name: "הבא" }).click();
+  const next = new Date(Date.now() + 86400000 * 60).toISOString().slice(0, 10);
+  await page.getByLabel("תאריך ושעה").fill(`${next}T20:30`);
+  await expect(page.locator(".date-hint")).toContainText("20:30");
+  await page.getByLabel("שם המקום").fill("מקום בדיקה");
   await page
     .getByLabel("קצת על מה שמחכה לנו")
     .fill("פלייר מלא, אישורים ורשימת המתנה.");
-  const next = new Date(Date.now() + 86400000 * 60).toISOString().slice(0, 10);
-  await page.getByLabel("תאריך ושעה").fill(`${next}T20:30`);
-  await page.getByLabel("שם המקום").fill("מקום בדיקה");
+  await page.getByRole("button", { name: "הבא" }).click();
   await page.getByLabel("עלות השתתפות").fill("50");
   await page.getByLabel("כמה מקומות יש?").fill("1");
   await page.screenshot({

@@ -1,20 +1,11 @@
 import Link from "next/link";
-import { ArrowUpLeft, MapPin, ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowUpLeft, MapPin, Sparkles } from "lucide-react";
 import { Brand } from "./Brand";
 import { KoralEvent, dateLabel, timeLabel, priceLabel } from "@/lib/types";
 export function Header() {
   return (
     <header className="site-header">
       <Brand />
-      <nav aria-label="ניווט ראשי">
-        <Link href="/#events">האירועים שלנו</Link>
-        <Link className="nav-about" href="/#about">
-          קצת עלינו
-        </Link>
-      </nav>
-      <span className="header-note">
-        <span className="live-dot" /> הלילה שייך לנו
-      </span>
     </header>
   );
 }
@@ -56,55 +47,77 @@ export function EventImage({
     </div>
   );
 }
+function StateBadge({ event }: { event: KoralEvent }) {
+  const full = event.capacity !== null && event.approved >= event.capacity;
+  if (!full && event.state !== "closed") return null;
+  return (
+    <span className="card-state">
+      {event.state === "closed" ? "ההרשמה נסגרה" : "נותר להצטרף להמתנה"}
+    </span>
+  );
+}
 export function EventCard({
   event,
   index = 0,
+  variant = "featured",
 }: {
   event: KoralEvent;
   index?: number;
+  variant?: "featured" | "compact";
 }) {
-  const full = event.capacity !== null && event.approved >= event.capacity;
+  const style = { "--delay": `${index * 80}ms` } as React.CSSProperties;
+  if (variant === "compact")
+    return (
+      <Link
+        href={`/events/${event.id}`}
+        className="event-card card-compact"
+        style={style}
+      >
+        <div className="card-thumb">
+          <EventImage event={event} />
+        </div>
+        <div className="card-body">
+          <h3>{event.title}</h3>
+          <p className="card-facts">
+            <span>{dateLabel(event.starts_at)}</span>
+            <i />
+            <span>{timeLabel(event.starts_at)}</span>
+            <i />
+            <span>{event.location}</span>
+          </p>
+          <StateBadge event={event} />
+        </div>
+        <span className="card-arrow">
+          <ArrowUpLeft size={22} />
+        </span>
+      </Link>
+    );
   return (
     <Link
       href={`/events/${event.id}`}
-      className="event-card"
-      style={{ "--delay": `${index * 80}ms` } as React.CSSProperties}
+      className="event-card card-featured"
+      style={style}
     >
       <div className="card-image">
-        <EventImage event={event} />
+        <EventImage event={event} priority={index === 0} />
         <span className="card-category">{event.category}</span>
-        <span className="card-arrow">
-          <ArrowUpLeft size={23} />
-        </span>
-        {(full || event.state === "closed") && (
-          <span className="card-state">
-            {event.state === "closed" ? "ההרשמה נסגרה" : "נותר להצטרף להמתנה"}
-          </span>
-        )}
+        <StateBadge event={event} />
       </div>
-      <div className="card-meta">
-        <span>
-          {dateLabel(event.starts_at)} <i /> {timeLabel(event.starts_at)}
-        </span>
-        <span>{priceLabel(event.price)}</span>
-      </div>
-      <div className="card-title-row">
+      <div className="card-overlay">
+        <p className="card-facts">
+          <span>{dateLabel(event.starts_at, { weekday: "long" })}</span>
+          <i />
+          <span>{timeLabel(event.starts_at)}</span>
+          <b>{priceLabel(event.price)}</b>
+        </p>
         <h3>{event.title}</h3>
-        <span className="card-number" aria-hidden="true">
-          {(index + 1).toString().padStart(2, "0")}
+        <p className="card-facts">
+          <MapPin size={14} /> {event.location}
+        </p>
+        <span className="card-cta">
+          אני באה <ArrowUpLeft size={18} />
         </span>
       </div>
-      <p className="card-location">
-        <MapPin size={14} />
-        {event.location}
-      </p>
-    </Link>
-  );
-}
-export function BackLink() {
-  return (
-    <Link href="/#events" className="back-link">
-      <ArrowLeft size={16} /> כל האירועים
     </Link>
   );
 }

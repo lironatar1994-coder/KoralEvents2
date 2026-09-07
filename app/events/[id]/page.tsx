@@ -1,13 +1,8 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarDays, MapPin, Clock3, ArrowUpLeft } from "lucide-react";
+import { MapPin, ArrowRight, ArrowUpLeft } from "lucide-react";
 import { getEvent, getEvents } from "@/lib/events";
-import {
-  Header,
-  Footer,
-  EventImage,
-  BackLink,
-  EventCard,
-} from "@/components/Public";
+import { Header, Footer, EventImage, EventCard } from "@/components/Public";
 import { dateLabel, timeLabel, priceLabel } from "@/lib/types";
 import { RegistrationForm } from "@/components/RegistrationForm";
 export const dynamic = "force-dynamic";
@@ -39,74 +34,72 @@ export default async function EventPage({
   const others = (await getEvents()).filter((x) => x.id !== e.id).slice(0, 3);
   const open = e.state === "published" && new Date(e.starts_at) > new Date();
   const full = e.capacity !== null && e.approved >= e.capacity;
+  const flyer = e.image_mode === "contain";
+  const title = (
+    <div className="poster-title">
+      <h1>{e.title}</h1>
+      <p className="poster-facts">
+        <span>{dateLabel(e.starts_at, { weekday: "long" })}</span>
+        <i />
+        <span>{timeLabel(e.starts_at)}</span>
+        <i />
+        <span>
+          <MapPin size={15} /> {e.location}
+        </span>
+        <b className="poster-price">{priceLabel(e.price)}</b>
+      </p>
+    </div>
+  );
   return (
     <div className="public-site public-event">
       <Header />
-      <main id="main" className="detail-main page-width">
-        <BackLink />
-        <div className="event-detail">
+      <main id="main" className="detail-main">
+        <section className={`event-poster ${flyer ? "is-flyer" : ""}`}>
           <div className="detail-visual">
             <EventImage event={e} priority />
+            {!flyer && <div className="poster-shade" aria-hidden="true" />}
+            <Link
+              href="/#events"
+              className="poster-back"
+              aria-label="כל האירועים"
+            >
+              <ArrowRight size={22} />
+            </Link>
             <span className="detail-category glass-tag">{e.category}</span>
+            {!flyer && title}
           </div>
-          <div className="detail-info">
-            <div className="eyebrow">כאן מתחיל הרגע הבא שלך</div>
-            <h1>{e.title}</h1>
-            <p className="detail-subtitle">{e.subtitle}</p>
-            <div className="detail-facts">
-              <div>
-                <CalendarDays />
-                <span>
-                  מתי נפגשות?
-                  <strong>{dateLabel(e.starts_at, { weekday: "long" })}</strong>
-                </span>
-              </div>
-              <div>
-                <Clock3 />
-                <span>
-                  מתחילות בשעה<strong>{timeLabel(e.starts_at)}</strong>
-                </span>
-              </div>
-              <div>
-                <MapPin />
-                <span>
-                  איפה זה קורה?<strong>{e.location}</strong>
-                  {e.address && <small>{e.address}</small>}
-                </span>
-                {e.address && (
-                  <a
-                    className="icon-button"
-                    aria-label="ניווט למיקום"
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <ArrowUpLeft size={18} />
-                  </a>
-                )}
-              </div>
-            </div>
-            <p className="detail-description">{e.description}</p>
-            <div className="price-row">
-              <span>עלות השתתפות</span>
-              <strong>{priceLabel(e.price)}</strong>
-            </div>
-            {e.price > 0 && (
-              <p className="field-hint">
-                התשלום בנפרד, בתיאום עם המנהלת. אין תשלום באתר.
-              </p>
-            )}
-            <RegistrationForm eventId={e.id} open={open} full={full} />
-          </div>
+          {flyer && <div className="page-width">{title}</div>}
+        </section>
+        <div className="detail-info page-width">
+          {e.subtitle && <p className="detail-subtitle">{e.subtitle}</p>}
+          {e.address && (
+            <a
+              className="poster-map"
+              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MapPin size={16} />
+              <span>{e.address}</span>
+              <ArrowUpLeft size={16} />
+            </a>
+          )}
+          <p className="detail-description">{e.description}</p>
+          {e.price > 0 && (
+            <p className="field-hint">
+              התשלום בנפרד, בתיאום עם המנהלת. אין תשלום באתר.
+            </p>
+          )}
+          <RegistrationForm eventId={e.id} open={open} full={full} />
         </div>
         {others.length > 0 && (
-          <section className="related">
+          <section className="related page-width">
             <div className="section-heading">
-              <h2>עוד רגעים ששווה לצאת בשבילם.</h2>
+              <h2>עוד ערבים ששווה לצאת בשבילם.</h2>
             </div>
-            <div className="event-grid">
+            <div className="event-list">
               {others.map((event) => (
-                <EventCard key={event.id} event={event} />
+                <EventCard key={event.id} event={event} variant="compact" />
               ))}
             </div>
           </section>

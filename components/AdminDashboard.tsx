@@ -27,7 +27,6 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
     <main id="main" className="admin-main">
       <div className="admin-title-row">
         <div>
-          <div className="eyebrow">LET’S MAKE SOMETHING GOOD</div>
           <h1>
             האירועים שלך<span className="gold">.</span>
           </h1>

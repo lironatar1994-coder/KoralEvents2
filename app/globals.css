@@ -17,9 +17,11 @@
   --panel-light: #2b2030;
   --text: #f5eee8;
   --muted: #bdadb9;
-  --gold: #dfbc91;
+  --gold: #ff806e;
+  --ink: #321a26;
   --line: #e4bfd421;
-  --radius: 6px;
+  --radius: 14px;
+  --radius-pill: 999px;
   --font: Heebo, Arial, sans-serif;
   color-scheme: dark;
 }
@@ -153,9 +155,10 @@ svg {
   flex-shrink: 0;
 }
 .brand > span:first-child {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 35px;
-  letter-spacing: 2px;
+  font-family: var(--font);
+  font-weight: 900;
+  font-size: 37px;
+  letter-spacing: -2px;
   line-height: 1.05;
 }
 .brand-dot {
@@ -199,7 +202,7 @@ svg {
   height: 6px;
   border-radius: 50%;
   background: var(--gold);
-  box-shadow: 0 0 10px #d6bf9230;
+  box-shadow: 0 0 10px #ff806e30;
 }
 .home-intro {
   padding-top: 56px;
@@ -338,9 +341,9 @@ svg {
   gap: 12px;
   padding: 12px 24px;
   border: 1px solid transparent;
-  border-radius: 3px;
-  font-size: 13px;
-  font-weight: 500;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  font-weight: 600;
   transition:
     background 0.2s,
     transform 0.2s;
@@ -348,7 +351,7 @@ svg {
   line-height: 1.5;
 }
 .button:hover {
-  transform: translateY(-1px);
+  filter: brightness(1.07);
 }
 .ivory {
   background: #f1eee3;
@@ -359,10 +362,13 @@ svg {
 }
 .gold-button {
   background: var(--gold);
-  color: #191c16;
+  color: var(--ink);
+  min-height: 52px;
+  font-weight: 800;
+  font-size: 16px;
 }
 .gold-button:hover {
-  background: #e5cca0;
+  background: #ffab99;
 }
 .outline-button {
   background: transparent;
@@ -745,7 +751,7 @@ svg {
   margin: 8px 0 14px;
 }
 .registration-box {
-  border: 1px solid #d6bf9226;
+  border: 1px solid #ff806e26;
   background: var(--panel);
   padding: 27px;
   margin-top: 25px;
@@ -1023,7 +1029,7 @@ select option {
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: 5px;
+  border-radius: var(--radius);
 }
 .stat-card > svg {
   position: absolute;
@@ -1079,16 +1085,16 @@ select option {
   padding: 18px;
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: var(--radius);
   transition: border-color 0.2s;
 }
 .admin-event-card:hover {
-  border-color: #d6bf9250;
+  border-color: #ff806e50;
 }
 .admin-event-image {
   width: 180px;
   height: 140px;
-  border-radius: 3px;
+  border-radius: 8px;
   overflow: hidden;
   flex-shrink: 0;
   background: #111;
@@ -1238,7 +1244,7 @@ select option {
   width: 210px;
   height: 165px;
   overflow: hidden;
-  border-radius: 5px;
+  border-radius: var(--radius);
   background: var(--panel);
 }
 .manager-hero-image img {
@@ -1318,7 +1324,7 @@ select option {
   background: var(--panel);
   border: 1px solid var(--line);
   padding: 20px;
-  border-radius: 5px;
+  border-radius: var(--radius);
 }
 .attendee-person {
   display: flex;
@@ -1328,13 +1334,13 @@ select option {
 .avatar {
   width: 43px;
   height: 43px;
-  background: #d6bf9210;
+  background: #ff806e10;
   color: var(--gold);
   display: grid;
   place-items: center;
   border-radius: 50%;
   font-size: 20px;
-  border: 1px solid #d6bf9222;
+  border: 1px solid #ff806e22;
 }
 .attendee-person h3 {
   font-size: 17px;
@@ -1394,14 +1400,18 @@ select option {
   flex: 1;
 }
 .approve-button {
-  background: #d6bf9215;
+  background: transparent;
   color: var(--gold);
-  border-color: #d6bf9230;
+  border-color: #ff806e66;
 }
 .whatsapp-button {
-  background: #293525;
-  color: #c8e1b8;
-  border-color: #809c6633;
+  background: #25d366;
+  color: #0b1a10;
+  border-color: transparent;
+  font-weight: 700;
+}
+.whatsapp-button:hover {
+  background: #3ee07a;
 }
 .event-tools {
   border-top: 1px solid var(--line);
@@ -1429,7 +1439,7 @@ select option {
 }
 .editor-panel {
   border: 1px solid var(--line);
-  border-radius: 5px;
+  border-radius: var(--radius);
   padding: 27px;
   background: var(--panel);
 }
@@ -1442,7 +1452,7 @@ select option {
 .panel-title > span {
   font-size: 11px;
   color: var(--gold);
-  border: 1px solid #d6bf9233;
+  border: 1px solid #ff806e33;
   width: 30px;
   height: 30px;
   display: grid;
@@ -1461,7 +1471,7 @@ select option {
   justify-content: center;
   gap: 12px;
   background: #18121d;
-  border: 1px dashed #d6bf9240;
+  border: 1px dashed #ff806e40;
   border-radius: 4px;
   position: relative;
   overflow: hidden;
@@ -1536,8 +1546,8 @@ select option {
 .modal {
   color: var(--text);
   background: #211925;
-  border: 1px solid #d6bf9238;
-  border-radius: 8px;
+  border: 1px solid #ff806e38;
+  border-radius: var(--radius);
   width: min(490px, calc(100% - 28px));
   max-height: 90dvh;
   padding: 25px;
@@ -2000,7 +2010,7 @@ select option {
     justify-content: space-between;
     gap: 12px;
     background: #1b1421f5;
-    border-top: 1px solid #d6bf9230;
+    border-top: 1px solid #ff806e30;
     backdrop-filter: blur(15px);
     z-index: 10;
   }
@@ -2268,7 +2278,7 @@ select option {
   }
   .editor-actions .button {
     flex: 1;
-    font-size: 11px;
+    font-size: 14px;
     padding: 12px 9px;
     gap: 7px;
   }
@@ -2319,13 +2329,10 @@ select option {
 
 /* Nightfall: plum charcoal, burgundy light and champagne highlights. */
 :root {
-  --champagne: #c8ab7f;
-}
-.brand {
-  color: var(--gold);
+  --champagne: #ff9d8d;
 }
 .brand-dot {
-  color: #c48baa;
+  color: var(--gold);
 }
 .demo-notice {
   text-align: center;
@@ -2361,13 +2368,6 @@ select option {
 }
 .featured .live-dot {
   background: #e6cbaa;
-}
-.gold-button {
-  background: var(--gold);
-  color: #fff9f0;
-}
-.gold-button:hover {
-  background: #632337;
 }
 .ivory {
   color: #642c3c;
@@ -2420,12 +2420,12 @@ select option {
   border-color: #9b725940;
 }
 .avatar {
-  background: #dfbc910b;
-  border-color: #dfbc9120;
+  background: #ff806e0b;
+  border-color: #ff806e20;
 }
 .approve-button {
-  background: #dfbc910b;
-  border-color: #dfbc9125;
+  background: #ff806e0b;
+  border-color: #ff806e25;
 }
 .upload-replace {
   color: #fff9f0 !important;
@@ -2467,14 +2467,6 @@ body {
     radial-gradient(ellipse 70% 600px at 90% 0, #51273d24, transparent 80%),
     var(--bg);
 }
-.gold-button {
-  background: #8c3f62;
-  color: #fff9f0;
-  border-color: #ba6a912b;
-}
-.gold-button:hover {
-  background: #a34a73;
-}
 .skip-link {
   color: #241627;
 }
@@ -2498,4 +2490,85 @@ body {
 .editor-panel,
 .registration-box {
   box-shadow: 0 5px 22px #0000000c;
+}
+
+/* Create-event wizard: one short screen at a time. */
+.editor-form {
+  max-width: 660px;
+}
+.wizard-steps {
+  display: flex;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+.wizard-steps li {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+.wizard-steps li > span {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid #ff806e33;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+}
+.wizard-steps li.is-active {
+  color: var(--text);
+  border-color: var(--gold);
+}
+.wizard-steps li.is-active > span {
+  background: var(--gold);
+  color: var(--ink);
+  border-color: var(--gold);
+  font-weight: 800;
+}
+.wizard-steps li.is-done > span {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.editor-step {
+  min-width: 0;
+  margin: 0;
+}
+.editor-step[hidden] {
+  display: none;
+}
+.editor-actions .back-step {
+  flex: 0 0 auto;
+  width: 52px;
+  padding: 0;
+}
+.date-hint {
+  color: var(--gold);
+}
+@media (max-width: 700px) {
+  .wizard-steps {
+    gap: 6px;
+  }
+  .wizard-steps li {
+    font-size: 11px;
+    gap: 6px;
+  }
+  .wizard-steps li:not(.is-active) {
+    font-size: 0;
+    flex: 0 0 auto;
+  }
+  .wizard-steps li:not(.is-active) > span {
+    font-size: 11px;
+  }
+  .editor-actions .button {
+    font-size: 14px;
+  }
 }

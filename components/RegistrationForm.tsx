@@ -46,6 +46,7 @@ export function RegistrationForm({
         <p>נשמח להיפגש באחד האירועים הבאים.</p>
       </div>
     );
+  const cta = full ? "בקשת הצטרפות להמתנה" : "שליחת בקשת הרשמה";
   return (
     <>
       <div id="registration" className="registration-box">
@@ -64,18 +65,14 @@ export function RegistrationForm({
                 ? "האירוע מלא כרגע. אם יתפנה מקום והמנהלת תאשר, היא תיצור איתך קשר."
                 : "המקום עדיין לא מאושר. המנהלת תבדוק את הבקשה ותיצור איתך קשר לאחר האישור."}
             </p>
-            <span className="eyebrow">GOOD THINGS ARE ON THEIR WAY</span>
           </div>
         ) : (
           <form method="post" onSubmit={submit}>
-            <h3>
-              {full ? "מלא כאן, אבל אולי יתפנה מקום." : "שומרות לך רגע טוב."}
-            </h3>
-            <p>
-              {full
-                ? "השאירי פרטים לבקשת הצטרפות לרשימת ההמתנה."
-                : "השאירי שם וטלפון, ואנחנו נדאג להמשך."}
-            </p>
+            {full && (
+              <p className="registration-full">
+                מלא כאן, אבל אולי יתפנה מקום. השאירי פרטים לרשימת ההמתנה.
+              </p>
+            )}
             <label>
               השם המלא שלך
               <input
@@ -99,10 +96,6 @@ export function RegistrationForm({
                 required
               />
             </label>
-            <p className="field-hint">
-              הפרטים ישמשו לניהול ההרשמה וליצירת קשר בנוגע לאירוע בלבד, ויהיו
-              זמינים למנהלת.
-            </p>
             {error && (
               <p className="error-message" role="alert">
                 {error}
@@ -117,26 +110,19 @@ export function RegistrationForm({
               ) : (
                 <ArrowUpLeft size={19} />
               )}{" "}
-              {busy
-                ? "שולחת את הבקשה…"
-                : full
-                  ? "בקשת הצטרפות להמתנה"
-                  : "שליחת בקשת הרשמה"}
+              {busy ? "שולחת את הבקשה…" : cta}
             </button>
             <p className="registration-note">
-              לנשים בלבד · בכפוף לאישור המנהלת · מקום אחד לכל הרשמה
+              לנשים בלבד · בכפוף לאישור המנהלת · הפרטים משמשים לאירוע הזה בלבד
             </p>
           </form>
         )}
       </div>
       {!success && (
         <div className="mobile-register-bar">
-          <span>
-            {full ? "נתראה אם יתפנה מקום" : "מפגש אחד. זיכרון שנשאר."}
-          </span>
           <a className="button gold-button" href="#registration">
-            {full ? "לרשימת ההמתנה" : "בקשת הרשמה"}
-            <ArrowUpLeft size={17} />
+            {full ? "לרשימת ההמתנה" : "אני באה"}
+            <ArrowUpLeft size={19} />
           </a>
         </div>
       )}

@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { ArrowUpLeft, ArrowDown, MapPin, Sparkles } from "lucide-react";
+import { ArrowUpLeft, ArrowDown, Sparkles } from "lucide-react";
 import { getEvents } from "@/lib/events";
-import { dateLabel, timeLabel } from "@/lib/types";
 import { Header, Footer, EventCard, EventImage } from "@/components/Public";
 
 export const dynamic = "force-dynamic";
+
+const ribbon = ["לצאת מהשגרה", "להיכנס לרגע", "להיות ביחד"];
 
 export default async function Home() {
   const events = await getEvents();
@@ -34,53 +34,19 @@ export default async function Home() {
               <br />
               זוכרות<span className="hero-period">.</span>
             </h1>
-            <p>רגעים שנשארים. הרבה אחרי שהלילה נגמר.</p>
             <a href="#events" className="button show-button">
               הלילה הבא שלי <ArrowDown size={20} />
             </a>
           </div>
-          <span className="hero-side-note" aria-hidden="true">
-            GOOD NIGHTS. GREAT MEMORIES.
-          </span>
-          <span className="hero-spark" aria-hidden="true">
-            ✳
-          </span>
-          {featured && (
-            <Link
-              className="next-event-ticket page-width"
-              href={`/events/${featured.id}`}
-            >
-              <div className="ticket-label">
-                <span className="live-dot" /> על הפרק
-                <span dir="ltr">UP NEXT / 01</span>
-              </div>
-              <div className="ticket-title">
-                <span>{featured.category}</span>
-                <h2>{featured.title}</h2>
-              </div>
-              <div className="ticket-facts">
-                <span>
-                  {dateLabel(featured.starts_at)} ·{" "}
-                  {timeLabel(featured.starts_at)}
-                </span>
-                <span>
-                  <MapPin size={14} /> {featured.location}
-                </span>
-              </div>
-              <span className="ticket-cta">
-                אני באה <ArrowUpLeft size={25} />
-              </span>
-            </Link>
-          )}
         </section>
         <div className="show-ribbon" aria-hidden="true">
-          <span>לצאת מהשגרה</span>
-          <span>✳</span>
-          <span>להיכנס לרגע</span>
-          <span>✳</span>
-          <span>להיות ביחד</span>
-          <span>✳</span>
-          <span className="ribbon-extra">MAKE IT A NIGHT</span>
+          <div className="ribbon-track">
+            {[...ribbon, ...ribbon, ...ribbon, ...ribbon].map((text, i) => (
+              <span key={i}>
+                {text} <b>✳</b>
+              </span>
+            ))}
+          </div>
         </div>
         <section className="show-events" id="events">
           <div className="page-width">
@@ -91,17 +57,16 @@ export default async function Home() {
                   זה הזמן <span>שלך.</span>
                 </h2>
               </div>
-              <span className="event-count">
-                <b>{events.length.toString().padStart(2, "0")}</b> אירועים
-                קרובים
-              </span>
             </div>
             {events.length ? (
-              <div
-                className={`event-grid ${events.length === 2 ? "two-events" : ""}`}
-              >
+              <div className="event-list">
                 {events.map((event, index) => (
-                  <EventCard key={event.id} event={event} index={index} />
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    index={index}
+                    variant={index === 0 ? "featured" : "compact"}
+                  />
                 ))}
               </div>
             ) : (
@@ -115,11 +80,8 @@ export default async function Home() {
         </section>
         <section id="about" className="show-about">
           <div className="page-width">
-            <span className="about-orbit" aria-hidden="true">
-              ✳
-            </span>
             <div className="show-about-copy">
-              <div className="eyebrow">KORAL EVENTS / הביחד שלנו</div>
+              <div className="eyebrow">הביחד שלנו</div>
               <h2>
                 פחות שגרה.
                 <br />
