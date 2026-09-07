@@ -26,7 +26,8 @@ release="$root/releases/$revision-$(date +%s)"
 mkdir "$release"
 cp -a .next/standalone/. "$release/"
 cp -a .next/static "$release/.next/static"
-cp -a public "$release/public"
+mkdir -p "$release/public"
+cp -a public/. "$release/public/"
 mkdir -p "$release/scripts"
 cp scripts/backup.mjs scripts/rotate-password.mjs "$release/scripts/"
 printf 'RELEASE_REVISION=%s\n' "$revision" > "$release/release.env"
@@ -84,5 +85,8 @@ for attempt in {1..30}; do
 done
 [[ "$healthy" = 1 ]] || rollback
 if ! curl -fsS https://lawebs.co.il/koralevents/api/health | grep -q "$revision"; then rollback; fi
+for asset in icon.svg apple-touch-icon.png icon-512.png; do
+    if ! curl -fsS "https://lawebs.co.il/koralevents/$asset" | cmp -s "$release/public/$asset" -; then rollback; fi
+done
 printf '%s\n' "$previous" > "$root/previous-release"
 echo "Healthy release: $revision"

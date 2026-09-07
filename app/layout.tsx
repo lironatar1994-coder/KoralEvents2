@@ -6,8 +6,11 @@ import "./typography.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_ORIGIN || "http://localhost:3000"),
   icons: {
-    icon: appPath("/icon.svg"),
-    apple: appPath("/apple-touch-icon.png"),
+    icon: [
+      { url: appPath("/icon.svg?v=2"), type: "image/svg+xml" },
+      { url: appPath("/icon-512.png?v=2"), type: "image/png", sizes: "512x512" },
+    ],
+    apple: appPath("/apple-touch-icon.png?v=2"),
   },
   title: {
     default: "Koral Events | ערבים לנשים, מהלב",
