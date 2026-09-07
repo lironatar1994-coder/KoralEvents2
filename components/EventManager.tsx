@@ -18,8 +18,11 @@ import {
   Unlock,
   MessageCircle,
   Trash2,
-  X,
   Users,
+  MoreHorizontal,
+  CheckCheck,
+  ClipboardCopy,
+  Download,
 } from "lucide-react";
 import {
   KoralEvent,
@@ -84,14 +87,26 @@ export function EventManager({
       "הפרטים עודכנו",
     );
   }
-  const visible = rows.filter(
-    (r) =>
-      (filter === "all" ||
-        (filter === "unpaid"
-          ? !r.paid && r.status === "approved"
-          : r.status === filter)) &&
-      `${r.name} ${r.phone}`.includes(search.trim()),
-  );
+  const order: Record<string, number> = {
+    pending: 0,
+    approved: 1,
+    waitlist: 2,
+    cancelled: 3,
+  };
+  const visible = [...rows]
+    .sort(
+      (a, b) =>
+        order[a.status] - order[b.status] ||
+        b.created_at.localeCompare(a.created_at),
+    )
+    .filter(
+      (r) =>
+        (filter === "all" ||
+          (filter === "unpaid"
+            ? !r.paid && r.status === "approved"
+            : r.status === filter)) &&
+        `${r.name} ${r.phone}`.includes(search.trim()),
+    );
   async function share() {
     const url = `${location.origin}${appPath(`/events/${event.id}`)}`;
     try {
@@ -156,73 +171,231 @@ export function EventManager({
           </div>
         </div>
       </section>
-      <section className="stats-grid four-stats" aria-label="סיכום האירוע">
-        <div className="stat-card">
-          <strong>
-            {event.approved}
-            <small>{event.capacity ? ` / ${event.capacity}` : ""}</small>
-          </strong>
-          <span>משתתפות מאושרות</span>
-        </div>
-        <div className="stat-card">
-          <strong>{event.pending}</strong>
-          <span>ממתינות לאישור</span>
-        </div>
-        <div className="stat-card">
-          <strong>{event.waitlist}</strong>
-          <span>ברשימת המתנה</span>
-        </div>
-        <div className="stat-card">
-          <strong>
-            {event.capacity === null
-              ? "∞"
-              : Math.max(0, event.capacity - event.approved)}
-          </strong>
-          <span>מקומות פנויים</span>
-        </div>
-      </section>
-      <div className="attendees-heading">
-        <div>
-          <h2>המשתתפות</h2>
-          <p>אישור, תשלום ווואטסאפ, הכול מכאן.</p>
-        </div>
-        <button
-          className="button gold-button"
-          onClick={() => {
-            setError("");
-            setEditing("new");
-          }}
-        >
-          <Plus size={18} />
-          הוספת משתתפת
-        </button>
-      </div>
-      <div className="attendees-toolbar">
-        <label className="search-field">
-          <Search size={18} />
-          <input
-            aria-label="חיפוש משתתפת לפי שם או טלפון"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="חיפוש לפי שם או טלפון"
-          />
-        </label>
-        <select
-          aria-label="סינון משתתפות"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="all">כל המשתתפות ({rows.length})</option>
-          {Object.entries(statusLabels).map(([k, v]) => (
-            <option key={k} value={k}>
-              {v} ({rows.filter((r) => r.status === k).length})
-            </option>
-          ))}
-          {event.price > 0 && (
-            <option value="unpaid">מאושרות שטרם שילמו</option>
-          )}
-        </select>
-      </div>
+      {(() => {
+        const count = (k: string) => rows.filter((r) => r.status === k).length;
+        const approvedRows = rows.filter((r) => r.status === "approved");
+        const unpaid = approvedRows.filter((r) => !r.paid).length;
+        const total = rows.length || 1;
+        const seg = (k: string) => `${(count(k) / total) * 100}%`;
+        const left =
+          event.capacity === null
+            ? null
+            : Math.max(0, event.capacity - event.approved);
+        const chips: [string, string, number][] = [
+          ["all", "הכול", rows.length],
+          ["pending", "ממתינות", count("pending")],
+          ["approved", "מאושרות", count("approved")],
+          ["waitlist", "בהמתנה", count("waitlist")],
+          ["unpaid", "לא שילמו", event.price > 0 ? unpaid : 0],
+          ["cancelled", "בוטלו", count("cancelled")],
+        ];
+        return (
+          <>
+            <section className="roster-overview" aria-label="סיכום האירוע">
+              <div className="roster-numbers">
+                <div className="roster-big">
+                  <strong>{event.approved}</strong>
+                  <span>
+                    מאושרות
+                    {event.capacity !== null && ` מתוך ${event.capacity}`}
+                  </span>
+                </div>
+                <div className="roster-facts">
+                  {event.pending > 0 && (
+                    <button
+                      className="roster-fact is-hot"
+                      onClick={() => setFilter("pending")}
+                    >
+                      <b>{event.pending}</b> ממתינות לאישור
+                    </button>
+                  )}
+                  {left !== null && (
+                    <span
+                      className={`roster-fact ${left === 0 ? "is-full" : ""}`}
+                    >
+                      <b>{left}</b> {left === 0 ? "מלא" : "פנויים"}
+                    </span>
+                  )}
+                  {event.waitlist > 0 && (
+                    <span className="roster-fact">
+                      <b>{event.waitlist}</b> ברשימת המתנה
+                    </span>
+                  )}
+                  {event.price > 0 && approvedRows.length > 0 && (
+                    <button
+                      className={`roster-fact ${unpaid ? "is-unpaid" : "is-ok"}`}
+                      onClick={() => setFilter(unpaid ? "unpaid" : "approved")}
+                    >
+                      <b>{approvedRows.length - unpaid}</b> שילמו
+                      {unpaid > 0 && ` · ${unpaid} עוד לא`}
+                    </button>
+                  )}
+                </div>
+              </div>
+              {rows.length > 0 && (
+                <div
+                  className="status-bar"
+                  role="img"
+                  aria-label={`${count("approved")} מאושרות, ${count("pending")} ממתינות, ${count("waitlist")} ברשימת המתנה, ${count("cancelled")} בוטלו`}
+                >
+                  <i
+                    className="seg-approved"
+                    style={{ width: seg("approved") }}
+                  />
+                  <i
+                    className="seg-pending"
+                    style={{ width: seg("pending") }}
+                  />
+                  <i
+                    className="seg-waitlist"
+                    style={{ width: seg("waitlist") }}
+                  />
+                  <i
+                    className="seg-cancelled"
+                    style={{ width: seg("cancelled") }}
+                  />
+                </div>
+              )}
+            </section>
+            <div className="attendees-heading">
+              <div>
+                <h2>המשתתפות</h2>
+              </div>
+              <button
+                className="button gold-button"
+                onClick={() => {
+                  setError("");
+                  setEditing("new");
+                }}
+              >
+                <Plus size={18} />
+                הוספת משתתפת
+              </button>
+            </div>
+            <div className="roster-toolbar">
+              <div
+                className="roster-chips"
+                role="group"
+                aria-label="סינון משתתפות"
+              >
+                {chips
+                  .filter(([k, , n]) => k === "all" || n > 0)
+                  .map(([k, label, n]) => (
+                    <button
+                      key={k}
+                      className={`chip chip-${k} ${filter === k ? "selected" : ""}`}
+                      aria-pressed={filter === k}
+                      onClick={() => setFilter(k)}
+                    >
+                      {label} <b>{n}</b>
+                    </button>
+                  ))}
+              </div>
+              <div className="roster-search">
+                <label className="search-field">
+                  <Search size={18} />
+                  <input
+                    aria-label="חיפוש משתתפת לפי שם או טלפון"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="חיפוש לפי שם או טלפון"
+                  />
+                </label>
+                {visible.length > 0 && (
+                  <div className="roster-bulk">
+                    {filter === "pending" && visible.length > 1 && (
+                      <button
+                        className="button outline-button small-button"
+                        disabled={busy}
+                        onClick={() => {
+                          if (
+                            !confirm(
+                              `לאשר את כל ${visible.length} הממתינות? אם המקומות ייגמרו באמצע, נעצור.`,
+                            )
+                          )
+                            return;
+                          action(async () => {
+                            for (const r of visible)
+                              await api(
+                                `${base}/registrations/${r.id}`,
+                                "PATCH",
+                                {
+                                  ...r,
+                                  status: "approved",
+                                },
+                              );
+                          }, `אושרו ${visible.length} משתתפות`);
+                        }}
+                      >
+                        <CheckCheck size={16} />
+                        אישור כל הממתינות
+                      </button>
+                    )}
+                    <button
+                      className="button outline-button small-button"
+                      disabled={busy}
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(
+                            visible.map((r) => r.phone).join("\n"),
+                          );
+                          setError("");
+                          setNotice(
+                            `הועתקו ${visible.length} מספרי טלפון. אפשר להדביק בקבוצת וואטסאפ.`,
+                          );
+                        } catch {
+                          setError("לא הצלחנו להעתיק. נסי שוב.");
+                        }
+                      }}
+                    >
+                      <ClipboardCopy size={16} />
+                      העתקת טלפונים
+                    </button>
+                    <button
+                      className="button outline-button small-button"
+                      onClick={() => {
+                        const lines = [
+                          ["שם", "טלפון", "מצב", "שולם", "נרשמה"],
+                          ...visible.map((r) => [
+                            r.name,
+                            r.phone,
+                            statusLabels[r.status],
+                            event.price > 0 ? (r.paid ? "כן" : "לא") : "",
+                            new Date(r.created_at).toLocaleString("he-IL", {
+                              timeZone: "Asia/Jerusalem",
+                            }),
+                          ]),
+                        ];
+                        const csv =
+                          "\ufeff" +
+                          lines
+                            .map((l) =>
+                              l
+                                .map(
+                                  (v) => `"${String(v).replace(/"/g, '""')}"`,
+                                )
+                                .join(","),
+                            )
+                            .join("\r\n");
+                        const a = document.createElement("a");
+                        a.href = URL.createObjectURL(
+                          new Blob([csv], { type: "text/csv;charset=utf-8" }),
+                        );
+                        a.download = `${event.title} - משתתפות.csv`;
+                        a.click();
+                        URL.revokeObjectURL(a.href);
+                      }}
+                    >
+                      <Download size={16} />
+                      אקסל
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        );
+      })()}
       {error && (
         <p className="error-message" role="alert">
           {error}
@@ -234,88 +407,78 @@ export function EventManager({
           {notice}
         </p>
       )}
-      <div className="attendee-list">
+      <div className="attendee-list roster-list">
         {visible.map((row) => (
-          <article key={row.id} className="attendee-card">
-            <div className="attendee-person">
-              <span className="avatar">{row.name.trim()[0]}</span>
-              <div>
-                <h3>{row.name}</h3>
+          <article
+            key={row.id}
+            className={`attendee-card attendee-row row-${row.status}`}
+          >
+            <span className="avatar">{row.name.trim()[0]}</span>
+            <div className="row-main">
+              <h3>{row.name}</h3>
+              <div className="row-meta">
                 <a href={`tel:${row.phone}`} dir="ltr">
                   {row.phone}
                 </a>
+                <span className="row-when">
+                  נרשמה {dateLabel(row.created_at)}
+                </span>
+                <span className={`badge status-${row.status}`}>
+                  {statusLabels[row.status]}
+                </span>
+                {event.price > 0 && row.status === "approved" && (
+                  <button
+                    className={`payment-toggle ${row.paid ? "is-paid" : ""}`}
+                    disabled={busy}
+                    aria-label={`${row.name}: ${row.paid ? "שולם, לחצי לביטול הסימון" : "לא שולם, לחצי לסימון שולם"}`}
+                    onClick={() => update(row, { paid: !row.paid })}
+                  >
+                    {row.paid ? (
+                      <Check size={13} />
+                    ) : (
+                      <span className="payment-dot" />
+                    )}
+                    {row.paid ? "שולם" : "לא שולם"}
+                  </button>
+                )}
               </div>
+            </div>
+            <div className="row-actions">
+              {row.status !== "approved" && row.status !== "cancelled" && (
+                <button
+                  className="row-action approve"
+                  disabled={busy}
+                  aria-label="אישור השתתפות"
+                  title="אישור השתתפות"
+                  onClick={() => update(row, { status: "approved" })}
+                >
+                  <Check size={19} />
+                </button>
+              )}
+              {row.status === "approved" && (
+                <a
+                  className="row-action whatsapp"
+                  aria-label="שליחת אישור בוואטסאפ"
+                  title="שליחת אישור בוואטסאפ"
+                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${typeof window !== "undefined" ? window.location.origin : ""}${appPath(`/events/${event.id}`)}\nמחכה לראותך, Koral Events`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <MessageCircle size={19} />
+                </a>
+              )}
               <button
-                className="icon-button attendee-edit"
+                className="row-action"
                 aria-label={`עריכת ${row.name}`}
+                title="עריכה, ביטול והסרה"
                 disabled={busy}
                 onClick={() => {
                   setError("");
                   setEditing(row);
                 }}
               >
-                <Pencil size={17} />
+                <MoreHorizontal size={19} />
               </button>
-            </div>
-            <div className="attendee-status">
-              <span className={`badge status-${row.status}`}>
-                {statusLabels[row.status]}
-              </span>
-              {event.price === 0 ? (
-                <span className="free-label">ללא עלות</span>
-              ) : (
-                <button
-                  className={`payment-toggle ${row.paid ? "is-paid" : ""}`}
-                  disabled={busy}
-                  aria-label={`${row.name}: ${row.paid ? "שולם, לחצי לביטול הסימון" : "לא שולם, לחצי לסימון שולם"}`}
-                  onClick={() => update(row, { paid: !row.paid })}
-                >
-                  {row.paid ? (
-                    <Check size={14} />
-                  ) : (
-                    <span className="payment-dot" />
-                  )}
-                  {row.paid ? "שולם" : "לא שולם"}
-                </button>
-              )}
-            </div>
-            <div className="attendee-actions">
-              {row.status !== "approved" && (
-                <button
-                  className="button approve-button small-button"
-                  disabled={busy}
-                  onClick={() => update(row, { status: "approved" })}
-                >
-                  <Check size={16} />
-                  אישור השתתפות
-                </button>
-              )}
-              {row.status === "approved" && (
-                <a
-                  className="button whatsapp-button small-button"
-                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${typeof window !== "undefined" ? window.location.origin : ""}${appPath(`/events/${event.id}`)}\nמחכה לראותך, Koral Events`)}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <MessageCircle size={16} />
-                  שליחת אישור בוואטסאפ
-                </a>
-              )}
-              {row.status !== "cancelled" && (
-                <button
-                  className="icon-button"
-                  disabled={busy}
-                  aria-label={`ביטול הרשמה של ${row.name}`}
-                  onClick={() => {
-                    if (
-                      confirm(`לבטל את ההרשמה של ${row.name}? המקום שלה יתפנה.`)
-                    )
-                      update(row, { status: "cancelled" });
-                  }}
-                >
-                  <X size={17} />
-                </button>
-              )}
             </div>
           </article>
         ))}
@@ -482,6 +645,32 @@ export function EventManager({
               {busy ? "שומרת…" : "שמירת פרטים"}
               <Check size={17} />
             </button>
+            {editing !== "new" && editing.status !== "cancelled" && (
+              <button
+                className="button outline-button full-width cancel-button"
+                disabled={busy}
+                type="button"
+                onClick={async () => {
+                  if (
+                    confirm(
+                      `לבטל את ההרשמה של ${editing.name}? המקום שלה יתפנה.`,
+                    )
+                  ) {
+                    const success = await action(
+                      () =>
+                        api(`${base}/registrations/${editing.id}`, "PATCH", {
+                          ...editing,
+                          status: "cancelled",
+                        }),
+                      "ההרשמה בוטלה",
+                    );
+                    if (success) setEditing(null);
+                  }
+                }}
+              >
+                ביטול ההרשמה
+              </button>
+            )}
             {editing !== "new" && (
               <button
                 className="delete-button"
