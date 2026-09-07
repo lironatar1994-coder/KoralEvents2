@@ -533,6 +533,24 @@
 .public-site .site-footer > div {
   color: #d3c3dd;
 }
+.public-site .site-footer {
+  flex-wrap: wrap;
+}
+.site-credit {
+  flex-basis: 100%;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+.site-credit a {
+  color: var(--gold);
+  font-weight: 600;
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
+}
 /* Event page: the poster is the page. */
 .public-event .site-header {
   justify-content: center;

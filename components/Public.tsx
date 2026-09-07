@@ -21,6 +21,16 @@ export function Footer() {
           כניסת מנהלת <ArrowUpLeft size={14} />
         </Link>
       </div>
+      <p className="site-credit">
+        נבנה על ידי{" "}
+        <a href="https://lawebs.co.il" target="_blank" rel="noreferrer">
+          lawebs
+        </a>
+        {" · "}
+        <a href="tel:+972508611888" dir="ltr">
+          050-8611888
+        </a>
+      </p>
     </footer>
   );
 }
