@@ -12,13 +12,13 @@
   unicode-range: U+0000-00FF;
 }
 :root {
-  --bg: #151018;
-  --panel: #211925;
-  --panel-light: #2b2030;
+  --bg: #160c1d;
+  --panel: #22142b;
+  --panel-light: #2e1b38;
   --text: #f5eee8;
-  --muted: #bdadb9;
-  --gold: #ff806e;
-  --ink: #321a26;
+  --muted: #c9b9d6;
+  --gold: #ff5c8a;
+  --ink: #2a0714;
   --line: #e4bfd421;
   --radius: 14px;
   --radius-pill: 999px;
@@ -368,7 +368,7 @@ svg {
   font-size: 16px;
 }
 .gold-button:hover {
-  background: #ffab99;
+  background: #ff7aa0;
 }
 .outline-button {
   background: transparent;
@@ -389,7 +389,7 @@ svg {
   justify-content: center;
   gap: 48px;
   padding: 17px 24px;
-  color: #bdadb9;
+  color: #c9b9d6;
   font-size: 12px;
 }
 .manifesto-strip > span:nth-child(even) {
@@ -847,7 +847,7 @@ textarea {
   min-width: 0;
   min-height: 48px;
   padding: 12px 14px;
-  background: #18121d;
+  background: #1a0f22;
   border: 1px solid #e4bfd433;
   border-radius: 4px;
   color: var(--text);
@@ -952,7 +952,7 @@ select option {
 /* The private workspace uses larger controls and quieter composition. */
 .admin-app {
   min-height: 100vh;
-  background: #151018;
+  background: #160c1d;
 }
 .admin-header {
   height: 88px;
@@ -979,7 +979,7 @@ select option {
   gap: 30px;
   padding: 0 max(32px, calc((100% - 1150px) / 2));
   border-bottom: 1px solid var(--line);
-  background: #211825;
+  background: #22142b;
 }
 .admin-nav a {
   min-height: 58px;
@@ -1024,7 +1024,7 @@ select option {
 }
 .stat-card {
   border: 1px solid var(--line);
-  background: #241b29;
+  background: #251530;
   padding: 23px;
   position: relative;
   display: flex;
@@ -1109,32 +1109,37 @@ select option {
 }
 .badge {
   display: inline-flex;
-  padding: 4px 9px;
+  padding: 4px 10px;
   align-items: center;
-  border-radius: 3px;
+  border-radius: var(--radius-pill);
   font-size: 10px;
   line-height: 1.7;
-  background: #d2acc114;
-  color: #d5c2cd;
+  background: #d9c6ff14;
+  color: #e6dcf3;
+}
+.badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-inline-end: 6px;
+  flex-shrink: 0;
 }
 .state-published,
 .status-approved {
-  background: #283726;
-  color: #c0dca8;
+  color: #8ff0b4;
 }
 .state-draft,
 .status-pending {
-  background: #382936;
   color: var(--gold);
 }
 .state-closed,
 .status-waitlist {
-  background: #263047;
-  color: #c5d3ee;
+  color: #d9c6ff;
 }
 .state-archived,
 .status-cancelled {
-  background: #302936;
   color: #c0b1bd;
 }
 .admin-event-body h2 {
@@ -1470,7 +1475,7 @@ select option {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: #18121d;
+  background: #1a0f22;
   border: 1px dashed #ff806e40;
   border-radius: 4px;
   position: relative;
@@ -1545,7 +1550,7 @@ select option {
 }
 .modal {
   color: var(--text);
-  background: #211925;
+  background: #22142b;
   border: 1px solid #ff806e38;
   border-radius: var(--radius);
   width: min(490px, calc(100% - 28px));
@@ -2329,7 +2334,7 @@ select option {
 
 /* Nightfall: plum charcoal, burgundy light and champagne highlights. */
 :root {
-  --champagne: #ff9d8d;
+  --champagne: #d9c6ff;
 }
 .brand-dot {
   color: var(--gold);
@@ -2379,7 +2384,7 @@ select option {
   background: #542d38e8;
 }
 .manifesto-strip {
-  background: #221727;
+  background: #24152e;
 }
 .about-section {
   background: radial-gradient(ellipse at 0 100%, #6e315b26, transparent 65%);
@@ -2402,11 +2407,11 @@ select option {
   box-shadow: 0 5px 22px #6c443805;
 }
 .image-placeholder {
-  background: radial-gradient(ellipse at 30% 20%, #3c253d, #221727 75%);
+  background: radial-gradient(ellipse at 30% 20%, #3c253d, #24152e 75%);
   color: var(--gold);
 }
 .admin-event-image {
-  background: #241b29;
+  background: #251530;
 }
 .payment-toggle {
   border-color: #9b725940;
@@ -2430,7 +2435,7 @@ select option {
   color: #e3c8a2;
 }
 .event-preview > img {
-  background: #241b29;
+  background: #251530;
 }
 .modal::backdrop {
   background: #0d0915b3;
@@ -2452,7 +2457,7 @@ select option {
 /* Warm pools of light against a night sky; keep text and controls crisp. */
 body {
   background:
-    radial-gradient(ellipse 70% 600px at 90% 0, #51273d24, transparent 80%),
+    radial-gradient(ellipse 70% 600px at 90% 0, #6a2c8a24, transparent 80%),
     var(--bg);
 }
 .skip-link {

@@ -1,18 +1,18 @@
 /* Public identity: midnight, burgundy spotlights and coral event posters. */
 .public-site {
-  --coral: #ff806e;
+  --coral: #ff5c8a;
   --paper: #f5f0e7;
-  --ink: #321a26;
-  --bg: #120e17;
-  --panel: #241823;
+  --ink: #2a0714;
+  --bg: #150b1c;
+  --panel: #241329;
   --text: #fff8ed;
-  --muted: #d0bac5;
-  --gold: #ff9d8d;
-  --line: #f5f0e728;
+  --muted: #d3c3dd;
+  --gold: #d9c6ff;
+  --line: #d9c6ff2b;
   --header: 76px;
   position: relative;
   background:
-    radial-gradient(ellipse 70% 600px at 100% 35%, #ae315b1a, transparent 75%),
+    radial-gradient(ellipse 70% 600px at 100% 35%, #8a2be21f, transparent 75%),
     var(--bg);
   color: var(--text);
   overflow: clip;
@@ -59,7 +59,7 @@
   color: var(--ink);
 }
 .public-site .gold-button:hover {
-  background: #ffab99;
+  background: #ff7aa0;
 }
 .public-site .empty-public {
   padding-top: calc(var(--header) + 40px);
@@ -98,7 +98,7 @@
 }
 .hero-next b {
   flex-shrink: 0;
-  color: var(--coral);
+  color: var(--gold);
   font-weight: 800;
   letter-spacing: 0.02em;
 }
@@ -171,7 +171,7 @@
   gap: 22px;
 }
 .public-site .show-button:hover {
-  background: #ffab99;
+  background: #ff7aa0;
 }
 .show-hero-content > * {
   animation: show-enter 0.85s both;
@@ -197,7 +197,7 @@
   display: flex;
   width: max-content;
   animation: ribbon-scroll 32s linear infinite;
-  color: var(--coral);
+  color: var(--gold);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -222,8 +222,8 @@
 /* Events list: one big poster card, then a quiet list. */
 .show-events {
   background:
-    radial-gradient(ellipse 55% 60% at 95% 35%, #a82e5738, transparent 75%),
-    radial-gradient(ellipse 50% 55% at 0% 75%, #74354c26, transparent 75%),
+    radial-gradient(ellipse 55% 60% at 95% 35%, #a12d8a38, transparent 75%),
+    radial-gradient(ellipse 50% 55% at 0% 75%, #5b2a8a26, transparent 75%),
     var(--bg);
   color: var(--text);
   padding: 72px 0 90px;
@@ -259,7 +259,7 @@
   max-height: 780px;
   box-shadow:
     0 24px 70px #0006,
-    0 0 45px #e9487512;
+    0 0 45px #b04cff18;
   margin-bottom: 18px;
   isolation: isolate;
 }
@@ -295,7 +295,7 @@
 }
 .public-site .card-state {
   color: #fff8ed;
-  background: #482232;
+  background: #3a1d4a;
   border-radius: var(--radius-pill);
   padding: 5px 10px;
 }
@@ -331,7 +331,7 @@
   background: var(--coral);
 }
 .card-facts b {
-  background: var(--coral);
+  background: var(--gold);
   color: var(--ink);
   border-radius: var(--radius-pill);
   padding: 3px 10px;
@@ -364,7 +364,7 @@
   transition: background 0.2s;
 }
 .card-featured:hover .card-cta {
-  background: #ffab99;
+  background: #ff7aa0;
 }
 .public-site .card-compact {
   display: grid;
@@ -426,8 +426,8 @@
 .show-about {
   padding: 90px 0 94px;
   background:
-    radial-gradient(ellipse 65% 100% at 85% 70%, #81274833, transparent 75%),
-    #1c111d;
+    radial-gradient(ellipse 65% 100% at 85% 70%, #8a2b9a33, transparent 75%),
+    #1a0f22;
   border-top: 1px solid var(--line);
 }
 .show-about > .page-width {
@@ -448,7 +448,7 @@
   color: var(--coral);
 }
 .show-about p {
-  color: #e8d6de;
+  color: #e6d9ee;
   font-size: 14px;
   line-height: 1.9;
 }
@@ -463,7 +463,7 @@
   font-family: Georgia, serif;
   font-size: clamp(54px, 7vw, 100px);
   line-height: 0.9;
-  color: #ffae99;
+  color: #d9c6ff;
   transform: rotate(-9deg);
   letter-spacing: -0.06em;
   padding-inline: 12px;
@@ -479,7 +479,7 @@
   min-height: 44px;
 }
 .public-site .site-footer > div {
-  color: #d0bac5;
+  color: #d3c3dd;
 }
 /* Event page: the poster is the page. */
 .public-event .site-header {
@@ -586,7 +586,7 @@
   gap: 5px;
 }
 .poster-price {
-  background: var(--coral);
+  background: var(--gold);
   color: var(--ink);
   border-radius: var(--radius-pill);
   padding: 4px 12px;
@@ -638,13 +638,13 @@
 .public-event .detail-description {
   font-size: 15px;
   line-height: 1.8;
-  color: #e8d6de;
+  color: #e6d9ee;
   white-space: pre-wrap;
   margin: 10px 0 0;
 }
 .public-event .registration-box {
   margin-top: 30px;
-  background: linear-gradient(135deg, #34202f, #211622 80%);
+  background: linear-gradient(135deg, #331a3d, #1d1024 80%);
   color: var(--text);
   padding: 24px 20px 20px;
   border-radius: 24px;
@@ -662,7 +662,7 @@
   font-size: 14px;
 }
 .public-event .registration-box input {
-  background: #17111c;
+  background: #190d20;
   color: var(--text);
   border-color: #ff9d8d45;
   border-radius: 16px;
@@ -672,7 +672,7 @@
   padding-inline: 18px;
 }
 .public-event .registration-box input::placeholder {
-  color: #9f8a98;
+  color: #a08fae;
   font-weight: 400;
 }
 .public-event .registration-box .gold-button {
