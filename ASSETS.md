@@ -2,11 +2,13 @@
 
 ## Brand hero (home page first screen)
 
-The hero uses three AI-generated scenes depicting observant Jewish women: challah preparation, a Western Wall visit, and an evening celebration. These are brand illustrations, not photographs of actual participants. Generated with the built-in image_gen tool on 2026-09-07.
+The hero uses three AI-generated environmental scenes: the Western Wall plaza, a Jerusalem courtyard, and a vaulted event hall. Architecture and warm lighting lead; observant Jewish women appear as small figures in the distance. These are brand illustrations, not photographs of actual participants. Generated with the built-in image_gen tool on 2026-09-07.
 
-Active files: `public/brand/hero-{challah,kotel,celebration}-{portrait,landscape}.webp`. Desktop files are 1536 x 1024 (quality 82); mobile files are central crops at 720 x 1080 (quality 84). Older rooftop/alley/beach files are no longer referenced by the slideshow. The slideshow changes every 6.5 seconds with a 1.4-second fade; only the current viewport variant is preloaded. Reduced-motion users see the first still.
+Active files: `public/brand/hero-venue-{wall,courtyard,hall}-{portrait,landscape}.webp`. Desktop files are 1536 x 1024 (quality 82); mobile files are central crops at 720 x 1080 (quality 84). Older rooftop/alley/beach files are no longer referenced by the slideshow. The slideshow changes every 6.5 seconds with a 1.4-second fade; only the current viewport variant is preloaded. Reduced-motion users see the first still.
 
-### Generation prompts
+Current prompts: [Venue hero prompts](design/venue-hero-prompts.md).
+
+### Previous close-up generation prompts
 
 Each final prompt combines this opening, one scene below, and the closing:
 

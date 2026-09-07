@@ -130,34 +130,61 @@
   }
 }
 
-/* A two-line signature, with a quiet service description beneath it. */
+/* One compact signature; consistent spacing through the next-event action. */
 .public-site .show-hero .hero-title {
-  font-size: clamp(100px, 9vw, 140px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  font-size: clamp(92px, 8vw, 120px);
+  font-weight: 900;
   line-height: 1.02;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.035em;
   margin: 24px 0 16px;
 }
+.hero-title .hero-line {
+  padding: 0.04em 0.08em 0.08em;
+  margin: -0.04em -0.08em -0.08em;
+}
+.hero-title .hero-line > span {
+  display: block;
+}
 .hero-title .hero-title-intro {
-  font-size: 0.52em;
-  line-height: 1.2;
+  font-size: 0.62em;
+  line-height: 1.12;
   letter-spacing: -0.035em;
-  margin-bottom: 8px;
 }
 .public-site .hero-description {
   color: var(--paper);
-  font-size: clamp(18px, 1.7vw, 24px);
+  font-size: clamp(17px, 1.5vw, 22px);
   font-weight: 500;
   line-height: 1.5;
-  margin: 0 0 20px;
+  margin: 0 0 24px;
   animation-delay: 0.2s;
 }
 @media (max-width: 700px) {
   .public-site .show-hero .hero-title {
-    font-size: clamp(84px, 25vw, 110px);
-    margin: 18px 0 12px;
+    font-size: clamp(72px, 21vw, 90px);
+    margin: 20px 0 14px;
   }
   .public-site .hero-description {
-    font-size: 18px;
-    margin-bottom: 14px;
+    font-size: 17px;
+    margin-bottom: 22px;
+  }
+  .public-site .hero-next {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 20px;
+    line-height: 1.45;
+  }
+  .public-site .hero-next b {
+    font-size: 13px;
+  }
+  .public-site .hero-next span {
+    font-size: 14px;
+    white-space: normal;
+    text-wrap: pretty;
   }
 }

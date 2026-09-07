@@ -12,8 +12,8 @@ test.beforeAll(() => {
 test("public site is readable, accessible, and has no overflow at phone and desktop widths", async ({
   page,
 }) => {
-  for (const width of [360, 390, 430, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
+  for (const width of [320, 360, 390, 430, 1440]) {
+    await page.setViewportSize({ width, height: width < 700 ? 780 : 900 });
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator("h1")).toContainText("אישה לאישה");
@@ -34,6 +34,11 @@ test("public site is readable, accessible, and has no overflow at phone and desk
       )
       .toBe(true);
     await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await page.screenshot({
+      path: `test-results/hero-${width}.png`,
+      fullPage: false,
+      animations: "disabled",
+    });
     await page.screenshot({
       path: `test-results/home-${width}.png`,
       fullPage: true,
