@@ -42,11 +42,20 @@ try {
     $published = ((Run git @('ls-remote', 'origin', 'refs/heads/main') | Out-String).Trim() -split '\s+')[0]
     if ($published -ne $revision) { throw 'GitHub main must match the exact deployment revision.' }
     if ($SSHHost -notmatch '^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+$') { throw 'Invalid SSH host.' }
-    New-Item -ItemType Directory -Force .deploy | Out-Null
-    $archive = Join-Path $PSScriptRoot ".deploy/$revision.tar.gz"
-    Run git @('archive', '--format=tar.gz', "--output=$archive", $revision)
-    Run ssh @('-o','BatchMode=yes','-o','ConnectTimeout=15',$SSHHost,'install -d -m 700 /opt/koralevents/incoming')
-    Run scp @('-o','BatchMode=yes',$archive,"${SSHHost}:/opt/koralevents/incoming/$revision.tar.gz")
+    # Fetch only changed Git objects directly on the server using its read-only deploy key.
+    $prepare = @'
+set -eu
+repo=/opt/koralevents/source.git
+test "$(git --git-dir="$repo" remote get-url origin)" = 'git@github.com:lironatar1994-coder/KoralEvents.git'
+git --git-dir="$repo" fetch origin main
+test "$(git --git-dir="$repo" rev-parse FETCH_HEAD)" = '__REV__'
+install -d -m 700 /opt/koralevents/incoming
+archive=$(mktemp /opt/koralevents/incoming/archive.XXXXXXXX)
+trap 'rm -f "$archive"' EXIT
+git --git-dir="$repo" archive --format=tar.gz --output="$archive" '__REV__'
+mv "$archive" '/opt/koralevents/incoming/__REV__.tar.gz'
+'@
+    Run ssh @('-o','BatchMode=yes','-o','ConnectTimeout=15',$SSHHost,$prepare.Replace('__REV__',$revision).Replace([string][char]13,''))
     # The deployment code comes from the exact archive published to GitHub.
     Run ssh @('-o','BatchMode=yes',$SSHHost,"tar -xOf /opt/koralevents/incoming/$revision.tar.gz scripts/deploy-linux.sh | bash -s -- $revision")
     $health = Invoke-RestMethod 'https://lawebs.co.il/koralevents/api/health'
