@@ -87,16 +87,26 @@ export default async function Home() {
         <section id="about" className="show-about">
           <div className="page-width">
             <div className="show-about-copy">
-              <div className="eyebrow">הביחד שלנו</div>
+              <div className="eyebrow">מי אנחנו</div>
               <h2>
-                פחות שגרה.
+                אנחנו KORAL EVENTS.
                 <br />
-                <span>יותר חיים.</span>
+                <span>ערבים לנשים, מהלב.</span>
               </h2>
               <p>
-                מסיבות, ערבים וטיולי לילה לנשים בלבד.
-                <br />
-                ללא מטרות רווח. עם כל הלב.
+                אנחנו עושות אירועים לנשים, ללא מטרות רווח. כל פעם מקום אחר וערב
+                אחר, ומה שמשותף לכולם הוא הביחד.
+              </p>
+              <ul className="about-kinds" aria-label="סוגי האירועים שלנו">
+                <li>שיעורי תורה עם רבניות</li>
+                <li>מסיבות וערבי לילה</li>
+                <li>הפרשת חלה</li>
+                <li>ערבי העצמה נשית</li>
+                <li>לילות בכותל וטיולים</li>
+                <li>ועוד</li>
+              </ul>
+              <p className="about-how">
+                נרשמות בשם ובטלפון, המנהלת מאשרת, ומחכה לך מקום.
               </p>
               <a href="#events" className="text-link">
                 נתראה באירוע הבא <ArrowUpLeft size={20} />

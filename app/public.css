@@ -475,6 +475,33 @@
   font-size: 14px;
   line-height: 1.9;
 }
+.show-about-copy {
+  max-width: 560px;
+}
+.about-kinds {
+  list-style: none;
+  padding: 0;
+  margin: 22px 0 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.about-kinds li {
+  border: 1px solid #d9c6ff55;
+  color: var(--paper);
+  border-radius: var(--radius-pill);
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.about-kinds li:last-child {
+  border-style: dashed;
+  color: var(--gold);
+}
+.about-how {
+  color: var(--gold);
+  font-weight: 600;
+}
 .show-about .text-link {
   margin-top: 23px;
   font-size: 14px;
@@ -913,12 +940,29 @@
     font-size: 12px;
     margin-top: 18px;
   }
+  .about-kinds {
+    gap: 6px;
+    margin: 16px 0 12px;
+  }
+  .about-kinds li {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+  .show-about h2 {
+    font-size: clamp(36px, 9.6vw, 52px);
+  }
   .about-signoff {
-    position: absolute;
-    bottom: 12px;
-    left: 5px;
-    font-size: 42px;
+    position: static;
+    display: inline-block;
+    margin: 30px 0 0 8px;
+    font-size: 44px;
     padding: 0;
+    transform: rotate(-6deg);
+  }
+  .show-about > .page-width {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
   .public-site .site-footer {
     padding: 25px 20px;
