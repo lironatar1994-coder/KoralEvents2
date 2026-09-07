@@ -127,11 +127,11 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
             >
               <div className="admin-event-image">
                 <EventImage event={e} />
+              </div>
+              <div className="admin-event-body">
                 <span className={`badge state-${e.state}`}>
                   {eventStateLabels[e.state]}
                 </span>
-              </div>
-              <div className="admin-event-body">
                 <h2>{e.title}</h2>
                 <p>
                   {dateLabel(e.starts_at, { weekday: "long" })} ·{" "}
