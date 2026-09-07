@@ -954,7 +954,8 @@
   .about-signoff {
     position: static;
     display: inline-block;
-    margin: 30px 0 0 8px;
+    align-self: flex-end;
+    margin: 6px 0 0 8px;
     font-size: 44px;
     padding: 0;
     transform: rotate(-6deg);
