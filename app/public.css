@@ -36,6 +36,7 @@
   gap: 0;
 }
 .public-site .brand {
+  width: auto;
   color: var(--paper);
   text-shadow: 0 2px 18px #0000008c;
 }

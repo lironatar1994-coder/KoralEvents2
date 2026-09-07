@@ -156,6 +156,9 @@ svg {
   flex-shrink: 0;
 }
 .brand > span:first-child {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font);
   font-weight: 900;
   font-size: 37px;
