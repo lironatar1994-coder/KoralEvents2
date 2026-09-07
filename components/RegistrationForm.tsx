@@ -87,18 +87,6 @@ export function RegistrationForm({
         <p>הערב הבא כבר מחכה לך למטה.</p>
       </div>
     );
-  const left =
-    event.capacity === null
-      ? null
-      : Math.max(0, event.capacity - event.approved);
-  const proof =
-    event.approved > 0 && left !== null && left > 0
-      ? `${event.approved} כבר באות · נשארו ${left} מקומות`
-      : event.approved > 0
-        ? `${event.approved} כבר באות`
-        : left !== null && left > 0
-          ? `נשארו ${left} מקומות`
-          : "";
   const when = `${dateLabel(event.starts_at, { weekday: "long" })} · ${timeLabel(event.starts_at)}`;
   const calendarUrl = apple
     ? appPath(`/api/events/${event.id}/calendar.ics`)
@@ -165,16 +153,10 @@ export function RegistrationForm({
           </div>
         ) : (
           <form method="post" onSubmit={submit}>
-            {full ? (
+            {full && (
               <p className="registration-full">
                 הערב מלא. השאירי פרטים, ואם יתפנה מקום נודיע לך.
               </p>
-            ) : (
-              proof && (
-                <p className="registration-proof">
-                  <span className="live-dot" /> {proof}
-                </p>
-              )
             )}
             <label>
               השם המלא שלך
@@ -237,18 +219,13 @@ export function RegistrationForm({
               className="button gold-button full-width"
               disabled={!ready || busy}
             >
+              {busy ? "שולחת…" : cta}
               {busy ? (
                 <Loader2 className="spin" size={18} />
-              ) : full ? (
-                <ArrowUpLeft size={19} />
               ) : (
-                <Spark className="button-spark" />
-              )}{" "}
-              {busy ? "שולחת…" : cta}
+                <ArrowUpLeft size={20} />
+              )}
             </button>
-            <p className="registration-note">
-              לנשים בלבד · המנהלת מאשרת כל בקשה · הפרטים נשארים אצלנו
-            </p>
           </form>
         )}
       </div>
