@@ -1,5 +1,7 @@
 import { ArrowUpLeft, ArrowDown, Sparkles } from "lucide-react";
+import Link from "next/link";
 import { getEvents } from "@/lib/events";
+import { dateLabel } from "@/lib/types";
 import { Header, Footer, EventCard, EventImage } from "@/components/Public";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +29,7 @@ export default async function Home() {
               <span className="live-dot" /> לילות. מסיבות. חוויות.{" "}
               <span className="kicker-divider" /> לנשים בלבד
             </div>
+            <div className="hero-spacer" aria-hidden="true" />
             <h1>
               יוצאות.
               <br />
@@ -34,6 +37,15 @@ export default async function Home() {
               <br />
               זוכרות<span className="hero-period">.</span>
             </h1>
+            {featured && (
+              <Link className="hero-next" href={`/events/${featured.id}`}>
+                <b>הלילה הבא</b>
+                <span>
+                  {featured.title} ·{" "}
+                  {dateLabel(featured.starts_at, { weekday: "long" })}
+                </span>
+              </Link>
+            )}
             <a href="#events" className="button show-button">
               הלילה הבא שלי <ArrowDown size={20} />
             </a>
