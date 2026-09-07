@@ -2,7 +2,7 @@ import { ArrowUpLeft, ArrowDown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { getEvents } from "@/lib/events";
 import { dateLabel } from "@/lib/types";
-import { Header, Footer, EventCard, EventImage } from "@/components/Public";
+import { Header, Footer, EventCard } from "@/components/Public";
 
 export const dynamic = "force-dynamic";
 
@@ -15,14 +15,20 @@ export default async function Home() {
     <div className="public-site">
       <Header />
       <main id="main">
-        <section
-          className={`show-hero ${featured?.image_mode === "contain" ? "show-hero-flyer" : ""}`}
-        >
-          {featured && (
-            <div className="show-hero-image">
-              <EventImage event={featured} priority />
-            </div>
-          )}
+        <section className="show-hero">
+          <div className="show-hero-image">
+            <picture>
+              <source
+                media="(min-width: 700px)"
+                srcSet="/brand/hero-landscape.webp"
+              />
+              <img
+                src="/brand/hero-portrait.webp"
+                alt=""
+                fetchPriority="high"
+              />
+            </picture>
+          </div>
           <div className="show-hero-shade" />
           <div className="show-hero-content page-width">
             <div className="show-kicker">
@@ -63,12 +69,9 @@ export default async function Home() {
         <section className="show-events" id="events">
           <div className="page-width">
             <div className="section-heading">
-              <div>
-                <div className="eyebrow">תפני לך ערב</div>
-                <h2>
-                  זה הזמן <span>שלך.</span>
-                </h2>
-              </div>
+              <h2>
+                הערבים <span>הקרובים.</span>
+              </h2>
             </div>
             {events.length ? (
               <div className="event-list">

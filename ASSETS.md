@@ -1,5 +1,9 @@
 # Visual assets
 
+## Brand hero (home page first screen)
+
+The home hero no longer uses the featured event image. It shows a fixed brand image: `public/brand/hero-portrait.webp` (phones, portrait, ~1080×1920) and `public/brand/hero-landscape.webp` (≥700px, ~2400×1350). Both are currently placeholders copied from `rooftop-sunset.webp` and should be replaced with a night-mood brand image before publishing. Text is overlaid on the lower 45% of the portrait crop, so keep that area darker.
+
 ## Current night identity
 
 Active assets: `public/demo/women-kotel-night.webp` and `public/demo/women-purim.webp`. The daytime Western Wall photograph is retained as an unused earlier variant. The night photograph was created with the built-in imagegen tool and optimized to WebP. Final prompt:
