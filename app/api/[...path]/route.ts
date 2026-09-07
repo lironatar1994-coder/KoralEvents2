@@ -116,6 +116,52 @@ async function handler(
     if (
       parts[0] === "events" &&
       parts.length === 3 &&
+      parts[2] === "calendar.ics" &&
+      method === "GET"
+    ) {
+      const e = await getEvent(parts[1]);
+      if (!e) throw new AppError("האירוע לא נמצא", 404);
+      const stamp = (iso: string, plusHours = 0) =>
+        new Date(new Date(iso).getTime() + plusHours * 3600_000)
+          .toISOString()
+          .replace(/[-:]/g, "")
+          .replace(/\.\d{3}Z$/, "Z");
+      const esc = (s: string) =>
+        s
+          .replace(/\\/g, "\\\\")
+          .replace(/;/g, "\\;")
+          .replace(/,/g, "\\,")
+          .replace(/\r?\n/g, "\\n");
+      const origin = process.env.APP_ORIGIN || req.nextUrl.origin;
+      const ics = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Koral Events//HE",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "BEGIN:VEVENT",
+        `UID:${e.id}@koral-events`,
+        `DTSTAMP:${stamp(new Date().toISOString())}`,
+        `DTSTART:${stamp(e.starts_at)}`,
+        `DTEND:${stamp(e.starts_at, 3)}`,
+        `SUMMARY:${esc(e.title)}`,
+        `LOCATION:${esc(e.address || e.location)}`,
+        `DESCRIPTION:${esc(`Koral Events · לנשים בלבד\n${origin}/events/${e.id}`)}`,
+        `URL:${origin}/events/${e.id}`,
+        "END:VEVENT",
+        "END:VCALENDAR",
+      ].join("\r\n");
+      return new NextResponse(ics, {
+        headers: {
+          "Content-Type": "text/calendar; charset=utf-8",
+          "Content-Disposition": `attachment; filename="koral-event.ics"`,
+          "Cache-Control": "no-store",
+        },
+      });
+    }
+    if (
+      parts[0] === "events" &&
+      parts.length === 3 &&
       parts[2] === "register" &&
       method === "POST"
     ) {

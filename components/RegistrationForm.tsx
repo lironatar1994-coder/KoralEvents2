@@ -34,6 +34,10 @@ export function RegistrationForm({
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
   const [formOnScreen, setFormOnScreen] = useState(false);
+  const [apple, setApple] = useState(false);
+  useEffect(() => {
+    setApple(/iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent));
+  }, []);
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = box.current;
@@ -94,12 +98,13 @@ export function RegistrationForm({
           ? `נשארו ${left} מקומות`
           : "";
   const when = `${dateLabel(event.starts_at, { weekday: "long" })} · ${timeLabel(event.starts_at)}`;
-  const calendarUrl =
-    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-    `&text=${encodeURIComponent(event.title)}` +
-    `&dates=${calendarStamp(event.starts_at)}/${calendarStamp(event.starts_at, 3)}` +
-    `&location=${encodeURIComponent(event.address || event.location)}` +
-    `&details=${encodeURIComponent("Koral Events · לנשים בלבד")}`;
+  const calendarUrl = apple
+    ? appPath(`/api/events/${event.id}/calendar.ics`)
+    : "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      `&text=${encodeURIComponent(event.title)}` +
+      `&dates=${calendarStamp(event.starts_at)}/${calendarStamp(event.starts_at, 3)}` +
+      `&location=${encodeURIComponent(event.address || event.location)}` +
+      `&details=${encodeURIComponent("Koral Events · לנשים בלבד")}`;
   function shareUrl() {
     const link =
       typeof window === "undefined" ? "" : window.location.href.split("#")[0];
@@ -136,7 +141,7 @@ export function RegistrationForm({
                 <a
                   className="button outline-button"
                   href={calendarUrl}
-                  target="_blank"
+                  target={apple ? undefined : "_blank"}
                   rel="noreferrer"
                 >
                   <CalendarPlus size={18} /> הוסיפי ליומן
