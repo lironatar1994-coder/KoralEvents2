@@ -156,8 +156,8 @@
   inset: 0;
   z-index: -2;
   background:
-    linear-gradient(0deg, var(--bg) 0%, #120e17d0 28%, #120e1710 62%),
-    linear-gradient(180deg, #120e1799, transparent 30%);
+    linear-gradient(0deg, var(--bg) 0%, #150b1cd0 28%, #150b1c10 62%),
+    linear-gradient(180deg, #150b1c99, transparent 30%);
 }
 .show-kicker {
   display: flex;
@@ -299,8 +299,8 @@
 .public-site .card-image:after {
   background: linear-gradient(
     0deg,
-    #120e17f5 0%,
-    #120e1780 32%,
+    #150b1cf5 0%,
+    #150b1c80 32%,
     transparent 62%
   );
 }
@@ -532,13 +532,16 @@
   min-height: 0;
   max-height: none;
   object-fit: cover;
+  object-position: center 68%;
 }
 .poster-shade {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(0deg, var(--bg) 0%, #120e17d9 24%, #120e1700 60%),
-    linear-gradient(180deg, #120e1799, transparent 28%);
+    radial-gradient(ellipse 90% 42% at 50% 100%, #ff5c8a33, transparent 72%),
+    radial-gradient(ellipse 60% 30% at 15% 95%, #8a2be233, transparent 70%),
+    linear-gradient(0deg, var(--bg) 0%, #150b1cd9 24%, #150b1c00 60%),
+    linear-gradient(180deg, #150b1c99, transparent 28%);
 }
 .poster-back {
   position: absolute;
@@ -550,7 +553,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #120e1780;
+  background: #150b1c80;
   border: 1px solid #f5f0e733;
   color: var(--paper);
   backdrop-filter: blur(10px);
@@ -713,7 +716,7 @@
   margin: 14px 0 0;
 }
 .public-event .mobile-register-bar {
-  background: linear-gradient(0deg, var(--bg) 55%, #120e1700);
+  background: linear-gradient(0deg, var(--bg) 55%, #150b1c00);
   border: 0;
   backdrop-filter: none;
   padding: 26px 20px max(14px, env(safe-area-inset-bottom));
@@ -792,8 +795,8 @@
   }
   .show-hero-shade {
     background:
-      linear-gradient(0deg, var(--bg) 0%, #120e17d6 30%, #120e1720 62%),
-      linear-gradient(180deg, #120e17b0, transparent 34%);
+      linear-gradient(0deg, var(--bg) 0%, #150b1cd6 30%, #150b1c20 62%),
+      linear-gradient(180deg, #150b1cb0, transparent 34%);
   }
   .show-kicker {
     font-size: 10px;
@@ -931,7 +934,7 @@
     min-height: 100svh;
   }
   .poster-title {
-    padding: 0 20px 118px;
+    padding: 0 20px 132px;
   }
   .is-flyer .poster-title {
     padding: 22px 0 0;
