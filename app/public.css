@@ -4,9 +4,9 @@
   --paper: #f5f0e7;
   --ink: #2a0714;
   --bg: #150b1c;
-  --panel: #241329;
+  --panel: #2a1732;
   --text: #fff8ed;
-  --muted: #d3c3dd;
+  --muted: #b7a8c6;
   --gold: #d9c6ff;
   --line: #d9c6ff2b;
   --header: 76px;
@@ -531,7 +531,7 @@
   min-height: 44px;
 }
 .public-site .site-footer > div {
-  color: #d3c3dd;
+  color: #b7a8c6;
 }
 .public-site .site-footer {
   flex-wrap: wrap;

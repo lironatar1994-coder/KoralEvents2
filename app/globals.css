@@ -13,10 +13,10 @@
 }
 :root {
   --bg: #160c1d;
-  --panel: #22142b;
+  --panel: #2a1732;
   --panel-light: #2e1b38;
   --text: #f5eee8;
-  --muted: #c9b9d6;
+  --muted: #b7a8c6;
   --gold: #ff5c8a;
   --ink: #2a0714;
   --line: #e4bfd421;
@@ -1032,7 +1032,7 @@ select option {
 }
 .stat-card {
   border: 1px solid var(--line);
-  background: #251530;
+  background: #2a1732;
   padding: 23px;
   position: relative;
   display: flex;
@@ -1140,7 +1140,7 @@ select option {
 }
 .state-draft,
 .status-pending {
-  color: var(--gold);
+  color: #ffb454;
 }
 .state-closed,
 .status-waitlist {
@@ -2416,7 +2416,7 @@ select option {
   color: var(--gold);
 }
 .admin-event-image {
-  background: #251530;
+  background: #2a1732;
 }
 .payment-toggle {
   border-color: #9b725940;
@@ -2440,7 +2440,7 @@ select option {
   color: #e3c8a2;
 }
 .event-preview > img {
-  background: #251530;
+  background: #2a1732;
 }
 .modal::backdrop {
   background: #0d0915b3;
@@ -2811,7 +2811,7 @@ body {
   color: var(--muted);
 }
 .overview .is-hot strong {
-  color: var(--gold);
+  color: #ffb454;
 }
 .tabs {
   margin-bottom: 20px;
@@ -2926,7 +2926,7 @@ body {
   letter-spacing: -0.02em;
 }
 .admin-event-counts .is-hot b {
-  color: var(--gold);
+  color: #ffb454;
 }
 @media (min-width: 1000px) {
   .admin-events {
@@ -3057,5 +3057,23 @@ body {
     font-size: 10px;
     white-space: nowrap;
     background: #160c1de6;
+  }
+}
+
+/* Film grain over the whole page: hides gradient banding on phones. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: soft-light;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+  background-size: 180px 180px;
+}
+@media (prefers-reduced-transparency: reduce) {
+  body::after {
+    display: none;
   }
 }
