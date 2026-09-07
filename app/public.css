@@ -536,6 +536,9 @@
 .public-site .site-footer {
   flex-wrap: wrap;
 }
+.public-site .site-footer > .site-credit {
+  display: block;
+}
 .site-credit {
   flex-basis: 100%;
   margin: 0;
