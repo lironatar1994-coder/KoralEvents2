@@ -152,7 +152,7 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
   expect(eventAxe.violations).toEqual([]);
   await visitor.getByLabel("השם המלא שלך").fill("משתתפת בדיקה");
   await visitor.getByLabel("מספר הטלפון").fill("0509999901");
-  await visitor.getByRole("button", { name: "שליחת בקשת הרשמה" }).click();
+  await visitor.getByRole("button", { name: "אני באה" }).click();
   await expect(visitor.getByRole("status")).toContainText(
     "המקום עדיין לא מאושר",
   );
@@ -169,7 +169,7 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
   await visitor.reload();
   await visitor.getByLabel("השם המלא שלך").fill("משתתפת בהמתנה");
   await visitor.getByLabel("מספר הטלפון").fill("0509999902");
-  await visitor.getByRole("button", { name: "בקשת הצטרפות להמתנה" }).click();
+  await visitor.getByRole("button", { name: "שמרי לי מקום בהמתנה" }).click();
   await expect(visitor.getByRole("status")).toContainText("רשימת ההמתנה");
   await page.reload({ waitUntil: "networkidle" });
   await page.getByRole("button", { name: "אישור השתתפות" }).click();

@@ -725,7 +725,73 @@
   color: var(--text);
   padding: 24px 20px 20px;
   border-radius: 24px;
-  border: 1px solid #ff9d8d30;
+  border: 1px solid #d9c6ff2b;
+  border-top-color: #ff5c8a66;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 80px #ff5c8a14;
+}
+.public-event .registration-box::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 180px;
+  background: radial-gradient(
+    ellipse 70% 100% at 50% 0%,
+    #ff5c8a2e,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+.public-event .registration-box > * {
+  position: relative;
+}
+.registration-proof {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--paper);
+}
+.registration-proof .live-dot {
+  background: #8ff0b4;
+  box-shadow: 0 0 0 4px #8ff0b426;
+}
+.button-spark {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+.public-event .registration-success h3 {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  display: block;
+}
+.success-spark {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  margin-inline-start: 6px;
+  vertical-align: -3px;
+  fill: var(--gold);
+}
+.success-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+.success-actions .button {
+  min-height: 54px;
+  font-size: 16px;
+  gap: 10px;
+}
+.success-actions .outline-button {
+  border-color: #d9c6ff55;
+  color: var(--text);
 }
 .registration-full {
   font-size: 13px;

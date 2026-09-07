@@ -2,13 +2,29 @@
 import { appPath } from "@/lib/paths";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpLeft, Check, Heart, Loader2 } from "lucide-react";
+import {
+  ArrowUpLeft,
+  CalendarPlus,
+  Check,
+  Heart,
+  Loader2,
+  MessageCircle,
+} from "lucide-react";
+import { Spark } from "./Brand";
+import { KoralEvent, dateLabel, timeLabel } from "@/lib/types";
+function calendarStamp(iso: string, plusHours = 0) {
+  const d = new Date(new Date(iso).getTime() + plusHours * 3600_000);
+  return d
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d{3}Z$/, "Z");
+}
 export function RegistrationForm({
-  eventId,
+  event,
   open,
   full,
 }: {
-  eventId: string;
+  event: KoralEvent;
   open: boolean;
   full: boolean;
 }) {
@@ -35,7 +51,7 @@ export function RegistrationForm({
     setError("");
     const form = new FormData(e.currentTarget);
     try {
-      const r = await fetch(appPath(`/api/events/${eventId}/register`), {
+      const r = await fetch(appPath(`/api/events/${event.id}/register`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -46,6 +62,7 @@ export function RegistrationForm({
       const data = await r.json();
       if (!r.ok) throw Error(data.error);
       setSuccess(data.status);
+      box.current?.scrollIntoView({ block: "center", behavior: "smooth" });
     } catch (e) {
       setError(
         e instanceof Error
@@ -64,7 +81,33 @@ export function RegistrationForm({
         <p>הערב הבא כבר מחכה לך למטה.</p>
       </div>
     );
-  const cta = full ? "בקשת הצטרפות להמתנה" : "שליחת בקשת הרשמה";
+  const left =
+    event.capacity === null
+      ? null
+      : Math.max(0, event.capacity - event.approved);
+  const proof =
+    event.approved > 0 && left !== null && left > 0
+      ? `${event.approved} כבר באות · נשארו ${left} מקומות`
+      : event.approved > 0
+        ? `${event.approved} כבר באות`
+        : left !== null && left > 0
+          ? `נשארו ${left} מקומות`
+          : "";
+  const when = `${dateLabel(event.starts_at, { weekday: "long" })} · ${timeLabel(event.starts_at)}`;
+  const calendarUrl =
+    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+    `&text=${encodeURIComponent(event.title)}` +
+    `&dates=${calendarStamp(event.starts_at)}/${calendarStamp(event.starts_at, 3)}` +
+    `&location=${encodeURIComponent(event.address || event.location)}` +
+    `&details=${encodeURIComponent("Koral Events · לנשים בלבד")}`;
+  function shareUrl() {
+    const link =
+      typeof window === "undefined" ? "" : window.location.href.split("#")[0];
+    return `https://wa.me/?text=${encodeURIComponent(
+      `היי! נרשמתי ל״${event.title}״ ב-${when}. בואי איתי? ${link}`,
+    )}`;
+  }
+  const cta = full ? "שמרי לי מקום בהמתנה" : "אני באה";
   return (
     <>
       <div id="registration" className="registration-box" ref={box}>
@@ -74,22 +117,53 @@ export function RegistrationForm({
               <Check />
             </span>
             <h3>
-              {success === "waitlist"
-                ? "את ברשימת ההמתנה."
-                : "הבקשה שלך אצלנו."}
+              {success === "waitlist" ? (
+                <>את ברשימת ההמתנה.</>
+              ) : (
+                <>
+                  נתראה ב{dateLabel(event.starts_at, { weekday: "long" })}
+                  <Spark className="success-spark" />
+                </>
+              )}
             </h3>
             <p>
               {success === "waitlist"
                 ? "הערב מלא כרגע. אם יתפנה מקום, המנהלת תיצור איתך קשר."
                 : "המקום עדיין לא מאושר. המנהלת תעבור על הבקשה ותחזור אלייך בהודעה או בטלפון."}
             </p>
+            <div className="success-actions">
+              {success !== "waitlist" && (
+                <a
+                  className="button outline-button"
+                  href={calendarUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <CalendarPlus size={18} /> הוסיפי ליומן
+                </a>
+              )}
+              <a
+                className="button gold-button"
+                href={shareUrl()}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MessageCircle size={18} /> תביאי חברה
+              </a>
+            </div>
           </div>
         ) : (
           <form method="post" onSubmit={submit}>
-            {full && (
+            {full ? (
               <p className="registration-full">
                 הערב מלא. השאירי פרטים, ואם יתפנה מקום נודיע לך.
               </p>
+            ) : (
+              proof && (
+                <p className="registration-proof">
+                  <span className="live-dot" /> {proof}
+                </p>
+              )
             )}
             <label>
               השם המלא שלך
@@ -125,10 +199,12 @@ export function RegistrationForm({
             >
               {busy ? (
                 <Loader2 className="spin" size={18} />
-              ) : (
+              ) : full ? (
                 <ArrowUpLeft size={19} />
+              ) : (
+                <Spark className="button-spark" />
               )}{" "}
-              {busy ? "שולחת את הבקשה…" : cta}
+              {busy ? "שולחת…" : cta}
             </button>
             <p className="registration-note">
               לנשים בלבד · המנהלת מאשרת כל בקשה · הפרטים נשארים אצלנו

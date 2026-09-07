@@ -90,7 +90,7 @@ export default async function EventPage({
               התשלום לא באתר. מסדרים אותו עם המנהלת אחרי האישור.
             </p>
           )}
-          <RegistrationForm eventId={e.id} open={open} full={full} />
+          <RegistrationForm event={e} open={open} full={full} />
         </div>
         {others.length > 0 && (
           <section className="related page-width">
