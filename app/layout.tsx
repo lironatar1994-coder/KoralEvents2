@@ -23,11 +23,6 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           דילוג לתוכן
         </a>
-        {process.env.DATABASE_PATH?.endsWith("demo.sqlite") && (
-          <div className="demo-notice">
-            תצוגה לדוגמה · התאריכים, המחירים ופרטי האירועים להמחשה בלבד
-          </div>
-        )}
         {children}
       </body>
     </html>

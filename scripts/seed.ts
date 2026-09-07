@@ -42,13 +42,7 @@ async function main() {
       starts_at: date.toISOString(),
       state: "published",
     });
-    const people = [
-      "נועה לדוגמה",
-      "מאיה לדוגמה",
-      "דנה לדוגמה",
-      "שירה לדוגמה",
-      "יעל לדוגמה",
-    ];
+    const people = ["נועה", "מאיה", "דנה", "שירה", "יעל"];
     for (let i = 0; i < people.length; i++) {
       await register(id, { name: people[i], phone: `050000000${i}` }, true);
     }
