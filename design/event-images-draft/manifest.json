@@ -1,0 +1,80 @@
+[
+  {
+    "scene": "torah",
+    "orientation": "mobile",
+    "source": {
+      "width": 1122,
+      "height": 1402
+    },
+    "export": {
+      "width": 1200,
+      "height": 1500
+    },
+    "webpBytes": 127824
+  },
+  {
+    "scene": "torah",
+    "orientation": "desktop",
+    "source": {
+      "width": 1672,
+      "height": 941
+    },
+    "export": {
+      "width": 1600,
+      "height": 900
+    },
+    "webpBytes": 120596
+  },
+  {
+    "scene": "challah",
+    "orientation": "mobile",
+    "source": {
+      "width": 1122,
+      "height": 1402
+    },
+    "export": {
+      "width": 1200,
+      "height": 1500
+    },
+    "webpBytes": 250870
+  },
+  {
+    "scene": "challah",
+    "orientation": "desktop",
+    "source": {
+      "width": 1672,
+      "height": 941
+    },
+    "export": {
+      "width": 1600,
+      "height": 900
+    },
+    "webpBytes": 221734
+  },
+  {
+    "scene": "empowerment",
+    "orientation": "mobile",
+    "source": {
+      "width": 1122,
+      "height": 1402
+    },
+    "export": {
+      "width": 1200,
+      "height": 1500
+    },
+    "webpBytes": 117032
+  },
+  {
+    "scene": "empowerment",
+    "orientation": "desktop",
+    "source": {
+      "width": 1672,
+      "height": 941
+    },
+    "export": {
+      "width": 1600,
+      "height": 900
+    },
+    "webpBytes": 112484
+  }
+]

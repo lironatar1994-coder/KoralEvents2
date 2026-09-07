@@ -36,8 +36,16 @@ function database() {
  CREATE INDEX IF NOT EXISTS registrations_event ON registrations(event_id,status);
  CREATE INDEX IF NOT EXISTS events_upcoming ON events(starts_at,state);
  CREATE TABLE IF NOT EXISTS rate_limits(key TEXT PRIMARY KEY,count INTEGER NOT NULL,expires_at TEXT NOT NULL);
- PRAGMA user_version=1;
  `);
+  // Schema v2: optional wide (desktop) image per event.
+  const cols = db.prepare("PRAGMA table_info(events)").all() as {
+    name: string;
+  }[];
+  if (!cols.some((c) => c.name === "image_wide"))
+    db.exec(
+      "ALTER TABLE events ADD COLUMN image_wide TEXT NOT NULL DEFAULT ''",
+    );
+  db.pragma("user_version = 2");
   store.db = db;
   return db;
 }

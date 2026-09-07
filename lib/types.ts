@@ -13,6 +13,7 @@ export interface KoralEvent {
   capacity: number | null;
   image: string;
   image_mode: "cover" | "contain";
+  image_wide: string;
   state: EventState;
   category: string;
   created_at: string;

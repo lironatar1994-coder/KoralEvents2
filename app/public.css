@@ -295,7 +295,7 @@
   border-radius: 0;
   aspect-ratio: auto;
 }
-.public-site .card-image > img.image-contain {
+.public-site .card-image img.image-contain {
   object-fit: contain;
 }
 .public-site .card-image:after {
@@ -409,14 +409,14 @@
   overflow: hidden;
   background: var(--panel);
 }
-.card-thumb > img,
+.card-thumb img,
 .card-thumb > .image-placeholder {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s;
 }
-.card-compact:hover .card-thumb > img {
+.card-compact:hover .card-thumb img {
   transform: scale(1.05);
 }
 .card-body {
@@ -552,8 +552,8 @@
   display: flex;
   align-items: flex-end;
 }
-.event-poster .detail-visual > img:not(.image-contain),
-.event-poster .detail-visual > .image-placeholder {
+.event-poster .detail-visual img:not(.image-contain),
+.event-poster .detail-visual .image-placeholder {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -656,7 +656,7 @@
   padding-top: var(--header);
   background: var(--bg);
 }
-.is-flyer .detail-visual > img.image-contain {
+.is-flyer .detail-visual img.image-contain {
   display: block;
   width: 100%;
   height: auto;

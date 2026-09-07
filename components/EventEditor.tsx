@@ -36,12 +36,13 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
     price: event?.price || 0,
     capacity: event?.capacity?.toString() || "",
     image: event?.image || "",
+    image_wide: event?.image_wide || "",
     image_mode: event?.image_mode || "cover",
     category: event?.category || "מפגש לנשים",
   });
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState<"" | "image" | "image_wide">("");
   const [error, setError] = useState("");
   const [dirty, setDirty] = useState(false);
   const [preview, setPreview] = useState(false);
@@ -107,13 +108,13 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
     }
     goTo(step + 1);
   }
-  async function upload(file?: File) {
+  async function upload(file?: File, key: "image" | "image_wide" = "image") {
     if (!file) return;
     if (file.size > 10 * 1024 * 1024) {
       setError("יש לבחור תמונה עד 10MB");
       return;
     }
-    setUploading(true);
+    setUploading(key);
     setError("");
     try {
       const data = new FormData();
@@ -124,11 +125,11 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
       });
       const result = await r.json();
       if (!r.ok) throw Error(result.error);
-      set("image", result.url);
+      set(key, result.url);
     } catch (e) {
       setError((e as Error).message);
     } finally {
-      setUploading(false);
+      setUploading("");
     }
   }
   async function save(state: string) {
@@ -172,7 +173,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
       key="save"
       className="button outline-button"
       type="button"
-      disabled={busy || uploading}
+      disabled={busy || !!uploading}
       onClick={() => {
         if (validateAll()) save(event?.state || "draft");
       }}
@@ -249,7 +250,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
-              disabled={uploading}
+              disabled={!!uploading}
               onChange={(e) => upload(e.target.files?.[0])}
             />
             {form.image && (
@@ -257,7 +258,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
                 <Upload size={16} /> החלפת תמונה
               </span>
             )}
-            {uploading && (
+            {uploading === "image" && (
               <span className="upload-overlay">
                 <Loader2 className="spin" /> מעלה את התמונה…
               </span>
@@ -276,6 +277,46 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           <p className="field-hint">
             לפלייר עם טקסט בחרי הצגה בשלמותה, כדי ששום פרט לא ייחתך.
           </p>
+          <label
+            className={`upload-zone upload-zone-wide ${form.image_wide ? "has-image" : ""}`}
+          >
+            {form.image_wide ? (
+              <img src={form.image_wide} alt="תצוגה מקדימה לתמונה למחשב" />
+            ) : (
+              <>
+                <ImagePlus size={22} />
+                <strong>תמונה רחבה למחשב · לא חובה</strong>
+                <span>
+                  אם יש גרסה לרוחב של אותה תמונה, היא תוצג במסכים גדולים
+                </span>
+              </>
+            )}
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              disabled={!!uploading}
+              onChange={(e) => upload(e.target.files?.[0], "image_wide")}
+            />
+            {form.image_wide && (
+              <span className="upload-replace">
+                <Upload size={16} /> החלפה
+              </span>
+            )}
+            {uploading === "image_wide" && (
+              <span className="upload-overlay">
+                <Loader2 className="spin" /> מעלה את התמונה…
+              </span>
+            )}
+          </label>
+          {form.image_wide && (
+            <button
+              type="button"
+              className="text-link remove-wide"
+              onClick={() => set("image_wide", "")}
+            >
+              הסרת התמונה הרחבה
+            </button>
+          )}
           <label>
             שם האירוע
             <input
@@ -420,7 +461,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
                 key="next"
                 type="button"
                 className="button gold-button"
-                disabled={busy || uploading}
+                disabled={busy || !!uploading}
                 onClick={nextStep}
               >
                 הבא <ArrowLeft size={18} />
@@ -433,7 +474,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
                 key="preview"
                 type="submit"
                 className="button gold-button"
-                disabled={busy || uploading}
+                disabled={busy || !!uploading}
               >
                 <Eye size={18} /> תצוגה מקדימה
               </button>
@@ -473,7 +514,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           )}
           <button
             className="button gold-button full-width"
-            disabled={busy || uploading}
+            disabled={busy || !!uploading}
             onClick={() => save("published")}
           >
             <Check size={18} />

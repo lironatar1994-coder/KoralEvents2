@@ -99,7 +99,7 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
   })
     .png()
     .toBuffer();
-  await page.locator("input[type=file]").setInputFiles({
+  await page.locator("input[type=file]").first().setInputFiles({
     name: "test-flyer.png",
     mimeType: "image/png",
     buffer: png,

@@ -48,6 +48,11 @@ export const eventSchema = z.object({
         /^https:\/\/images\.unsplash\.com\/[\w?=&.%+-]+$/.test(v),
     ),
   image_mode: z.enum(["cover", "contain"]),
+  image_wide: z
+    .string()
+    .max(500)
+    .default("")
+    .refine((v) => v === "" || /^\/api\/media\/[a-f0-9-]+\.webp$/.test(v)),
   state: z.enum(["draft", "published", "closed", "archived"]),
   category: z.string().trim().min(1).max(60),
 });

@@ -32,12 +32,22 @@ async function main() {
       .resize({ width: 1800, withoutEnlargement: true })
       .webp({ quality: 85 })
       .toFile(path.join(uploadDir, filename));
+    let image_wide = "";
+    if (def.assetWide) {
+      const wideName = `${randomUUID()}.webp`;
+      await sharp(fs.readFileSync(def.assetWide))
+        .resize({ width: 2000, withoutEnlargement: true })
+        .webp({ quality: 85 })
+        .toFile(path.join(uploadDir, wideName));
+      image_wide = `/api/media/${wideName}`;
+    }
     const date = new Date();
     date.setUTCDate(date.getUTCDate() + def.days);
     date.setUTCHours(16, 30, 0, 0);
     const id = await saveEvent({
       ...def,
       image: `/api/media/${filename}`,
+      image_wide,
       image_mode: "cover",
       starts_at: date.toISOString(),
       state: "published",

@@ -6,7 +6,7 @@ The home hero no longer uses the featured event image. It cross-fades three bran
 
 ## Demo event images (temporary)
 
-`public/demo/event-torah.webp`, `event-challah.webp` and `event-empowerment.webp` back the three newer demo events (Torah class with a rabbanit, challah separation, women's empowerment evening). They are temporary copies of the brand hero scenes until dedicated images are generated; see the prompts the client received in chat. Event images are a single file per event, used as a portrait poster on phones and a wide poster on desktop, so a 4:5 composition with the subject centred crops best.
+`public/demo/event-{torah,challah,empowerment}.webp` (4:5, phones) and `event-*-wide.webp` (16:9, desktop) back the three newer demo events: Torah class with a rabbanit, challah separation, women's empowerment evening. Generated with AI from the prompts the client received in chat. Each event has a required portrait image and an optional wide image; the public pages pick the wide one from 1000px up.
 
 ## Current night identity
 

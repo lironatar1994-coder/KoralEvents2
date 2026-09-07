@@ -27,12 +27,14 @@ export function EventImage({
   event,
   className = "",
   priority = false,
+  compact = false,
 }: {
   event: KoralEvent;
   className?: string;
   priority?: boolean;
+  compact?: boolean;
 }) {
-  return event.image ? (
+  const img = (
     <img
       className={`${className} image-${event.image_mode}`}
       src={event.image}
@@ -40,6 +42,16 @@ export function EventImage({
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
     />
+  );
+  return event.image ? (
+    event.image_wide && !compact ? (
+      <picture>
+        <source media="(min-width: 1000px)" srcSet={event.image_wide} />
+        {img}
+      </picture>
+    ) : (
+      img
+    )
   ) : (
     <div className={`${className} image-placeholder`}>
       <Sparkles size={42} />
@@ -74,7 +86,7 @@ export function EventCard({
         style={style}
       >
         <div className="card-thumb">
-          <EventImage event={event} />
+          <EventImage event={event} compact />
         </div>
         <div className="card-body">
           <h3>{event.title}</h3>

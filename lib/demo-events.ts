@@ -36,6 +36,7 @@ export const demoEvents = [
     capacity: null,
     days: 28,
     asset: "public/demo/event-torah.webp",
+    assetWide: "public/demo/event-torah-wide.webp",
     description:
       "שיעור תורה לנשים עם רבנית אורחת, על פרשת השבוע ועל החיים שבתוכה.\n\nמגיעות כמו שאתן, בלי ידע מוקדם. יש זמן לשאלות, יש כיבוד קל, ויש עם מי לדבר אחרי. פרטי השיעור והמיקום יעודכנו על ידי המנהלת.",
   },
@@ -49,6 +50,7 @@ export const demoEvents = [
     capacity: 30,
     days: 35,
     asset: "public/demo/event-challah.webp",
+    assetWide: "public/demo/event-challah-wide.webp",
     description:
       "ערב הפרשת חלה לנשים: לשות יחד, מברכות יחד, וכל אחת חוזרת הביתה עם חלות משלה.\n\nהעלות מכסה את חומרי הגלם. המקומות מוגבלים, ולכן ההרשמה מראש. הפרטים המלאים יעודכנו על ידי המנהלת.",
   },
@@ -62,6 +64,7 @@ export const demoEvents = [
     capacity: 80,
     days: 42,
     asset: "public/demo/event-empowerment.webp",
+    assetWide: "public/demo/event-empowerment-wide.webp",
     description:
       "ערב העצמה לנשים עם מרצה אורחת, סדנה קצרה ושיחה פתוחה.\n\nערב שמתחיל בהרצאה וממשיך במעגל שיחה קטן, כדי שכל אחת תצא עם תובנה אחת שלה. פרטי הערב, המרצה והמיקום יעודכנו על ידי המנהלת.",
   },
