@@ -16,7 +16,18 @@ test("public site is readable, accessible, and has no overflow at phone and desk
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
-    await expect(page.locator("h1")).toContainText("יוצאות.");
+    await expect(page.locator("h1")).toContainText("אישה לאישה");
+    await expect(page.locator("h1")).toContainText("מלכה");
+    await expect
+      .poll(() =>
+        page
+          .locator(".hero-slide.is-active img")
+          .evaluate(
+            (image: HTMLImageElement) =>
+              image.complete && image.naturalWidth > 0,
+          ),
+      )
+      .toBe(true);
     await expect
       .poll(() =>
         page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),

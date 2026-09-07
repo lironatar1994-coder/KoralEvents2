@@ -36,21 +36,15 @@ export default async function Home() {
               <span className="kicker-divider" /> ללא מטרות רווח
             </div>
             <div className="hero-spacer" aria-hidden="true" />
-            <h1>
-              <span className="hero-line">
-                <span>יוצאות.</span>
+            <h1 className="hero-title">
+              <span className="hero-line hero-title-intro">
+                <span>אישה לאישה</span>
               </span>
               <span className="hero-line">
-                <span>
-                  <span className="hero-rose">נהנות.</span>
-                </span>
-              </span>
-              <span className="hero-line">
-                <span>
-                  זוכרות<span className="hero-period">.</span>
-                </span>
+                <span className="hero-rose">מלכה</span>
               </span>
             </h1>
+            <p className="hero-description">אירועי ערב והפקות לנשים.</p>
             {featured && (
               <Link className="hero-next" href={`/events/${featured.id}`}>
                 <b>הערב הבא</b>

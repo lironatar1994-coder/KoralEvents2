@@ -129,3 +129,35 @@
     line-height: 1.4;
   }
 }
+
+/* A two-line signature, with a quiet service description beneath it. */
+.public-site .show-hero .hero-title {
+  font-size: clamp(100px, 9vw, 140px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  margin: 24px 0 16px;
+}
+.hero-title .hero-title-intro {
+  font-size: 0.52em;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  margin-bottom: 8px;
+}
+.public-site .hero-description {
+  color: var(--paper);
+  font-size: clamp(18px, 1.7vw, 24px);
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0 0 20px;
+  animation-delay: 0.2s;
+}
+@media (max-width: 700px) {
+  .public-site .show-hero .hero-title {
+    font-size: clamp(84px, 25vw, 110px);
+    margin: 18px 0 12px;
+  }
+  .public-site .hero-description {
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+}

@@ -2,7 +2,21 @@
 
 ## Brand hero (home page first screen)
 
-The home hero no longer uses the featured event image. It cross-fades three brand scenes every 4 seconds (`components/HeroSlides.tsx`): `public/brand/hero-{rooftop,alley,beach}-portrait.webp` for phones and `hero-*-landscape.webp` from 700px up. Only the first scene loads before first paint; the others are fetched about a second later. Reduced-motion users get a single still image. Both were generated with AI (a women's night walk through an old Jerusalem alley under string lights), converted to WebP at quality 82. `hero-portrait-rooftop.webp` is an alternative portrait (rooftop dinner with city lights) kept for the client to choose from. Text is overlaid on the lower 45% of the portrait crop, so keep that area darker.
+The hero uses three AI-generated scenes depicting observant Jewish women: challah preparation, a Western Wall visit, and an evening celebration. These are brand illustrations, not photographs of actual participants. Generated with the built-in image_gen tool on 2026-09-07.
+
+Active files: `public/brand/hero-{challah,kotel,celebration}-{portrait,landscape}.webp`. Desktop files are 1536 x 1024 (quality 82); mobile files are central crops at 720 x 1080 (quality 84). Older rooftop/alley/beach files are no longer referenced by the slideshow. The slideshow changes every 6.5 seconds with a 1.4-second fade; only the current viewport variant is preloaded. Reduced-motion users see the first still.
+
+### Generation prompts
+
+Each final prompt combines this opening, one scene below, and the closing:
+
+Opening: Create one photorealistic editorial website hero photograph, landscape 3:2 composition.
+
+- Challah: A women's challah-separating gathering in a Jerusalem home at night, 5 adult religious Jewish Israeli women warmly smiling together as they braid challah dough on a wooden table with flour and braided loaves. Modest elegant long-sleeved high-neck dresses, some married women wear Jewish-style tied colorful mitpachot with visible wrapped knots and others uncovered styled hair; diverse natural appearances. Clearly Jewish context via challah ritual, tasteful small Star of David pendant. No other religious iconography.
+- Kotel: Four adult observant Jewish Israeli women together in the women's prayer section at the Western Wall in Jerusalem at blue hour, holding small Hebrew prayer books, quietly joyful companionship, authentic enormous weathered limestone stones directly behind them. Modest long-sleeve dresses below knee, two wearing tied Jewish mitpachat headscarves and two with uncovered hair. Frame wall closely with no skyline or domes.
+- Celebration: A joyful intimate evening gathering of six adult religious Jewish Israeli women in an elegant Jerusalem courtyard with warm string lights, modest long-sleeved high-neck midi dresses, some with Jewish tied mitpachat headscarves with wrapped knots and some with uncovered styled hair, laughing and clapping around a beautifully set table. A subtle Star of David pendant and braided challah on the table establish a Jewish cultural celebration. Authentic diverse people, not fashion models.
+
+Closing: Premium natural candid photography, warm amber practical lighting, deep plum evening shadows, realistic anatomy and hands. Place the people as a compact central group mainly in the upper middle, composed to remain recognizable in a narrow central portrait crop. Leave dark quiet space toward lower third and right for Hebrew headline overlay, but NO embedded text or logos. Women-only scene. Dignified joyful realistic atmosphere.
 
 ## Demo event images (temporary)
 

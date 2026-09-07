@@ -4,20 +4,22 @@ import { appPath } from "@/lib/paths";
 import { useEffect, useState } from "react";
 // Brand scenes for the first screen. The first one is rendered on the server
 // and is the only image fetched before first paint; the rest load afterwards.
-const slides = ["rooftop", "alley", "beach"];
-const INTERVAL = 4000;
-const FADE = 2000;
+const slides = ["challah", "kotel", "celebration"];
+const INTERVAL = 6500;
+const FADE = 1400;
 export function HeroSlides() {
   const [{ active, prev }, setIdx] = useState({ active: 0, prev: -1 });
   const [ready, setReady] = useState(false);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const warm = setTimeout(() => {
-      for (const s of slides.slice(1))
-        for (const kind of ["portrait", "landscape"]) {
-          const img = new Image();
-          img.src = appPath(`/brand/hero-${s}-${kind}.webp`);
-        }
+      const kind = window.matchMedia("(min-width: 700px)").matches
+        ? "landscape"
+        : "portrait";
+      for (const s of slides.slice(1)) {
+        const img = new Image();
+        img.src = appPath(`/brand/hero-${s}-${kind}.webp`);
+      }
       setReady(true);
     }, 1200);
     return () => clearTimeout(warm);
