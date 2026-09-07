@@ -7,7 +7,15 @@ import { HeroSlides } from "@/components/HeroSlides";
 
 export const dynamic = "force-dynamic";
 
-const ribbon = ["לצאת מהשגרה", "להיכנס לרגע", "להיות ביחד"];
+const ribbon = [
+  "ערבי נשים",
+  "לילה בכותל",
+  "מסיבת פורים",
+  "שיעור עם רבנית",
+  "הפרשת חלה",
+  "ערב העצמה",
+  "טיול לילה",
+];
 
 export default async function Home() {
   const events = await getEvents();
