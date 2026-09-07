@@ -36,14 +36,16 @@ import { Modal } from "./Modal";
 export function EventManager({
   initialEvent,
   initialRegistrations,
+  initialFilter = "all",
 }: {
   initialEvent: KoralEvent;
   initialRegistrations: Registration[];
+  initialFilter?: "all" | "pending";
 }) {
   const router = useRouter();
   const [event, setEvent] = useState(initialEvent);
   const [rows, setRows] = useState(initialRegistrations);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState<string>(initialFilter);
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");

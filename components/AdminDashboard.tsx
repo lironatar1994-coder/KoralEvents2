@@ -5,7 +5,6 @@ import {
   Plus,
   ArrowLeft,
   Users,
-  Clock3,
   CalendarDays,
   ImagePlus,
   MapPin,
@@ -18,72 +17,79 @@ import {
   eventStateLabels,
 } from "@/lib/types";
 import { EventImage } from "./Public";
+import { dashboardGroups } from "@/lib/dashboard";
 export function AdminDashboard({ events }: { events: KoralEvent[] }) {
-  const [tab, setTab] = useState("upcoming");
-  const upcoming = events.filter(
-    (e) => e.state !== "archived" && new Date(e.starts_at) > new Date(),
+  const [tab, setTab] = useState<"upcoming" | "draft" | "archive" | "pending">(
+    "upcoming",
   );
-  const filtered = events.filter((e) =>
-    tab === "archive"
-      ? e.state === "archived" || new Date(e.starts_at) <= new Date()
-      : tab === "draft"
-        ? e.state === "draft"
-        : e.state !== "archived" &&
-          e.state !== "draft" &&
-          new Date(e.starts_at) > new Date(),
-  );
-  const live = upcoming.filter((e) => e.state !== "draft");
-  const pending = upcoming.reduce((n, e) => n + e.pending, 0);
-  const approved = upcoming.reduce((n, e) => n + e.approved, 0);
-  const firstTime = live.length === 0 && tab === "upcoming";
+  const groups = dashboardGroups(events);
+  const filtered = groups[tab];
+  const live = groups.upcoming;
+  const pending = live.reduce((n, e) => n + e.pending, 0);
+  const approved = live.reduce((n, e) => n + e.approved, 0);
+  const firstTime = events.length === 0;
   return (
-    <main id="main" className="admin-main">
+    <main id="main" className="admin-main dashboard-main">
       <div className="admin-title-row">
         <div>
           <h1>
-            האירועים שלך<span className="gold">.</span>
+            האירועים<span className="gold">.</span>
           </h1>
-          <p>מה קרוב, מי נרשמה, ומה הבא.</p>
         </div>
-        <Link className="button gold-button" href="/admin/events/new">
-          <Plus size={19} /> יצירת אירוע
-        </Link>
+        {!firstTime && (
+          <Link className="button gold-button" href="/admin/events/new">
+            <Plus size={19} /> יצירת אירוע
+          </Link>
+        )}
       </div>
       {live.length > 0 && (
-        <section className="overview" aria-label="סיכום האירועים הקרובים">
-          <div>
-            <CalendarDays />
-            <strong>{live.length}</strong>
-            <span>אירועים קרובים</span>
-          </div>
-          <div className={pending ? "is-hot" : ""}>
-            <Clock3 />
-            <strong>{pending}</strong>
-            <span>בקשות שמחכות לך</span>
-          </div>
-          <div>
-            <Users />
-            <strong>{approved}</strong>
-            <span>משתתפות מאושרות</span>
-          </div>
+        <section
+          className="dashboard-summary"
+          aria-label="סיכום האירועים הקרובים"
+        >
+          <span>
+            <strong>{live.length}</strong> אירועים קרובים
+          </span>
+          <span>
+            <strong>{approved}</strong> מאושרות
+          </span>
+          {pending === 0 && (
+            <span className="all-clear">אין בקשות שממתינות לאישור</span>
+          )}
         </section>
       )}
-      <div className="tabs" aria-label="סינון אירועים">
-        {[
-          ["upcoming", "קרובים"],
-          ["draft", "טיוטות"],
-          ["archive", "עברו וארכיון"],
-        ].map(([key, label]) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={tab === key ? "selected" : ""}
-            aria-pressed={tab === key}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      {pending > 0 && (
+        <button
+          className="pending-action"
+          onClick={() => setTab("pending")}
+          aria-pressed={tab === "pending"}
+        >
+          <span>
+            <strong>{pending}</strong> בקשות ממתינות לאישור
+          </span>
+          <span>
+            לטיפול <ArrowLeft size={18} />
+          </span>
+        </button>
+      )}
+      {!firstTime && (
+        <div className="tabs" aria-label="סינון אירועים">
+          {[
+            ["upcoming", "קרובים"],
+            ["draft", "טיוטות"],
+            ["archive", "עברו וארכיון"],
+          ].map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setTab(key as typeof tab)}
+              className={tab === key ? "selected" : ""}
+              aria-pressed={tab === key}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
       {firstTime ? (
         <section className="admin-onboarding">
           <div className="onboarding-copy">
@@ -123,7 +129,7 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
             <Link
               className="admin-event-card"
               key={e.id}
-              href={`/admin/events/${e.id}`}
+              href={`/admin/events/${e.id}${tab === "pending" ? "?status=pending" : ""}`}
             >
               <div className="admin-event-image">
                 <EventImage event={e} />
@@ -133,17 +139,20 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
                   {eventStateLabels[e.state]}
                 </span>
                 <h2>{e.title}</h2>
-                <p>
+                <p className="event-date">
                   {dateLabel(e.starts_at, { weekday: "long" })} ·{" "}
-                  {timeLabel(e.starts_at)} · {e.location}
+                  {timeLabel(e.starts_at)}
                 </p>
+                <p className="event-location">{e.location}</p>
                 <div className="admin-event-counts">
                   <span>
                     <b>{e.approved}</b> מאושרות
                   </span>
-                  <span className={e.pending ? "is-hot" : ""}>
-                    <b>{e.pending}</b> ממתינות
-                  </span>
+                  {e.pending > 0 && (
+                    <span className="is-hot">
+                      <b>{e.pending}</b> ממתינות לאישור
+                    </span>
+                  )}
                   <span>
                     {e.capacity === null ? (
                       "ללא מכסה"
@@ -161,11 +170,21 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
           {!filtered.length && (
             <div className="admin-empty">
               <CalendarDays size={28} />
-              <h2>{tab === "draft" ? "אין טיוטות כרגע" : "הארכיון ריק"}</h2>
+              <h2>
+                {tab === "draft"
+                  ? "אין טיוטות כרגע"
+                  : tab === "archive"
+                    ? "הארכיון ריק"
+                    : tab === "pending"
+                      ? "אין בקשות שממתינות לאישור"
+                      : "אין אירועים קרובים כרגע"}
+              </h2>
               <p>
                 {tab === "draft"
                   ? "אירוע ששמרת בלי לפרסם יופיע כאן."
-                  : "אירועים שעברו או שהועברו לארכיון יופיעו כאן."}
+                  : tab === "archive"
+                    ? "אירועים שעברו או שהועברו לארכיון יופיעו כאן."
+                    : "אפשר לעבור לטיוטות או ליצור אירוע חדש."}
               </p>
             </div>
           )}

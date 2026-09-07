@@ -1,0 +1,161 @@
+/* Daily management: content first, with one creation action and a quiet summary. */
+.admin-app .dashboard-header {
+  height: 60px;
+  min-height: 60px;
+  padding-block: 6px;
+  flex-wrap: nowrap;
+}
+.dashboard-header .brand {
+  width: 96px;
+}
+.admin-app .dashboard-header .brand > span:first-child {
+  font-size: 27px;
+}
+.dashboard-header .brand-sub {
+  font-size: 7px;
+}
+.dashboard-main .admin-title-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.dashboard-main .admin-title-row h1 {
+  font-size: 34px;
+  margin: 0;
+}
+.dashboard-main .admin-title-row > .button {
+  width: auto;
+  margin: 0;
+  min-height: 46px;
+  padding: 10px 18px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.dashboard-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.dashboard-summary strong {
+  color: var(--text);
+}
+.dashboard-summary .all-clear {
+  font-size: 13px;
+}
+.pending-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  border: 1px solid #ff5c8a66;
+  border-radius: 14px;
+  color: var(--text);
+  background: #ff5c8a18;
+  text-align: start;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.pending-action strong {
+  color: var(--gold);
+}
+.pending-action > span:last-child {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  white-space: nowrap;
+}
+.pending-action:hover,
+.pending-action[aria-pressed="true"] {
+  background: #ff5c8a2b;
+}
+.dashboard-main .tabs {
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.admin-app .dashboard-main .tabs button {
+  padding-inline: 12px;
+}
+.dashboard-main .admin-events {
+  gap: 12px;
+}
+.dashboard-main .admin-event-card {
+  box-shadow: none;
+  background: #21152b;
+  border-color: #d9c6ff24;
+}
+.dashboard-main .admin-event-body > .badge {
+  position: static;
+  font-size: 12px;
+  padding: 2px 8px;
+  margin: 0 0 4px;
+  background: transparent;
+  backdrop-filter: none;
+}
+.dashboard-main .admin-event-body h2 {
+  margin: 0 0 6px;
+}
+.admin-app .dashboard-main .admin-event-body > p {
+  margin: 0;
+  line-height: 1.65;
+}
+.dashboard-main .event-date {
+  color: var(--text);
+}
+.dashboard-main .admin-event-counts {
+  margin-top: 10px;
+  gap: 6px 12px;
+}
+.dashboard-main .admin-event-counts .is-hot {
+  color: var(--gold);
+  font-weight: 600;
+}
+@media (min-width: 1000px) {
+  .dashboard-main .admin-event-image {
+    height: 170px;
+  }
+  .dashboard-main .admin-event-body {
+    padding-block: 14px;
+  }
+}
+@media (max-width: 700px) {
+  .admin-app .dashboard-main {
+    padding-top: 18px;
+  }
+  .dashboard-main .admin-title-row h1 {
+    font-size: 28px;
+  }
+  .dashboard-main .admin-title-row > .button {
+    padding-inline: 12px;
+  }
+  .dashboard-summary {
+    gap: 4px 16px;
+    margin-bottom: 14px;
+  }
+  .dashboard-summary .all-clear {
+    flex-basis: 100%;
+  }
+  .dashboard-main .admin-event-card {
+    padding: 14px;
+    gap: 12px;
+  }
+  .dashboard-main .admin-event-image {
+    width: 80px;
+    height: 106px;
+    flex-shrink: 0;
+  }
+  .dashboard-main .admin-event-body h2 {
+    font-size: 20px;
+  }
+}

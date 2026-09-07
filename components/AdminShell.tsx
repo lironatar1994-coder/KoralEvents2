@@ -4,28 +4,23 @@ import { appPath } from "@/lib/paths";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Brand } from "./Brand";
-import { ArrowUpLeft, LayoutDashboard, LogOut, Plus } from "lucide-react";
+import { ArrowUpLeft, LayoutDashboard, LogOut } from "lucide-react";
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const login = pathname === "/admin/login";
+  const dashboard = pathname === "/admin";
   return (
     <div className="admin-app">
-      <header className="admin-header">
+      <header className={`admin-header ${dashboard ? "dashboard-header" : ""}`}>
         <Brand small />
-        {!login && (
+        {!login && !dashboard && (
           <nav className="admin-nav" aria-label="ניווט ניהול">
             <Link
               className={pathname === "/admin" ? "active" : ""}
               href="/admin"
             >
               <LayoutDashboard size={17} /> האירועים שלי
-            </Link>
-            <Link
-              className={pathname === "/admin/events/new" ? "active" : ""}
-              href="/admin/events/new"
-            >
-              <Plus size={18} /> אירוע חדש
             </Link>
           </nav>
         )}

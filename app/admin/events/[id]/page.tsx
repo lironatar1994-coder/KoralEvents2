@@ -5,8 +5,10 @@ import { EventManager } from "@/components/EventManager";
 export const dynamic = "force-dynamic";
 export default async function Manage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ status?: string | string[] }>;
 }) {
   if (!(await isAdmin())) redirect("/admin/login");
   const e = await getEvent((await params).id, true);
@@ -15,6 +17,9 @@ export default async function Manage({
     <EventManager
       initialEvent={e}
       initialRegistrations={await registrations(e.id)}
+      initialFilter={
+        (await searchParams).status === "pending" ? "pending" : "all"
+      }
     />
   );
 }
