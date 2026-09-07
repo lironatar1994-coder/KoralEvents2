@@ -113,30 +113,42 @@
   inset: 0;
   z-index: -3;
 }
+/* The incoming scene fades in on top; the outgoing one stays fully opaque
+   underneath until the fade ends, so the frame never dips to dark. */
 .hero-slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 1.5s ease;
+  z-index: 0;
+  transition: opacity var(--fade, 2s) ease-in-out;
 }
 .hero-slide.is-active {
   opacity: 1;
+  z-index: 2;
+}
+.hero-slide.is-prev {
+  opacity: 1;
+  z-index: 1;
+  transition: none;
 }
 .show-hero-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 55%;
+  /* A slow, linear, never-ending drift: no restart, no pause. */
+  animation: hero-drift 22s linear infinite alternate;
+  will-change: transform;
 }
-.hero-slide.is-active img {
-  animation: hero-zoom 7s ease-out both;
+.hero-slide:nth-child(2n) img {
+  animation-direction: alternate-reverse;
 }
-@keyframes hero-zoom {
+@keyframes hero-drift {
   from {
-    transform: scale(1.1);
+    transform: scale(1.04) translateY(0);
   }
   to {
-    transform: scale(1);
+    transform: scale(1.12) translateY(-1.5%);
   }
 }
 .show-hero-shade {

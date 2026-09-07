@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 // and is the only image fetched before first paint; the rest load afterwards.
 const slides = ["rooftop", "alley", "beach"];
 const INTERVAL = 4000;
+const FADE = 2000;
 export function HeroSlides() {
-  const [active, setActive] = useState(0);
+  const [{ active, prev }, setIdx] = useState({ active: 0, prev: -1 });
   const [ready, setReady] = useState(false);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -22,7 +23,11 @@ export function HeroSlides() {
   useEffect(() => {
     if (!ready) return;
     const id = setInterval(
-      () => setActive((a) => (a + 1) % slides.length),
+      () =>
+        setIdx((s) => ({
+          active: (s.active + 1) % slides.length,
+          prev: s.active,
+        })),
       INTERVAL,
     );
     return () => clearInterval(id);
@@ -33,7 +38,8 @@ export function HeroSlides() {
         i === 0 || ready ? (
           <picture
             key={s}
-            className={`hero-slide ${i === active ? "is-active" : ""}`}
+            className={`hero-slide ${i === active ? "is-active" : i === prev ? "is-prev" : ""}`}
+            style={{ "--fade": `${FADE}ms` } as React.CSSProperties}
             aria-hidden={i !== active}
           >
             <source
