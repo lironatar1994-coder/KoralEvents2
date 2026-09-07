@@ -37,6 +37,7 @@
 }
 .public-site .brand {
   color: var(--paper);
+  text-shadow: 0 2px 18px #0000008c;
 }
 .public-site .brand-sub {
   letter-spacing: 3px;

@@ -3,7 +3,7 @@ import "./globals.css";
 import "./public.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_ORIGIN || "http://localhost:3000"),
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
   title: {
     default: "Koral Events | רגעים ששווה לצאת בשבילם",
     template: "%s | Koral Events",
