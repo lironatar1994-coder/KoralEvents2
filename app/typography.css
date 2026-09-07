@@ -1,0 +1,131 @@
+/* Shared reading scale, applied after the public and management layouts. */
+:root {
+  --type-body: 1rem;
+  --type-detail: 0.875rem;
+  --type-caption: 0.8125rem;
+  --type-badge: 0.75rem;
+}
+
+.public-site .hero-next,
+.public-site .card-facts,
+.public-site .card-compact .card-facts,
+.public-site .show-about .text-link,
+.public-site .poster-facts,
+.public-site .poster-price,
+.public-event .registration-box .registration-note,
+.public-event .registration-full,
+.field-hint,
+.registration-box form > p.field-hint {
+  font-size: var(--type-detail);
+  line-height: 1.65;
+}
+.public-site .show-kicker,
+.public-site .eyebrow,
+.public-site .site-footer > div,
+.public-site .site-footer > p,
+.public-site .site-credit {
+  font-size: var(--type-caption);
+}
+.public-site .card-category,
+.public-site .card-state,
+.public-site .card-facts b,
+.public-event .detail-category {
+  font-size: var(--type-badge);
+}
+.public-site .show-about p,
+.public-event .detail-description {
+  font-size: var(--type-body);
+  line-height: 1.8;
+}
+.public-site .about-kinds li {
+  font-size: var(--type-detail);
+}
+.public-site .show-about h2 {
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  line-height: 1.15;
+}
+.public-site .hero-next {
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.admin-app label,
+.admin-app .tabs button,
+.admin-app .small-button,
+.admin-app .manager-hero-actions .small-button,
+.admin-app .attendee-actions .small-button,
+.admin-app .event-tools .small-button,
+.admin-app .back-link,
+.admin-app .admin-header .text-link,
+.admin-app .admin-event-body > p,
+.admin-app .manager-hero p,
+.admin-app .attendees-heading p,
+.admin-app .admin-empty p,
+.admin-app .empty-attendees p,
+.admin-app .editor-actions .button,
+.admin-app .remove-wide {
+  font-size: var(--type-detail);
+  line-height: 1.6;
+}
+.admin-app .admin-header .admin-nav a {
+  font-size: var(--type-detail);
+  min-height: 44px;
+}
+.admin-app .overview span,
+.admin-app .stat-card > span,
+.admin-app .stat-card small,
+.admin-app .admin-event-counts,
+.admin-app .admin-event-counts b,
+.admin-app .upload-zone small,
+.admin-app .upload-zone-wide > span,
+.admin-app .onboarding-steps span,
+.admin-app .wizard-steps li.is-active,
+.admin-app .wizard-steps li > span {
+  font-size: var(--type-caption);
+  line-height: 1.6;
+}
+.admin-app .badge,
+.admin-app .admin-event-image .badge {
+  font-size: var(--type-badge);
+}
+.admin-app .tabs button,
+.admin-app .small-button {
+  min-height: 44px;
+}
+.admin-app .admin-event-counts {
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.admin-app .admin-event-body {
+  min-width: 0;
+}
+.admin-app .admin-event-body > p {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.admin-app .upload-zone-wide {
+  min-height: 132px;
+  height: auto;
+  padding-block: 16px;
+}
+
+@media (max-width: 700px) {
+  .public-site .show-hero h1 {
+    font-size: clamp(4rem, 17vw, 4.5rem);
+    line-height: 1.05;
+  }
+  .admin-app .stats-grid.four-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .admin-app .four-stats .stat-card {
+    padding: 14px 10px;
+  }
+  .admin-app .manager-hero-actions {
+    flex-wrap: wrap;
+  }
+  .admin-app .admin-event-image .badge {
+    white-space: normal;
+    line-height: 1.4;
+  }
+}

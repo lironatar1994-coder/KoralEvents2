@@ -38,7 +38,7 @@ export default async function Home() {
             <h1>
               יוצאות.
               <br />
-              <span>מרגישות.</span>
+              <span>נהנות.</span>
               <br />
               זוכרות<span className="hero-period">.</span>
             </h1>

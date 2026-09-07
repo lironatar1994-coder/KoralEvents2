@@ -2,6 +2,7 @@ import { appPath } from "@/lib/paths";
 import type { Metadata } from "next";
 import "./globals.css";
 import "./public.css";
+import "./typography.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_ORIGIN || "http://localhost:3000"),
   icons: {
