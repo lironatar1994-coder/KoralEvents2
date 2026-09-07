@@ -4,7 +4,12 @@ import { appPath } from "@/lib/paths";
 import { useEffect, useState } from "react";
 // Brand scenes for the first screen. The first one is rendered on the server
 // and is the only image fetched before first paint; the rest load afterwards.
-const slides = ["gathering-torah", "gathering-home-challah", "gathering-empowerment"];
+const slides = [
+  "production-kotel",
+  "production-torah",
+  "production-challah",
+  "production-empowerment",
+];
 const INTERVAL = 6500;
 const FADE = 1400;
 export function HeroSlides() {

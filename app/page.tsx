@@ -38,13 +38,13 @@ export default async function Home() {
             <div className="hero-spacer" aria-hidden="true" />
             <h1 className="hero-title">
               <span className="hero-line hero-title-intro">
-                <span>אישה לאישה</span>
+                <span>״אישה לאישה״</span>
               </span>
               <span className="hero-line">
                 <span className="hero-rose">מלכה</span>
               </span>
             </h1>
-            <p className="hero-description">אירועי ערב והפקות לנשים.</p>
+            <p className="hero-description">ערבי נשים לזיכוי הרבות</p>
             {featured && (
               <Link className="hero-next" href={`/events/${featured.id}`}>
                 <b>הערב הבא</b>
