@@ -1130,3 +1130,50 @@
   display: inline-block;
   margin-bottom: 14px;
 }
+/* "How many are you" stepper on the registration form. */
+.guests-field {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 14px;
+  margin: 4px 0 16px;
+}
+.guests-field > span {
+  font-size: 14px;
+  font-weight: 600;
+}
+.guests-field small {
+  grid-column: 1;
+  font-size: 12px;
+  color: var(--muted);
+}
+.stepper {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #d9c6ff45;
+  border-radius: var(--radius-pill);
+  background: #190d20;
+  overflow: hidden;
+}
+.stepper button {
+  width: 46px;
+  height: 46px;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  font-size: 22px;
+  cursor: pointer;
+}
+.stepper button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.stepper output {
+  min-width: 34px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--gold);
+}

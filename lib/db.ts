@@ -7,19 +7,15 @@ export interface Sql {
     values?: unknown[],
   ): Promise<{ rows: T[] }>;
 }
-type Store = { db?: Database.Database; queue: Promise<unknown> };
 const globalDb = globalThis as unknown as { koralDb?: Store };
 const store = (globalDb.koralDb ??= { queue: Promise.resolve() });
-function database() {
-  if (store.db) return store.db;
-  const filename =
-    process.env.DATABASE_PATH ||
-    path.join(process.cwd(), "data", "koral.sqlite");
-  fs.mkdirSync(path.dirname(filename), { recursive: true });
-  const db = new Database(filename);
-  db.pragma("journal_mode = WAL");
-  db.pragma("foreign_keys = ON");
-  db.pragma("busy_timeout = 5000");
+const SCHEMA_VERSION = 3;
+type Store = {
+  db?: Database.Database;
+  queue: Promise<unknown>;
+  schema?: number;
+};
+function migrate(db: Database.Database) {
   db.exec(`
  CREATE TABLE IF NOT EXISTS admin(id INTEGER PRIMARY KEY CHECK(id=1), password_hash TEXT NOT NULL);
  CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY, expires_at TEXT NOT NULL);
@@ -45,7 +41,34 @@ function database() {
     db.exec(
       "ALTER TABLE events ADD COLUMN image_wide TEXT NOT NULL DEFAULT ''",
     );
-  db.pragma("user_version = 2");
+  // Schema v3: a registration can hold several guests under one name.
+  const rcols = db.prepare("PRAGMA table_info(registrations)").all() as {
+    name: string;
+  }[];
+  if (!rcols.some((c) => c.name === "guests"))
+    db.exec(
+      "ALTER TABLE registrations ADD COLUMN guests INTEGER NOT NULL DEFAULT 1",
+    );
+  db.pragma("user_version = 3");
+}
+function database() {
+  if (store.db) {
+    if (store.schema !== SCHEMA_VERSION) {
+      migrate(store.db);
+      store.schema = SCHEMA_VERSION;
+    }
+    return store.db;
+  }
+  const filename =
+    process.env.DATABASE_PATH ||
+    path.join(process.cwd(), "data", "koral.sqlite");
+  fs.mkdirSync(path.dirname(filename), { recursive: true });
+  const db = new Database(filename);
+  db.pragma("journal_mode = WAL");
+  db.pragma("foreign_keys = ON");
+  db.pragma("busy_timeout = 5000");
+  migrate(db);
+  store.schema = SCHEMA_VERSION;
   store.db = db;
   return db;
 }

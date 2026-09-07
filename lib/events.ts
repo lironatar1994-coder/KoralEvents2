@@ -28,6 +28,7 @@ export const phoneSchema = z
 export const registrationSchema = z.object({
   name: z.string().trim().min(2, "יש להזין שם מלא").max(100),
   phone: phoneSchema,
+  guests: z.coerce.number().int().min(1).max(10).default(1),
 });
 export const eventSchema = z.object({
   title: z.string().trim().min(2).max(120),
@@ -56,7 +57,7 @@ export const eventSchema = z.object({
   state: z.enum(["draft", "published", "closed", "archived"]),
   category: z.string().trim().min(1).max(60),
 });
-const select = `SELECT e.*, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND status='approved') AS approved, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND status='pending') AS pending, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND status='waitlist') AS waitlist, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND paid=true) AS paid FROM events e`;
+const select = `SELECT e.*, (SELECT coalesce(sum(guests),0) FROM registrations r WHERE r.event_id=e.id AND status='approved') AS approved, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND status='pending') AS pending, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND status='waitlist') AS waitlist, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND paid=true) AS paid FROM events e`;
 function clean(e: KoralEvent): KoralEvent {
   return {
     ...e,
@@ -90,7 +91,7 @@ export async function saveEvent(input: unknown, id?: string) {
       const locked = await sql.query("SELECT id FROM events WHERE id=$1", [id]);
       if (!locked.rows.length) throw new AppError("האירוע לא נמצא", 404);
       const { rows } = await sql.query<{ n: number }>(
-        "SELECT count(*) AS n FROM registrations WHERE event_id=$1 AND status='approved'",
+        "SELECT coalesce(sum(guests),0) AS n FROM registrations WHERE event_id=$1 AND status='approved'",
         [id],
       );
       if (e.capacity && e.capacity < rows[0].n)
@@ -129,14 +130,16 @@ export async function register(eventId: string, input: unknown, admin = false) {
     )
       throw new AppError("ההרשמה לאירוע אינה פתוחה כרגע");
     const counts = await sql.query<{ n: number }>(
-      "SELECT count(*) AS n FROM registrations WHERE event_id=$1 AND status='approved'",
+      "SELECT coalesce(sum(guests),0) AS n FROM registrations WHERE event_id=$1 AND status='approved'",
       [eventId],
     );
     const status =
-      e.capacity && counts.rows[0].n >= e.capacity ? "waitlist" : "pending";
+      e.capacity && counts.rows[0].n + data.guests > e.capacity
+        ? "waitlist"
+        : "pending";
     const result = await sql.query(
-      "INSERT INTO registrations(id,event_id,name,phone,status) VALUES($1,$2,$3,$4,$5) ON CONFLICT(event_id,phone) DO NOTHING RETURNING id",
-      [randomUUID(), eventId, data.name, data.phone, status],
+      "INSERT INTO registrations(id,event_id,name,phone,status,guests) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT(event_id,phone) DO NOTHING RETURNING id",
+      [randomUUID(), eventId, data.name, data.phone, status, data.guests],
     );
     if (admin && !result.rows.length)
       throw new AppError("המספר כבר מופיע ברשימת האירוע");
@@ -165,26 +168,27 @@ export async function updateRegistration(
       [id, eventId],
     );
     if (!current.rows.length) throw new AppError("ההרשמה לא נמצאה", 404);
-    if (
-      data.status === "approved" &&
-      current.rows[0].status !== "approved" &&
-      event.capacity
-    ) {
+    if (data.status === "approved" && event.capacity) {
       const count = await sql.query<{ n: number }>(
-        "SELECT count(*) AS n FROM registrations WHERE event_id=$1 AND status='approved'",
-        [eventId],
+        "SELECT coalesce(sum(guests),0) AS n FROM registrations WHERE event_id=$1 AND status='approved' AND id<>$2",
+        [eventId, id],
       );
-      if (count.rows[0].n >= event.capacity)
-        throw new AppError("האירוע מלא. יש לפנות מקום לפני האישור.");
+      if (count.rows[0].n + data.guests > event.capacity)
+        throw new AppError(
+          current.rows[0].status === "approved"
+            ? "אין מספיק מקומות פנויים למספר המוזמנות הזה."
+            : "האירוע מלא. יש לפנות מקום לפני האישור.",
+        );
     }
     try {
       await sql.query(
-        "UPDATE registrations SET name=$1,phone=$2,status=$3,paid=$4 WHERE id=$5 AND event_id=$6",
+        "UPDATE registrations SET name=$1,phone=$2,status=$3,paid=$4,guests=$5 WHERE id=$6 AND event_id=$7",
         [
           data.name,
           data.phone,
           data.status,
           Number(event.price) > 0 && data.paid,
+          data.guests,
           id,
           eventId,
         ],

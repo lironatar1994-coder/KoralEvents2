@@ -3506,3 +3506,21 @@ button.roster-fact {
 .roster-bulk .button:first-child:has(svg.lucide-check-check):hover {
   background: #ff7aa0;
 }
+.guests-chip {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink);
+  background: var(--gold);
+  border-radius: var(--radius-pill);
+  padding: 2px 7px;
+  direction: ltr;
+}
+@media (max-width: 700px) {
+  .row-actions {
+    gap: 3px;
+  }
+  .row-action {
+    width: 36px;
+    height: 36px;
+  }
+}

@@ -19,6 +19,7 @@ import {
   MessageCircle,
   Trash2,
   Users,
+  Phone,
   MoreHorizontal,
   CheckCheck,
   ClipboardCopy,
@@ -355,10 +356,11 @@ export function EventManager({
                       className="button outline-button small-button"
                       onClick={() => {
                         const lines = [
-                          ["שם", "טלפון", "מצב", "שולם", "נרשמה"],
+                          ["שם", "טלפון", "מוזמנות", "מצב", "שולם", "נרשמה"],
                           ...visible.map((r) => [
                             r.name,
                             r.phone,
+                            r.guests,
                             statusLabels[r.status],
                             event.price > 0 ? (r.paid ? "כן" : "לא") : "",
                             new Date(r.created_at).toLocaleString("he-IL", {
@@ -426,6 +428,14 @@ export function EventManager({
                 <span className={`badge status-${row.status}`}>
                   {statusLabels[row.status]}
                 </span>
+                {row.guests > 1 && (
+                  <span
+                    className="guests-chip"
+                    title={`${row.guests} מוזמנות על השם הזה`}
+                  >
+                    ×{row.guests}
+                  </span>
+                )}
                 {event.price > 0 && row.status === "approved" && (
                   <button
                     className={`payment-toggle ${row.paid ? "is-paid" : ""}`}
@@ -454,6 +464,26 @@ export function EventManager({
                 >
                   <Check size={19} />
                 </button>
+              )}
+              <a
+                className="row-action"
+                aria-label={`התקשרות ל${row.name}`}
+                title="התקשרות"
+                href={`tel:${row.phone}`}
+              >
+                <Phone size={18} />
+              </a>
+              {row.status !== "approved" && (
+                <a
+                  className="row-action whatsapp"
+                  aria-label={`וואטסאפ ל${row.name}`}
+                  title="וואטסאפ"
+                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, כאן Koral Events לגבי ״${event.title}״. `)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <MessageCircle size={18} />
+                </a>
               )}
               {row.status === "approved" && (
                 <a
@@ -578,6 +608,7 @@ export function EventManager({
               const payload = {
                 name: data.get("name"),
                 phone: data.get("phone"),
+                guests: Number(data.get("guests") || 1),
                 ...(editing !== "new"
                   ? { status: data.get("status"), paid: editing.paid }
                   : {}),
@@ -616,6 +647,17 @@ export function EventManager({
                 required
                 maxLength={20}
                 defaultValue={editing === "new" ? "" : editing.phone}
+              />
+            </label>
+            <label>
+              כמה מוזמנות על השם הזה (כולל אותה)
+              <input
+                type="number"
+                name="guests"
+                min={1}
+                max={10}
+                step={1}
+                defaultValue={editing === "new" ? 1 : editing.guests}
               />
             </label>
             {editing !== "new" && (

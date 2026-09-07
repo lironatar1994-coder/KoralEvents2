@@ -29,6 +29,7 @@ export interface Registration {
   phone: string;
   status: RegistrationState;
   paid: boolean;
+  guests: number;
   created_at: string;
 }
 export const statusLabels: Record<RegistrationState, string> = {

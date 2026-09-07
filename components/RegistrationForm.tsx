@@ -32,6 +32,7 @@ export function RegistrationForm({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [ready, setReady] = useState(false);
+  const [guests, setGuests] = useState(1);
   useEffect(() => setReady(true), []);
   const [formOnScreen, setFormOnScreen] = useState(false);
   const [apple, setApple] = useState(false);
@@ -61,6 +62,7 @@ export function RegistrationForm({
         body: JSON.stringify({
           name: form.get("name"),
           phone: form.get("phone"),
+          guests,
         }),
       });
       const data = await r.json();
@@ -112,7 +114,11 @@ export function RegistrationForm({
       `היי! נרשמתי ל״${event.title}״ ב-${when}. בואי איתי? ${link}`,
     )}`;
   }
-  const cta = full ? "שמרי לי מקום בהמתנה" : "אני באה";
+  const cta = full
+    ? "שמרי לי מקום בהמתנה"
+    : guests > 1
+      ? "אנחנו באות"
+      : "אני באה";
   return (
     <>
       <div id="registration" className="registration-box" ref={box}>
@@ -193,6 +199,35 @@ export function RegistrationForm({
                 required
               />
             </label>
+            <div className="guests-field">
+              <span id="guests-label">כמה אתן?</span>
+              <div
+                className="stepper"
+                role="group"
+                aria-labelledby="guests-label"
+              >
+                <button
+                  type="button"
+                  aria-label="פחות"
+                  disabled={guests <= 1}
+                  onClick={() => setGuests((g) => Math.max(1, g - 1))}
+                >
+                  −
+                </button>
+                <output aria-live="polite">{guests}</output>
+                <button
+                  type="button"
+                  aria-label="יותר"
+                  disabled={guests >= 6}
+                  onClick={() => setGuests((g) => Math.min(6, g + 1))}
+                >
+                  +
+                </button>
+              </div>
+              <small>
+                {guests === 1 ? "רק אני" : `אני ועוד ${guests - 1}, על השם שלי`}
+              </small>
+            </div>
             {error && (
               <p className="error-message" role="alert">
                 {error}

@@ -195,3 +195,31 @@ test("data survives a separate process connection", async () => {
   );
   assert.equal(output.trim(), id);
 });
+
+test("guests count as seats: a party larger than the free seats goes to the waitlist", async () => {
+  const id = await saveEvent({ ...base, capacity: 4 });
+  await register(id, { ...person(1), guests: 3 });
+  const [three] = await registrations(id);
+  await updateRegistration(id, three.id, { ...three, status: "approved" });
+  assert.equal((await getEvent(id, true))!.approved, 3);
+  assert.equal(
+    (await register(id, { ...person(2), guests: 2 })).status,
+    "waitlist",
+  );
+  assert.equal(
+    (await register(id, { ...person(3), guests: 1 })).status,
+    "pending",
+  );
+  const single = (await registrations(id)).find(
+    (r) => r.phone === person(3).phone,
+  )!;
+  await updateRegistration(id, single.id, { ...single, status: "approved" });
+  assert.equal((await getEvent(id, true))!.approved, 4);
+  await assert.rejects(
+    updateRegistration(id, single.id, {
+      ...single,
+      status: "approved",
+      guests: 2,
+    }),
+  );
+});
