@@ -39,7 +39,7 @@ try {
     $revision = (Run git @('rev-parse', 'HEAD') | Out-String).Trim()
     if ($revision -notmatch '^[0-9a-f]{40}$') { throw 'Invalid revision.' }
     if ($Target -eq 'GitHub') { return }
-    $published = (Run git @('ls-remote', 'origin', 'refs/heads/main') | Out-String).Trim().Split()[0]
+    $published = ((Run git @('ls-remote', 'origin', 'refs/heads/main') | Out-String).Trim() -split '\s+')[0]
     if ($published -ne $revision) { throw 'GitHub main must match the exact deployment revision.' }
     if ($SSHHost -notmatch '^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+$') { throw 'Invalid SSH host.' }
     New-Item -ItemType Directory -Force .deploy | Out-Null
