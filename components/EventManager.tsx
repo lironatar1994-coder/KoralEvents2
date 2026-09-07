@@ -1,4 +1,6 @@
 "use client";
+import { appPath } from "@/lib/paths";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -89,7 +91,7 @@ export function EventManager({
       `${r.name} ${r.phone}`.includes(search.trim()),
   );
   async function share() {
-    const url = `${location.origin}/events/${event.id}`;
+    const url = `${location.origin}${appPath(`/events/${event.id}`)}`;
     try {
       if (navigator.share) await navigator.share({ title: event.title, url });
       else {
@@ -179,8 +181,8 @@ export function EventManager({
       </section>
       <div className="attendees-heading">
         <div>
-          <h2>מי מצטרפת אלינו?</h2>
-          <p>מאשרות, מעדכנות ושומרות על קשר.</p>
+          <h2>המשתתפות</h2>
+          <p>אישור, תשלום ווואטסאפ, הכול מכאן.</p>
         </div>
         <button
           className="button gold-button"
@@ -258,7 +260,7 @@ export function EventManager({
                 {statusLabels[row.status]}
               </span>
               {event.price === 0 ? (
-                <span className="free-label">ללא צורך בתשלום</span>
+                <span className="free-label">ללא עלות</span>
               ) : (
                 <button
                   className={`payment-toggle ${row.paid ? "is-paid" : ""}`}
@@ -289,7 +291,7 @@ export function EventManager({
               {row.status === "approved" && (
                 <a
                   className="button whatsapp-button small-button"
-                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${typeof window !== "undefined" ? window.location.origin : ""}/events/${event.id}\nמחכה לראותך, Koral Events`)}`}
+                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${typeof window !== "undefined" ? window.location.origin : ""}${appPath(`/events/${event.id}`)}\nמחכה לראותך, Koral Events`)}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -319,20 +321,18 @@ export function EventManager({
           <div className="admin-empty">
             <Users size={30} />
             <h3>
-              {rows.length
-                ? "לא נמצאו משתתפות בחיפוש הזה"
-                : "המשתתפות הראשונות בדרך"}
+              {rows.length ? "לא מצאנו אף אחת" : "המשתתפות הראשונות בדרך"}
             </h3>
             <p>
               {rows.length
-                ? "נסי שם אחר או שינוי סינון."
+                ? "נסי שם אחר, או שני את הסינון."
                 : "שתפי את קישור האירוע או הוסיפי משתתפת בעצמך."}
             </p>
           </div>
         )}
       </div>
       <section className="event-tools">
-        <h3>עוד פעולות לאירוע</h3>
+        <h3>עוד פעולות</h3>
         <div>
           <button
             className="button outline-button small-button"
@@ -401,7 +401,7 @@ export function EventManager({
       </section>
       {editing && (
         <Modal
-          title={editing === "new" ? "מוסיפות משתתפת" : "עדכון פרטי משתתפת"}
+          title={editing === "new" ? "הוספת משתתפת" : "עריכת משתתפת"}
           onClose={() => {
             if (!busy) setEditing(null);
           }}
@@ -467,8 +467,8 @@ export function EventManager({
             )}
             {editing === "new" && (
               <p className="field-hint">
-                המשתתפת תתווסף כממתינה לאישור, או לרשימת ההמתנה אם האירוע מלא.
-                לאחר ההוספה תוכלי לאשר אותה.
+                היא תיכנס כממתינה לאישור, או לרשימת המתנה אם הערב מלא. את מאשרת
+                אחר כך.
               </p>
             )}
             {error && (

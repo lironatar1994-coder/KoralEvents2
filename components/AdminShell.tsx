@@ -1,4 +1,6 @@
 "use client";
+import { appPath } from "@/lib/paths";
+
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Brand } from "./Brand";
@@ -21,7 +23,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
               className="icon-button"
               aria-label="יציאה מהחשבון"
               onClick={async () => {
-                await fetch("/api/auth/logout", { method: "POST" });
+                await fetch(appPath("/api/auth/logout"), { method: "POST" });
                 router.push("/admin/login");
                 router.refresh();
               }}

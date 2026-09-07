@@ -1,3 +1,4 @@
+import { appPath } from "@/lib/paths";
 import { redirect, notFound } from "next/navigation";
 import { isAdmin } from "@/lib/auth";
 import { getEvent, registrations } from "@/lib/events";
@@ -8,7 +9,7 @@ export default async function Manage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  if (!(await isAdmin())) redirect("/admin/login");
+  if (!(await isAdmin())) redirect(appPath("/admin/login"));
   const e = await getEvent((await params).id, true);
   if (!e) notFound();
   return (

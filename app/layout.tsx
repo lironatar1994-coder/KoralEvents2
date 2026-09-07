@@ -1,15 +1,19 @@
+import { appPath } from "@/lib/paths";
 import type { Metadata } from "next";
 import "./globals.css";
 import "./public.css";
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_ORIGIN || "http://localhost:3000"),
-  icons: { icon: "/icon.svg", apple: "/apple-touch-icon.png" },
+  icons: {
+    icon: appPath("/icon.svg"),
+    apple: appPath("/apple-touch-icon.png"),
+  },
   title: {
-    default: "Koral Events | רגעים ששווה לצאת בשבילם",
+    default: "Koral Events | ערבים לנשים, מהלב",
     template: "%s | Koral Events",
   },
   description:
-    "ערבים, מסיבות וטיולי לילה לנשים בלבד, ללא מטרות רווח. מערב בכותל ועד מסיבת פורים — גלי את הלילה הבא שלך.",
+    "אירועים לנשים ללא מטרות רווח: שיעורי תורה, מסיבות, הפרשת חלה, ערבי העצמה ולילות בכותל. נרשמות בשם ובטלפון, והמקום שלך שמור.",
   robots: { index: true, follow: true },
 };
 export default function RootLayout({

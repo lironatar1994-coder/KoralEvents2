@@ -1,3 +1,4 @@
+import { appPath } from "@/lib/paths";
 import Link from "next/link";
 import { ArrowUpLeft, MapPin, Sparkles } from "lucide-react";
 import { Brand } from "./Brand";
@@ -13,7 +14,7 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <Brand small />
-      <p>נשים נפגשות. רגעים שנשארים.</p>
+      <p>ערבים לנשים, מהלב. ללא מטרות רווח.</p>
       <div>
         <span>© {new Date().getFullYear()} Koral Events</span>
         <Link href="/admin">
@@ -37,7 +38,7 @@ export function EventImage({
   const img = (
     <img
       className={`${className} image-${event.image_mode}`}
-      src={event.image}
+      src={appPath(event.image)}
       alt={event.title}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
@@ -46,7 +47,10 @@ export function EventImage({
   return event.image ? (
     event.image_wide && !compact ? (
       <picture>
-        <source media="(min-width: 1000px)" srcSet={event.image_wide} />
+        <source
+          media="(min-width: 1000px)"
+          srcSet={appPath(event.image_wide)}
+        />
         {img}
       </picture>
     ) : (
@@ -64,7 +68,7 @@ function StateBadge({ event }: { event: KoralEvent }) {
   if (!full && event.state !== "closed") return null;
   return (
     <span className="card-state">
-      {event.state === "closed" ? "ההרשמה נסגרה" : "נותר להצטרף להמתנה"}
+      {event.state === "closed" ? "ההרשמה נסגרה" : "מלא · רשימת המתנה"}
     </span>
   );
 }

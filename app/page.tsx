@@ -23,8 +23,8 @@ export default async function Home() {
           <div className="show-hero-shade" />
           <div className="show-hero-content page-width">
             <div className="show-kicker">
-              <span className="live-dot" /> לילות. מסיבות. חוויות.{" "}
-              <span className="kicker-divider" /> לנשים בלבד
+              <span className="live-dot" /> ערבים לנשים{" "}
+              <span className="kicker-divider" /> ללא מטרות רווח
             </div>
             <div className="hero-spacer" aria-hidden="true" />
             <h1>
@@ -36,7 +36,7 @@ export default async function Home() {
             </h1>
             {featured && (
               <Link className="hero-next" href={`/events/${featured.id}`}>
-                <b>הלילה הבא</b>
+                <b>הערב הבא</b>
                 <span>
                   {featured.title} ·{" "}
                   {dateLabel(featured.starts_at, { weekday: "long" })}
@@ -44,7 +44,7 @@ export default async function Home() {
               </Link>
             )}
             <a href="#events" className="button show-button">
-              הלילה הבא שלי <ArrowDown size={20} />
+              הערב הבא שלי <ArrowDown size={20} />
             </a>
           </div>
         </section>
@@ -78,8 +78,8 @@ export default async function Home() {
             ) : (
               <div className="empty-public">
                 <Sparkles size={40} />
-                <h3>הלילה הבא כבר בדרך.</h3>
-                <p>האירועים הקרובים יופיעו כאן בקרוב.</p>
+                <h3>הערב הבא כבר בדרך.</h3>
+                <p>ברגע שייקבע תאריך, הוא יופיע כאן ראשון.</p>
               </div>
             )}
           </div>
@@ -94,8 +94,8 @@ export default async function Home() {
                 <span>ערבים לנשים, מהלב.</span>
               </h2>
               <p>
-                אנחנו עושות אירועים לנשים, ללא מטרות רווח. כל פעם מקום אחר וערב
-                אחר, ומה שמשותף לכולם הוא הביחד.
+                אירועים לנשים, ללא מטרות רווח. כל פעם מקום אחר וערב אחר, ומה
+                שמשותף לכולם הוא הביחד.
               </p>
               <ul className="about-kinds" aria-label="סוגי האירועים שלנו">
                 <li>שיעורי תורה עם רבניות</li>
@@ -106,10 +106,10 @@ export default async function Home() {
                 <li>ועוד</li>
               </ul>
               <p className="about-how">
-                נרשמות בשם ובטלפון, המנהלת מאשרת, ומחכה לך מקום.
+                נרשמות בשם ובטלפון, המנהלת מאשרת, והמקום שלך שמור.
               </p>
               <a href="#events" className="text-link">
-                נתראה באירוע הבא <ArrowUpLeft size={20} />
+                נתראה בערב הבא <ArrowUpLeft size={20} />
               </a>
             </div>
             <span className="about-signoff" aria-hidden="true">

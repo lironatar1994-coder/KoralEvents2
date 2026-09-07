@@ -23,7 +23,36 @@ Node.js 22.14 ומעלה נדרש.
 - כל התאריכים והשעות מוזנים ומוצגים לפי Asia/Jerusalem, גם אם הטלפון נמצא בחו״ל.
 - הרשמה כפולה אינה חושפת את פרטי ההרשמה הקיימת ואינה משנה אותם.
 
-## פריסה בשרת Linux
+## עדכון GitHub ופרוד
+
+הכתובת: https://lawebs.co.il/koralevents — ניהול: https://lawebs.co.il/koralevents/admin.
+המאגר הפרטי: https://github.com/lironatar1994-coder/KoralEvents.
+
+מתיקיית הפרויקט ב־PowerShell:
+
+```powershell
+.\deploy.ps1 "תיאור השינוי"
+.\deploy.ps1 "תיאור השינוי" -Target GitHub  # commit + push בלבד
+.\deploy.ps1 -Target Prod                  # פריסת HEAD נקי שכבר נמצא ב-GitHub
+.\deploy.ps1 -Target Check                 # בדיקות בלבד
+```
+
+נדרשים Node.js, Git, גישה לחשבון GitHub וחיבור SSH ל־`root@vee-app.co.il`.
+הסקריפט בודק טיפוסים וטסטים, מעלה את הקוד, ושולח לשרת ארכיון של אותו commit בדיוק. בשרת מתבצעת בניית Linux עם worker יחיד ומגבלת זיכרון; האתר הקודם ממשיך לפעול עד שהבנייה מסתיימת. החלפת הגרסה מפעילה מחדש את השירות ולכן צפויה הפסקה קצרה. אם בדיקת הבריאות המקומית או הציבורית נכשלת, קוד הגרסה הקודמת מופעל מחדש. מסד הנתונים אינו משוחזר אוטומטית.
+
+השירות `koralevents` מאזין רק ב־`127.0.0.1:3110`, מאחורי Nginx וה־HTTPS הקיים. `NEXT_PUBLIC_BASE_PATH=/koralevents` נקבע בזמן הבנייה. הנתונים והתמונות נשמרים ב־`/opt/koralevents/shared`, מחוץ לתיקיות הגרסאות. הסיסמה הראשונית נוצרת אקראית ונשמרת רק בשרת ב־`/opt/koralevents/shared/app.env`; היא אינה מופיעה ב־GitHub. קובצי הדגמה מקומיים אינם מועתקים.
+
+לפני עדכון מסד קיים נוצר גיבוי SQLite עקבי ב־`/opt/koralevents/backups`. תיקיות גרסאות וגיבויים נשמרות; יש לנטר מקום בדיסק ולמחוק גרסאות ישנות ידנית תוך שמירת `current` והנתיב הרשום ב־`previous-release`. הגיבוי האוטומטי לפני עדכון אינו תחליף לגיבוי יומי וחיצוני של מסד הנתונים והתמונות.
+
+```sh
+systemctl status koralevents
+journalctl -u koralevents -n 100 --no-pager
+curl -f https://lawebs.co.il/koralevents/api/health
+```
+
+ההקמה החד־פעמית מתועדת ב־`scripts/provision-linux.sh`; היא מיועדת לשרת הקיים בלבד. עדכונים שוטפים אינם משנים את Nginx. `/api/health` מחזיר גם את ה־commit הפעיל.
+
+## פריסה חלופית עם Docker בשרת Linux
 
 1. הגדירו DNS לדומיין ופתחו פורטים 80 ו־443. נדרשים Docker ו־Compose.
 2. העלו את קוד הפרויקט בלבד. צרו `.env` עם `DOMAIN=events.example.com` ו־`ADMIN_PASSWORD` חזק (12 תווים לפחות).
@@ -57,5 +86,3 @@ docker compose cp app:/app/uploads ./backups/uploads
 לאחר הפעלת האתר המקומי עם `data/demo.sqlite`, הריצו `npm run test:browser` לבדיקות דפדפן מקצה לקצה. ב־Windows נעשה שימוש ב־Chrome המותקן; ב־Linux התקינו קודם `npx playwright install --with-deps chromium`. הבדיקות יוצרות אירוע בדיקה ומעבירות אותו לארכיון, ולא שולחות הודעות וואטסאפ. הן כוללות רוחבי 360, 390, 430 ו־1440 פיקסלים ובדיקות נגישות אוטומטיות.
 
 פרטי תמונת האווירה שנוצרה במיוחד לאתר והפרומפט שלה מופיעים ב־`ASSETS.md`.
-
-ללא פרטי שרת ודומיין, הפרויקט מוכן לפריסה אך אינו מפורסם לאינטרנט.

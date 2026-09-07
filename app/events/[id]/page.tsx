@@ -13,7 +13,7 @@ export async function generateMetadata({
 }) {
   const e = await getEvent((await params).id);
   return {
-    title: e?.title || "האירוע לא נמצא",
+    title: e?.title || "הערב הזה לא נמצא",
     description: e?.subtitle || e?.description.slice(0, 160),
     openGraph: e
       ? {
@@ -87,7 +87,7 @@ export default async function EventPage({
           <p className="detail-description">{e.description}</p>
           {e.price > 0 && (
             <p className="field-hint">
-              התשלום בנפרד, בתיאום עם המנהלת. אין תשלום באתר.
+              התשלום לא באתר. מסדרים אותו עם המנהלת אחרי האישור.
             </p>
           )}
           <RegistrationForm eventId={e.id} open={open} full={full} />
@@ -95,7 +95,7 @@ export default async function EventPage({
         {others.length > 0 && (
           <section className="related page-width">
             <div className="section-heading">
-              <h2>עוד ערבים ששווה לצאת בשבילם.</h2>
+              <h2>עוד ערבים שמחכים לך.</h2>
             </div>
             <div className="event-list">
               {others.map((event) => (

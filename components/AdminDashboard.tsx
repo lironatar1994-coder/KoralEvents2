@@ -30,7 +30,7 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
           <h1>
             האירועים שלך<span className="gold">.</span>
           </h1>
-          <p>כל מה שצריך למפגש מוצלח, מתחיל כאן.</p>
+          <p>מה קרוב, מי נרשמה, ומה הבא.</p>
         </div>
         <Link className="button gold-button" href="/admin/events/new">
           <Plus size={19} /> יצירת אירוע
@@ -55,9 +55,9 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
       </section>
       <div className="tabs" aria-label="סינון אירועים">
         {[
-          ["upcoming", "אירועים קרובים"],
+          ["upcoming", "קרובים"],
           ["draft", "טיוטות"],
-          ["archive", "אירועים קודמים וארכיון"],
+          ["archive", "עברו וארכיון"],
         ].map(([key, label]) => (
           <button
             key={key}
@@ -93,7 +93,7 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
                   <b>{e.approved}</b> מאושרות
                 </span>
                 <span>
-                  <b>{e.pending}</b> ממתינות לאישור
+                  <b>{e.pending}</b> ממתינות
                 </span>
                 <span>
                   {e.capacity === null ? (
@@ -115,12 +115,12 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
             <CalendarDays size={32} />
             <h2>
               {tab === "draft"
-                ? "אין עדיין טיוטות"
+                ? "אין טיוטות כרגע"
                 : tab === "archive"
-                  ? "עוד אין אירועים בארכיון"
-                  : "האירוע הבא מתחיל אצלך"}
+                  ? "הארכיון ריק"
+                  : "הערב הבא מתחיל כאן"}
             </h2>
-            <p>תמונה יפה, כמה פרטים — ואפשר להתחיל להזמין.</p>
+            <p>תמונה, כמה פרטים, ואפשר להזמין.</p>
             <Link className="button outline-button" href="/admin/events/new">
               <Plus size={18} />
               יצירת אירוע חדש

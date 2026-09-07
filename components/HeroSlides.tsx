@@ -1,4 +1,6 @@
 "use client";
+import { appPath } from "@/lib/paths";
+
 import { useEffect, useState } from "react";
 // Brand scenes for the first screen. The first one is rendered on the server
 // and is the only image fetched before first paint; the rest load afterwards.
@@ -14,7 +16,7 @@ export function HeroSlides() {
       for (const s of slides.slice(1))
         for (const kind of ["portrait", "landscape"]) {
           const img = new Image();
-          img.src = `/brand/hero-${s}-${kind}.webp`;
+          img.src = appPath(`/brand/hero-${s}-${kind}.webp`);
         }
       setReady(true);
     }, 1200);
@@ -44,10 +46,10 @@ export function HeroSlides() {
           >
             <source
               media="(min-width: 700px)"
-              srcSet={`/brand/hero-${s}-landscape.webp`}
+              srcSet={appPath(`/brand/hero-${s}-landscape.webp`)}
             />
             <img
-              src={`/brand/hero-${s}-portrait.webp`}
+              src={appPath(`/brand/hero-${s}-portrait.webp`)}
               alt=""
               fetchPriority={i === 0 ? "high" : "auto"}
             />

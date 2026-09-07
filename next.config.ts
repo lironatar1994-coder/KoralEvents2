@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
+  experimental: { cpus: 1 },
   turbopack: { root: process.cwd() },
   outputFileTracingRoot: process.cwd(),
   outputFileTracingExcludes: {

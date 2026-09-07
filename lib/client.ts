@@ -1,9 +1,10 @@
+import { appPath } from "./paths";
 export async function api<T = Record<string, unknown>>(
   path: string,
   method = "GET",
   body?: unknown,
 ): Promise<T> {
-  const r = await fetch(path, {
+  const r = await fetch(appPath(path), {
     method,
     headers: body ? { "Content-Type": "application/json" } : undefined,
     body: body ? JSON.stringify(body) : undefined,

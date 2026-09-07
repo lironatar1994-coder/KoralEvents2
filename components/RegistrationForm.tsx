@@ -1,4 +1,6 @@
 "use client";
+import { appPath } from "@/lib/paths";
+
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpLeft, Check, Heart, Loader2 } from "lucide-react";
 export function RegistrationForm({
@@ -33,7 +35,7 @@ export function RegistrationForm({
     setError("");
     const form = new FormData(e.currentTarget);
     try {
-      const r = await fetch(`/api/events/${eventId}/register`, {
+      const r = await fetch(appPath(`/api/events/${eventId}/register`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -45,7 +47,11 @@ export function RegistrationForm({
       if (!r.ok) throw Error(data.error);
       setSuccess(data.status);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "לא הצלחנו לשלוח. נסי שוב.");
+      setError(
+        e instanceof Error
+          ? e.message
+          : "לא הצלחנו לשלוח. בדקי את החיבור ונסי שוב.",
+      );
     } finally {
       setBusy(false);
     }
@@ -54,8 +60,8 @@ export function RegistrationForm({
     return (
       <div className="registration-closed">
         <Heart size={22} />
-        <h3>ההרשמה לאירוע הזה הסתיימה</h3>
-        <p>נשמח להיפגש באחד האירועים הבאים.</p>
+        <h3>ההרשמה לערב הזה נסגרה.</h3>
+        <p>הערב הבא כבר מחכה לך למטה.</p>
       </div>
     );
   const cta = full ? "בקשת הצטרפות להמתנה" : "שליחת בקשת הרשמה";
@@ -69,20 +75,20 @@ export function RegistrationForm({
             </span>
             <h3>
               {success === "waitlist"
-                ? "קיבלנו את בקשת ההמתנה שלך"
-                : "הבקשה שלך התקבלה"}
+                ? "את ברשימת ההמתנה."
+                : "הבקשה שלך אצלנו."}
             </h3>
             <p>
               {success === "waitlist"
-                ? "האירוע מלא כרגע. אם יתפנה מקום והמנהלת תאשר, היא תיצור איתך קשר."
-                : "המקום עדיין לא מאושר. המנהלת תבדוק את הבקשה ותיצור איתך קשר לאחר האישור."}
+                ? "הערב מלא כרגע. אם יתפנה מקום, המנהלת תיצור איתך קשר."
+                : "המקום עדיין לא מאושר. המנהלת תעבור על הבקשה ותחזור אלייך בהודעה או בטלפון."}
             </p>
           </div>
         ) : (
           <form method="post" onSubmit={submit}>
             {full && (
               <p className="registration-full">
-                מלא כאן, אבל אולי יתפנה מקום. השאירי פרטים לרשימת ההמתנה.
+                הערב מלא. השאירי פרטים, ואם יתפנה מקום נודיע לך.
               </p>
             )}
             <label>
@@ -125,7 +131,7 @@ export function RegistrationForm({
               {busy ? "שולחת את הבקשה…" : cta}
             </button>
             <p className="registration-note">
-              לנשים בלבד · בכפוף לאישור המנהלת · הפרטים משמשים לאירוע הזה בלבד
+              לנשים בלבד · המנהלת מאשרת כל בקשה · הפרטים נשארים אצלנו
             </p>
           </form>
         )}

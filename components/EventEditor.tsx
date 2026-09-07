@@ -1,4 +1,6 @@
 "use client";
+import { appPath } from "@/lib/paths";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -111,7 +113,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
   async function upload(file?: File, key: "image" | "image_wide" = "image") {
     if (!file) return;
     if (file.size > 10 * 1024 * 1024) {
-      setError("יש לבחור תמונה עד 10MB");
+      setError("התמונה גדולה מדי. עד 10MB.");
       return;
     }
     setUploading(key);
@@ -119,7 +121,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
     try {
       const data = new FormData();
       data.set("file", file);
-      const r = await fetch("/api/admin/upload", {
+      const r = await fetch(appPath("/api/admin/upload"), {
         method: "POST",
         body: data,
       });
@@ -192,7 +194,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
       </Link>
       <div className="admin-title-row">
         <div>
-          <h1>{event ? "הפרטים הקטנים." : "בואי ניצור מפגש מיוחד."}</h1>
+          <h1>{event ? "עריכת האירוע." : "ערב חדש."}</h1>
           <p>שלושה מסכים קצרים, ואת מוכנה לפרסם.</p>
         </div>
       </div>
@@ -229,21 +231,18 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           data-step={0}
           hidden={step !== 0}
         >
-          <div className="panel-title">
-            <h2>מתחילות באווירה</h2>
-          </div>
           <label className={`upload-zone ${form.image ? "has-image" : ""}`}>
             {form.image ? (
               <img
-                src={form.image}
+                src={appPath(form.image)}
                 alt="תצוגה מקדימה לתמונת האירוע"
                 style={{ objectFit: form.image_mode as "cover" | "contain" }}
               />
             ) : (
               <>
                 <ImagePlus size={36} />
-                <strong>התמונה שמספרת את החוויה</strong>
-                <span>לחצי להעלאת תמונה או פלייר מהטלפון</span>
+                <strong>התמונה של הערב</strong>
+                <span>לחצי לבחירת תמונה או פלייר מהטלפון</span>
                 <small>JPG, PNG, WebP · עד 10MB</small>
               </>
             )}
@@ -270,25 +269,26 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
               value={form.image_mode}
               onChange={(e) => set("image_mode", e.target.value)}
             >
-              <option value="cover">תמונת אווירה — מילוי המסגרת</option>
-              <option value="contain">פלייר — הצגת התמונה בשלמותה</option>
+              <option value="cover">צילום: ממלא את המסך</option>
+              <option value="contain">פלייר: מוצג בשלמותו</option>
             </select>
           </label>
           <p className="field-hint">
-            לפלייר עם טקסט בחרי הצגה בשלמותה, כדי ששום פרט לא ייחתך.
+            יש טקסט על התמונה? בחרי פלייר, כדי שלא ייחתך.
           </p>
           <label
             className={`upload-zone upload-zone-wide ${form.image_wide ? "has-image" : ""}`}
           >
             {form.image_wide ? (
-              <img src={form.image_wide} alt="תצוגה מקדימה לתמונה למחשב" />
+              <img
+                src={appPath(form.image_wide)}
+                alt="תצוגה מקדימה לתמונה למחשב"
+              />
             ) : (
               <>
                 <ImagePlus size={22} />
                 <strong>תמונה רחבה למחשב · לא חובה</strong>
-                <span>
-                  אם יש גרסה לרוחב של אותה תמונה, היא תוצג במסכים גדולים
-                </span>
+                <span>גרסה לרוחב של אותה תמונה, למי שפותחת במחשב</span>
               </>
             )}
             <input
@@ -322,7 +322,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             <input
               value={form.title}
               onChange={(e) => set("title", e.target.value)}
-              placeholder="למשל: נשים נפגשות בכותל"
+              placeholder="למשל: לילה בכותל, יחד"
               minLength={2}
               maxLength={120}
               required
@@ -333,7 +333,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             <input
               value={form.subtitle}
               onChange={(e) => set("subtitle", e.target.value)}
-              placeholder="מפגש של תפילה, חיבור וזמן לעצמך"
+              placeholder="משפט אחד שמסביר למה לבוא"
               maxLength={160}
             />
           </label>
@@ -342,7 +342,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             <input
               value={form.category}
               onChange={(e) => set("category", e.target.value)}
-              placeholder="תפילה • חיבור • ביחד"
+              placeholder="למשל: שיעור תורה · לנשים בלבד"
               maxLength={60}
               required
             />
@@ -353,9 +353,6 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           data-step={1}
           hidden={step !== 1}
         >
-          <div className="panel-title">
-            <h2>מתי ואיפה נפגשות?</h2>
-          </div>
           <label>
             תאריך ושעה · שעון ישראל
             <input
@@ -367,7 +364,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             />
           </label>
           <p className="field-hint date-hint" aria-live="polite">
-            {dateHint || "בחרי תאריך ושעה, ונציג אותם כאן בעברית."}
+            {dateHint || "אחרי הבחירה התאריך יופיע כאן בעברית."}
           </p>
           <label>
             שם המקום
@@ -385,7 +382,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             <input
               value={form.address}
               onChange={(e) => set("address", e.target.value)}
-              placeholder="רחוב, מספר ועיר"
+              placeholder="רחוב, מספר ועיר, בשביל הניווט"
               maxLength={250}
             />
           </label>
@@ -394,7 +391,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             <textarea
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
-              placeholder="ספרי בכמה מילים על החוויה, מה כלול ומה כדאי לדעת."
+              placeholder="מה קורה בערב, מה כלול, ומה כדאי להביא."
               rows={4}
               maxLength={5000}
             />
@@ -405,9 +402,6 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
           data-step={2}
           hidden={step !== 2}
         >
-          <div className="panel-title">
-            <h2>מכינות מקום לכולן</h2>
-          </div>
           <label>
             עלות השתתפות בש״ח
             <input
@@ -420,7 +414,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
               required
             />
           </label>
-          <p className="field-hint">0 = ללא עלות. התשלום ייעשה מחוץ לאתר.</p>
+          <p className="field-hint">0 = ללא עלות. התשלום לא עובר דרך האתר.</p>
           <label>
             כמה מקומות יש?
             <input
@@ -430,12 +424,12 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
               step={1}
               value={form.capacity}
               onChange={(e) => set("capacity", e.target.value)}
-              placeholder="השאירי ריק אם אין הגבלה"
+              placeholder="ריק = בלי הגבלה"
             />
           </label>
           <p className="field-hint">
-            כשהאירוע מלא, בקשות חדשות יצטרפו לרשימת ההמתנה. אישור ההשתתפות תמיד
-            בידיים שלך.
+            כשהמקומות נגמרים, בקשות חדשות נכנסות לרשימת המתנה. את מאשרת כל אחת
+            בעצמך.
           </p>
         </fieldset>
         {error && (
@@ -483,11 +477,11 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
         </div>
       </form>
       {preview && (
-        <Modal title="ככה האירוע שלך ייראה" onClose={() => setPreview(false)}>
+        <Modal title="ככה זה ייראה למשתתפות" onClose={() => setPreview(false)}>
           <div className="event-preview">
             {form.image && (
               <img
-                src={form.image}
+                src={appPath(form.image)}
                 alt={form.title}
                 style={{ objectFit: form.image_mode as "cover" | "contain" }}
               />

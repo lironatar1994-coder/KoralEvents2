@@ -3,9 +3,9 @@ export default function ErrorPage({ reset }: { reset: () => void }) {
   return (
     <main id="main" className="empty-public">
       <h1>משהו קטן השתבש.</h1>
-      <p>לא הצלחנו לטעון את העמוד. אפשר לנסות שוב.</p>
+      <p>העמוד לא נטען. נסי שוב, זה בדרך כלל עובר.</p>
       <button className="button gold-button" onClick={reset}>
-        ניסיון נוסף
+        לנסות שוב
       </button>
     </main>
   );

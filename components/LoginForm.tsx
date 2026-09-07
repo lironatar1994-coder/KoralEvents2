@@ -1,4 +1,6 @@
 "use client";
+import { appPath } from "@/lib/paths";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff, LockKeyhole } from "lucide-react";
@@ -19,7 +21,7 @@ export function LoginForm() {
         setError("");
         const password = new FormData(e.currentTarget).get("password");
         try {
-          const r = await fetch("/api/auth/login", {
+          const r = await fetch(appPath("/api/auth/login"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ password }),
@@ -29,7 +31,9 @@ export function LoginForm() {
           router.replace("/admin");
           router.refresh();
         } catch (e) {
-          setError(e instanceof Error ? e.message : "לא ניתן להתחבר כרגע");
+          setError(
+            e instanceof Error ? e.message : "לא הצלחנו להתחבר. נסי שוב.",
+          );
         } finally {
           setBusy(false);
         }
@@ -58,7 +62,7 @@ export function LoginForm() {
           </button>
         </div>
       </label>
-      <p className="field-hint">נשאיר אותך מחוברת במכשיר הזה למשך 30 יום.</p>
+      <p className="field-hint">נשארת מחוברת בטלפון הזה 30 יום.</p>
       {error && (
         <p role="alert" className="error-message">
           {error}

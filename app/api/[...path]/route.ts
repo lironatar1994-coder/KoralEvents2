@@ -64,7 +64,10 @@ async function handler(
       NextResponse.json(data, { headers: { "Cache-Control": "no-store" } });
     if (route === "health" && method === "GET") {
       await getEvents();
-      return ok({ ok: true });
+      return ok({
+        ok: true,
+        revision: process.env.RELEASE_REVISION || "local",
+      });
     }
     if (parts[0] === "media" && method === "GET") {
       if (parts.length !== 2 || !/^[a-f0-9-]+\.webp$/.test(parts[1]))

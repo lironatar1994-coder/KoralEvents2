@@ -6,9 +6,9 @@ export default function NotFound() {
       <Header />
       <main id="main" className="empty-public page-width">
         <h1>הרגע הזה לא נמצא.</h1>
-        <p>יכול להיות שהקישור השתנה או שהאירוע כבר אינו זמין.</p>
+        <p>אולי הקישור השתנה, או שהערב כבר עבר.</p>
         <Link className="button gold-button" href="/">
-          לאירועים שלנו
+          לערבים הקרובים
         </Link>
       </main>
       <Footer />
