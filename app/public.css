@@ -1,6 +1,7 @@
 /* Public identity: midnight, burgundy spotlights and coral event posters. */
 .public-site {
   --coral: #ff5c8a;
+  --rose-text: #ff7da3;
   --paper: #f5f0e7;
   --ink: #2a0714;
   --bg: #150b1c;
@@ -184,7 +185,7 @@
 }
 .show-hero h1 > span,
 .show-hero h1 .hero-period {
-  color: var(--coral);
+  color: var(--rose-text);
 }
 .public-site .show-button {
   color: var(--ink);
@@ -263,7 +264,7 @@
   margin-top: 8px;
 }
 .show-events .section-heading h2 span {
-  color: var(--coral);
+  color: var(--rose-text);
 }
 .show-events .eyebrow {
   color: var(--gold);
@@ -470,7 +471,7 @@
   margin: 22px 0;
 }
 .show-about h2 span {
-  color: var(--coral);
+  color: var(--rose-text);
 }
 .show-about p {
   color: #e6d9ee;
