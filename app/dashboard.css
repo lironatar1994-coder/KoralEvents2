@@ -1,18 +1,56 @@
 /* Daily management: content first, with one creation action and a quiet summary. */
 .admin-app .dashboard-header {
-  height: 60px;
-  min-height: 60px;
-  padding-block: 6px;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  height: 64px;
+  min-height: 64px;
+  padding-block: 8px;
 }
-.dashboard-header .brand {
-  width: 96px;
+.admin-app .dashboard-header .brand {
+  width: max-content;
+  margin: 0;
+  justify-self: start;
 }
 .admin-app .dashboard-header .brand > span:first-child {
-  font-size: 27px;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -1.2px;
 }
-.dashboard-header .brand-sub {
+.admin-app .admin-header .brand-sub {
   font-size: 7px;
+  line-height: 1;
+  width: 100%;
+  text-align: center;
+  letter-spacing: 0.48em;
+  text-indent: 0.48em;
+  padding: 0;
+  margin-top: 5px;
+}
+.dashboard-header .brand-spark {
+  width: 0.45em;
+  height: 0.45em;
+  margin-inline-start: 0.1em;
+}
+.admin-app .dashboard-header .admin-header-actions {
+  margin: 0;
+  justify-self: end;
+  gap: 8px;
+}
+.dashboard-header .admin-header-actions .text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.dashboard-summary > span,
+.dashboard-main .admin-event-counts > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.dashboard-main .admin-event-counts b,
+.dashboard-summary strong {
+  font-variant-numeric: tabular-nums;
 }
 .dashboard-main .admin-title-row {
   flex-direction: row;
@@ -97,11 +135,22 @@
 }
 .dashboard-main .admin-event-body > .badge {
   position: static;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  gap: 6px;
   font-size: 12px;
-  padding: 2px 8px;
-  margin: 0 0 4px;
+  line-height: 1.5;
+  padding: 0;
+  margin: 0 0 6px;
   background: transparent;
   backdrop-filter: none;
+}
+.dashboard-main .admin-event-body > .badge::before {
+  order: 1;
+  width: 6px;
+  height: 6px;
+  margin: 0;
 }
 .dashboard-main .admin-event-body h2 {
   margin: 0 0 6px;
@@ -130,6 +179,9 @@
   }
 }
 @media (max-width: 700px) {
+  .admin-app .dashboard-header {
+    padding-inline: 20px;
+  }
   .admin-app .dashboard-main {
     padding-top: 18px;
   }

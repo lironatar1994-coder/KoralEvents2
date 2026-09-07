@@ -17,7 +17,7 @@ export function Brand({ small = false }: { small?: boolean }) {
         KORAL
         <Spark className="brand-spark" />
       </span>
-      <span className="brand-sub">E V E N T S</span>
+      <span className="brand-sub">EVENTS</span>
     </Link>
   );
 }
