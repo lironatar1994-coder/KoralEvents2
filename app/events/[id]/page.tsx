@@ -17,6 +17,7 @@ import {
   EventImage,
   EventCard,
   Price,
+  SeatsTag,
 } from "@/components/Public";
 import { dateLabel, timeLabel, priceLabel } from "@/lib/types";
 import { RegistrationForm } from "@/components/RegistrationForm";
@@ -84,6 +85,7 @@ export default async function EventPage({
                 <MapPin size={16} /> {e.location}
               </span>
               <Price price={e.price} />
+              <SeatsTag event={e} />
             </p>
           </div>
         </section>

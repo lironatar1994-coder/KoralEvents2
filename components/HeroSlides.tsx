@@ -42,26 +42,41 @@ export function HeroSlides() {
   }, [ready]);
   return (
     <>
-      {slides.map((s, i) =>
-        i === 0 || ready ? (
-          <picture
+      <div className="k-hero-media">
+        {slides.map((s, i) =>
+          i === 0 || ready ? (
+            <picture
+              key={s}
+              className={`hero-slide ${i === active ? "is-active" : i === prev ? "is-prev" : ""}`}
+              style={{ "--fade": `${FADE}ms` } as React.CSSProperties}
+              aria-hidden={i !== active}
+            >
+              <source
+                media="(min-width: 700px)"
+                srcSet={appPath(`/brand/hero-${s}-landscape.webp`)}
+              />
+              <img
+                src={appPath(`/brand/hero-${s}-portrait.webp`)}
+                alt=""
+                fetchPriority={i === 0 ? "high" : "auto"}
+              />
+            </picture>
+          ) : null,
+        )}
+      </div>
+      {/* Which scene is on: thin bars, the active one fills until the next. */}
+      <div
+        className={`k-hero-progress ${ready ? "is-running" : ""}`}
+        style={{ "--interval": `${INTERVAL}ms` } as React.CSSProperties}
+        aria-hidden="true"
+      >
+        {slides.map((s, i) => (
+          <span
             key={s}
-            className={`hero-slide ${i === active ? "is-active" : i === prev ? "is-prev" : ""}`}
-            style={{ "--fade": `${FADE}ms` } as React.CSSProperties}
-            aria-hidden={i !== active}
-          >
-            <source
-              media="(min-width: 700px)"
-              srcSet={appPath(`/brand/hero-${s}-landscape.webp`)}
-            />
-            <img
-              src={appPath(`/brand/hero-${s}-portrait.webp`)}
-              alt=""
-              fetchPriority={i === 0 ? "high" : "auto"}
-            />
-          </picture>
-        ) : null,
-      )}
+            className={i === active ? "is-active" : i < active ? "is-done" : ""}
+          />
+        ))}
+      </div>
     </>
   );
 }

@@ -2,7 +2,13 @@ import { ArrowDown, ArrowUpLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { getEvents } from "@/lib/events";
 import { dateLabel, timeLabel } from "@/lib/types";
-import { Header, Footer, EventCard, DateLeaf } from "@/components/Public";
+import {
+  Header,
+  Footer,
+  EventCard,
+  DateLeaf,
+  countdownLabel,
+} from "@/components/Public";
 import { Spark } from "@/components/Brand";
 import { HeroSlides } from "@/components/HeroSlides";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -43,9 +49,7 @@ export default async function Home() {
       <Header />
       <main id="main">
         <section className="k-hero">
-          <div className="k-hero-media">
-            <HeroSlides />
-          </div>
+          <HeroSlides />
           <div className="k-hero-shade" aria-hidden="true" />
           <div className="k-grain" aria-hidden="true" />
           <div className="k-wrap k-hero-body">
@@ -55,15 +59,21 @@ export default async function Home() {
               </p>
               <h1 className="k-hero-title">
                 <span className="hero-line k-hero-intro">
-                  <span>״אישה לאישה״</span>
+                  <span>״אישה לאישה</span>
                 </span>
                 <span className="hero-line k-hero-word">
-                  <span>מלכה</span>
+                  <span>
+                    מלכה
+                    <i className="k-quote">״</i>
+                  </span>
                 </span>
               </h1>
-              <p className="k-hero-sub">
-                ערבי נשים לזיכוי הרבות. כל פעם מקום אחר, כל פעם אותו ביחד.
-              </p>
+              <span className="k-hero-flourish" aria-hidden="true">
+                <svg viewBox="0 0 320 26" preserveAspectRatio="none">
+                  <path d="M3 18 C 60 4, 110 26, 170 12 S 270 4, 317 10" />
+                </svg>
+              </span>
+              <p className="k-hero-sub">ערבי נשים לזיכוי הרבות.</p>
               <div className="k-hero-actions">
                 <a href="#events" className="k-btn k-btn-rose k-btn-down">
                   הערב הבא שלנו <ArrowDown size={20} />
@@ -77,7 +87,9 @@ export default async function Home() {
               <Link className="k-ticket" href={`/events/${featured.id}`}>
                 <DateLeaf value={featured.starts_at} className="on-night" />
                 <span className="k-ticket-body">
-                  <span className="k-ticket-label">הערב הבא</span>
+                  <span className="k-ticket-label">
+                    הערב הבא · {countdownLabel(featured.starts_at)}
+                  </span>
                   <span className="k-ticket-title">{featured.title}</span>
                   <span className="k-ticket-meta">
                     {dateLabel(featured.starts_at, { weekday: "long" })} ·{" "}

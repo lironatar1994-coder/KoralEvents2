@@ -2,6 +2,7 @@ import { appPath } from "@/lib/paths";
 import Link from "next/link";
 import { ArrowDown, ArrowUpLeft, Clock3, MapPin, Sparkles } from "lucide-react";
 import { Brand } from "./Brand";
+import { HeaderScroll } from "./HeaderScroll";
 import { KoralEvent, dateLabel, timeLabel, priceLabel } from "@/lib/types";
 
 /* Day and month, pulled apart for the calendar leaf. */
@@ -14,6 +15,42 @@ export function dateParts(value: string) {
   }).formatToParts(new Date(value));
   const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
   return { day: get("day"), month: get("month"), weekday: get("weekday") };
+}
+
+/* Calendar days from now until the evening, in Jerusalem time. */
+export function daysUntil(value: string, now = new Date()) {
+  const key = (d: Date) =>
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Jerusalem",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(d);
+  const [a, b] = [key(now), key(new Date(value))].map((k) => {
+    const [y, m, d] = k.split("-").map(Number);
+    return Date.UTC(y, m - 1, d);
+  });
+  return Math.round((b - a) / 86400000);
+}
+export function countdownLabel(value: string) {
+  const n = daysUntil(value);
+  if (n < 0) return "עבר";
+  if (n === 0) return "הערב!";
+  if (n === 1) return "מחר";
+  if (n === 2) return "מחרתיים";
+  return `בעוד ${n} ימים`;
+}
+/* Shown only when seats are actually running out. */
+export function SeatsTag({ event }: { event: KoralEvent }) {
+  if (event.capacity === null || event.state !== "published") return null;
+  const left = event.capacity - event.approved;
+  if (left <= 0 || left > Math.max(5, Math.ceil(event.capacity * 0.2)))
+    return null;
+  return (
+    <span className="k-tag urgent">
+      {left === 1 ? "נשאר מקום אחרון" : `נשארו ${left} מקומות`}
+    </span>
+  );
 }
 
 export function DateLeaf({
@@ -43,6 +80,7 @@ export function Price({ price }: { price: number }) {
 export function Header() {
   return (
     <header className="k-header">
+      <HeaderScroll />
       <div className="k-wrap k-header-row">
         <Brand />
         <nav className="k-nav" aria-label="ניווט ראשי">
@@ -170,6 +208,7 @@ export function EventCard({
           <EventImage event={event} compact />
           <DateLeaf value={event.starts_at} />
           <StateTag event={event} />
+          <SeatsTag event={event} />
         </div>
         <div className="k-card-body">
           <p className="k-card-kicker">{event.category}</p>
@@ -202,6 +241,7 @@ export function EventCard({
         <EventImage event={event} priority={index === 0} />
         <span className="k-tag">{event.category}</span>
         <StateTag event={event} />
+        <SeatsTag event={event} />
       </div>
       <div className="k-card-body">
         <div className="k-card-date">
