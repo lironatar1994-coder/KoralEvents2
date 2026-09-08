@@ -57,4 +57,4 @@ Secondary demo images are downloaded from Unsplash by `scripts/seed.ts`:
 - `photo-1514933651103-005eec06c04b` — bar interior.
 - `photo-1514525253161-7a46d19cd819` — concert lights.
 
-Heebo is self-hosted under the SIL Open Font License, included in `public/fonts/OFL.txt`. Interface icons use lucide-react. The wordmark and favicon are rendered in code.
+Heebo, Frank Ruhl Libre (Hebrew display serif) and Cormorant Garamond (Latin wordmark) are self-hosted in `public/fonts` under the SIL Open Font License, included in `public/fonts/OFL.txt`. The public identity lives in `app/site.css`. Interface icons use lucide-react. The wordmark and favicon are rendered in code.

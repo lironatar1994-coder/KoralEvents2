@@ -95,10 +95,10 @@
   width: 100%;
   padding: 14px 16px;
   margin-bottom: 18px;
-  border: 1px solid #ff5c8a66;
+  border: 1px solid #e8607f66;
   border-radius: 14px;
   color: var(--text);
-  background: #ff5c8a18;
+  background: #e8607f18;
   text-align: start;
   font: inherit;
   font-size: 14px;
@@ -115,7 +115,7 @@
 }
 .pending-action:hover,
 .pending-action[aria-pressed="true"] {
-  background: #ff5c8a2b;
+  background: #e8607f2b;
 }
 .dashboard-main .tabs {
   gap: 4px;

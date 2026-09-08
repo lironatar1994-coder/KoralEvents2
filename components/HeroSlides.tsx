@@ -1,6 +1,5 @@
 "use client";
 import { appPath } from "@/lib/paths";
-
 import { useEffect, useState } from "react";
 // Brand scenes for the first screen. The first one is rendered on the server
 // and is the only image fetched before first paint; the rest load afterwards.

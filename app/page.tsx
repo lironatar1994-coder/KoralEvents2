@@ -1,8 +1,9 @@
-import { ArrowUpLeft, ArrowDown, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowUpLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { getEvents } from "@/lib/events";
-import { dateLabel } from "@/lib/types";
-import { Header, Footer, EventCard } from "@/components/Public";
+import { dateLabel, timeLabel } from "@/lib/types";
+import { Header, Footer, EventCard, DateLeaf } from "@/components/Public";
+import { Spark } from "@/components/Brand";
 import { HeroSlides } from "@/components/HeroSlides";
 import { ScrollReveal } from "@/components/ScrollReveal";
 
@@ -11,84 +12,143 @@ export const dynamic = "force-dynamic";
 const ribbon = [
   "ערבי נשים",
   "לילות בכותל",
-  "מסיבות פורים",
   "שיעורי תורה",
   "הפרשות חלה",
   "ערבי העצמה",
+  "מסיבות פורים",
   "טיולי לילה",
+];
+
+const steps = [
+  {
+    title: "נרשמות",
+    text: "בשם ובטלפון בלבד. בלי סיסמאות, בלי תשלום באתר.",
+  },
+  {
+    title: "המנהלת מאשרת",
+    text: "עוברת על הבקשה וחוזרת אלייך בהודעה או בטלפון.",
+  },
+  {
+    title: "המקום שלך שמור",
+    text: "מוסיפות ליומן, מביאות חברה, ונפגשות.",
+  },
 ];
 
 export default async function Home() {
   const events = await getEvents();
-  const featured = events[0];
+  const [featured, ...rest] = events;
+  const openCount = events.filter((e) => e.state === "published").length;
   return (
     <div className="public-site">
       <Header />
       <main id="main">
-        <section className="show-hero">
-          <div className="show-hero-image">
+        <section className="k-hero">
+          <div className="k-hero-media">
             <HeroSlides />
           </div>
-          <div className="show-hero-shade" />
-          <div className="show-hero-content page-width">
-            <div className="show-kicker">
-              <span className="live-dot" /> ערבים לנשים{" "}
-              <span className="kicker-divider" /> ללא מטרות רווח
+          <div className="k-hero-shade" aria-hidden="true" />
+          <div className="k-grain" aria-hidden="true" />
+          <div className="k-wrap k-hero-body">
+            <div className="k-hero-copy">
+              <p className="k-kicker">
+                <i aria-hidden="true" /> ערבי נשים · ללא מטרות רווח
+              </p>
+              <h1 className="k-hero-title">
+                <span className="hero-line k-hero-intro">
+                  <span>״אישה לאישה״</span>
+                </span>
+                <span className="hero-line k-hero-word">
+                  <span>מלכה</span>
+                </span>
+              </h1>
+              <p className="k-hero-sub">
+                ערבי נשים לזיכוי הרבות. כל פעם מקום אחר, כל פעם אותו ביחד.
+              </p>
+              <div className="k-hero-actions">
+                <a href="#events" className="k-btn k-btn-rose k-btn-down">
+                  הערב הבא שלנו <ArrowDown size={20} />
+                </a>
+                <a href="#about" className="k-btn k-btn-ghost">
+                  מי אנחנו
+                </a>
+              </div>
             </div>
-            <div className="hero-spacer" aria-hidden="true" />
-            <h1 className="hero-title">
-              <span className="hero-line hero-title-intro">
-                <span>״אישה לאישה״</span>
-              </span>
-              <span className="hero-line">
-                <span className="hero-rose">מלכה</span>
-              </span>
-            </h1>
-            <p className="hero-description">ערבי נשים לזיכוי הרבות</p>
             {featured && (
-              <Link className="hero-next" href={`/events/${featured.id}`}>
-                <b>הערב הבא</b>
-                <span>
-                  {featured.title} ·{" "}
-                  {dateLabel(featured.starts_at, { weekday: "long" })}
+              <Link className="k-ticket" href={`/events/${featured.id}`}>
+                <DateLeaf value={featured.starts_at} className="on-night" />
+                <span className="k-ticket-body">
+                  <span className="k-ticket-label">הערב הבא</span>
+                  <span className="k-ticket-title">{featured.title}</span>
+                  <span className="k-ticket-meta">
+                    {dateLabel(featured.starts_at, { weekday: "long" })} ·{" "}
+                    {timeLabel(featured.starts_at)} · {featured.location}
+                  </span>
+                </span>
+                <span className="k-ticket-arrow" aria-hidden="true">
+                  <ArrowUpLeft size={20} />
                 </span>
               </Link>
             )}
-            <a href="#events" className="button show-button">
-              הערב הבא שלנו <ArrowDown size={20} />
-            </a>
+          </div>
+          <div className="k-hero-foot" aria-hidden="true">
+            <span className="k-scroll-cue">
+              <i /> גללי למטה
+            </span>
+            <span className="latin">women only · from the heart</span>
           </div>
         </section>
-        <div className="show-ribbon" aria-hidden="true">
-          <div className="ribbon-track">
+
+        <div className="k-ribbon" aria-hidden="true">
+          <div className="k-ribbon-track">
             {[...ribbon, ...ribbon, ...ribbon, ...ribbon].map((text, i) => (
               <span key={i}>
-                {text} <b>✳</b>
+                {text} <Spark />
               </span>
             ))}
           </div>
         </div>
-        <section className="show-events" id="events">
-          <div className="page-width">
-            <div className="section-heading" data-reveal>
-              <h2>
-                הערבים <span>הקרובים.</span>
-              </h2>
-            </div>
-            {events.length ? (
-              <div className="event-list">
-                {events.map((event, index) => (
-                  <EventCard
-                    key={event.id}
-                    event={event}
-                    index={index}
-                    variant={index === 0 ? "featured" : "compact"}
-                    reveal
-                  />
-                ))}
+
+        <section className="k-events" id="events">
+          <div className="k-wrap">
+            <header className="k-section-head" data-reveal>
+              <div>
+                <p className="k-eyebrow">מה שמחכה לנו</p>
+                <h2>
+                  הערבים <em>הקרובים</em>
+                </h2>
               </div>
+              {openCount > 0 && (
+                <p className="k-section-note">
+                  {openCount === 1
+                    ? "ערב אחד פתוח להרשמה"
+                    : `${openCount} ערבים פתוחים להרשמה`}
+                </p>
+              )}
+            </header>
+            {featured ? (
+              <>
+                <EventCard
+                  event={featured}
+                  index={0}
+                  variant="featured"
+                  reveal
+                />
+                {rest.length > 0 && (
+                  <div className="k-grid">
+                    {rest.map((event, index) => (
+                      <EventCard
+                        key={event.id}
+                        event={event}
+                        index={index + 1}
+                        variant="compact"
+                        reveal
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="empty-public" data-reveal>
+              <div className="k-empty" data-reveal>
                 <Sparkles size={40} />
                 <h3>הערב הבא כבר בדרך.</h3>
                 <p>ברגע שייקבע תאריך, הוא יופיע כאן ראשון.</p>
@@ -96,28 +156,28 @@ export default async function Home() {
             )}
           </div>
         </section>
-        <section id="about" className="show-about">
-          <div className="page-width">
-            <div className="show-about-copy">
-              <div className="eyebrow" data-reveal>
+
+        <section id="about" className="k-about">
+          <div className="k-grain" aria-hidden="true" />
+          <div className="k-wrap k-about-grid">
+            <div className="k-about-copy">
+              <p className="k-eyebrow light" data-reveal>
                 מי אנחנו
-              </div>
-              <h2
-                data-reveal
-                style={{ "--reveal-delay": "80ms" } as React.CSSProperties}
-              >
-                אנחנו KORAL EVENTS.
+              </p>
+              <h2 data-reveal>
+                אנחנו <span className="latin">Koral Events</span>.
                 <br />
-                <span>ערבים לנשים, מהלב.</span>
+                <em>ערבים לנשים, מהלב.</em>
               </h2>
               <p
                 data-reveal
-                style={{ "--reveal-delay": "160ms" } as React.CSSProperties}
+                style={{ "--reveal-delay": "80ms" } as React.CSSProperties}
               >
                 אירועים לנשים, ללא מטרות רווח. כל פעם מקום אחר וערב אחר, ומה
-                שמשותף לכולם הוא הביחד.
+                שמשותף לכולם הוא הביחד: שיעור שנשאר איתך, שולחן שמתמלא, ולילה
+                שמסתיים בחיוך.
               </p>
-              <ul className="about-kinds" aria-label="סוגי האירועים שלנו">
+              <ul className="k-kinds" aria-label="סוגי האירועים שלנו">
                 {[
                   "שיעורי תורה עם רבניות",
                   "מסיבות וערבי לילה",
@@ -131,7 +191,7 @@ export default async function Home() {
                     data-reveal
                     style={
                       {
-                        "--reveal-delay": `${i * 35}ms`,
+                        "--reveal-delay": `${120 + i * 40}ms`,
                       } as React.CSSProperties
                     }
                   >
@@ -139,19 +199,33 @@ export default async function Home() {
                   </li>
                 ))}
               </ul>
-              <p className="about-how" data-reveal>
-                נרשמות בשם ובטלפון, המנהלת מאשרת, והמקום שלך שמור.
-              </p>
-              <a href="#events" className="text-link" data-reveal>
-                נתראה בערב הבא <ArrowUpLeft size={20} />
+            </div>
+            <div>
+              <ol className="k-steps" aria-label="איך זה עובד">
+                {steps.map((step, i) => (
+                  <li
+                    key={step.title}
+                    data-reveal
+                    style={
+                      { "--reveal-delay": `${i * 90}ms` } as React.CSSProperties
+                    }
+                  >
+                    <span aria-hidden="true">0{i + 1}</span>
+                    <div>
+                      <b>{step.title}</b>
+                      <p>{step.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <a href="#events" className="k-btn k-btn-rose" data-reveal>
+                נתראה בערב הבא <ArrowUpLeft size={18} />
               </a>
             </div>
-            <span className="about-signoff" aria-hidden="true" data-reveal>
-              See you
-              <br />
-              <em>there.</em>
-            </span>
           </div>
+          <span className="k-signoff" aria-hidden="true">
+            See you there.
+          </span>
         </section>
       </main>
       <Footer />

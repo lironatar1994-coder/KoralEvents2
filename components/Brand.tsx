@@ -13,11 +13,11 @@ export function Brand({ small = false }: { small?: boolean }) {
       className={`brand ${small ? "brand-small" : ""}`}
       aria-label="Koral Events — לעמוד הבית"
     >
-      <span>
-        KORAL
+      <span className="brand-word">
+        Koral
         <Spark className="brand-spark" />
       </span>
-      <span className="brand-sub">EVENTS</span>
+      <span className="brand-sub">Events</span>
     </Link>
   );
 }

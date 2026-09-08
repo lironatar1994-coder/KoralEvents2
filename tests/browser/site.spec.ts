@@ -2,6 +2,17 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import sharp from "sharp";
 
+/* Entrance animations fade text in; let them finish before axe samples colours. */
+const settle = (page: import("@playwright/test").Page) =>
+  page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((a) => a.effect?.getTiming().iterations !== Infinity)
+        .map((a) => a.finished.catch(() => undefined)),
+    ),
+  );
+
 test.beforeAll(() => {
   if (!process.env.DATABASE_PATH?.endsWith("demo.sqlite"))
     throw Error(
@@ -45,6 +56,7 @@ test("public site is readable, accessible, and has no overflow at phone and desk
       animations: "disabled",
     });
   }
+  await settle(page);
   const result = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
     .analyze();
@@ -105,6 +117,7 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
     path: "test-results/admin-mobile.png",
     fullPage: true,
   });
+  await settle(page);
   const adminAxe = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
     .analyze();
@@ -155,6 +168,16 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
     "object-fit",
     "contain",
   );
+  await expect(visitor.locator(".detail-visual img")).toBeVisible();
+  await expect
+    .poll(() =>
+      visitor
+        .locator(".detail-visual img")
+        .evaluate(
+          (image: HTMLImageElement) => image.complete && image.naturalWidth > 0,
+        ),
+    )
+    .toBe(true);
   const bounds = await visitor.locator(".detail-visual img").boundingBox();
   expect(bounds!.height / bounds!.width).toBeCloseTo(1000 / 600, 1);
   await visitor.screenshot({
@@ -162,6 +185,7 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
     fullPage: true,
     animations: "disabled",
   });
+  await settle(visitor);
   const eventAxe = await new AxeBuilder({ page: visitor })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
     .analyze();

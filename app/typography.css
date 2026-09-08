@@ -1,52 +1,15 @@
-/* Shared reading scale, applied after the public and management layouts. */
+/* Shared reading scale for the management app. The public site defines its
+   own scale in site.css. */
 :root {
   --type-body: 1rem;
   --type-detail: 0.875rem;
   --type-caption: 0.8125rem;
   --type-badge: 0.75rem;
 }
-
-.public-site .hero-next,
-.public-site .card-facts,
-.public-site .card-compact .card-facts,
-.public-site .show-about .text-link,
-.public-site .poster-facts,
-.public-site .poster-price,
-.public-event .registration-box .registration-note,
-.public-event .registration-full,
 .field-hint,
 .registration-box form > p.field-hint {
   font-size: var(--type-detail);
   line-height: 1.65;
-}
-.public-site .show-kicker,
-.public-site .eyebrow,
-.public-site .site-footer > div,
-.public-site .site-footer > p,
-.public-site .site-credit {
-  font-size: var(--type-caption);
-}
-.public-site .card-category,
-.public-site .card-state,
-.public-site .card-facts b,
-.public-event .detail-category {
-  font-size: var(--type-badge);
-}
-.public-site .show-about p,
-.public-event .detail-description {
-  font-size: var(--type-body);
-  line-height: 1.8;
-}
-.public-site .about-kinds li {
-  font-size: var(--type-detail);
-}
-.public-site .show-about h2 {
-  font-size: clamp(2.25rem, 4vw, 3.5rem);
-  line-height: 1.15;
-}
-.public-site .hero-next {
-  flex-wrap: wrap;
-  gap: 4px 10px;
 }
 
 .admin-app label,
@@ -110,10 +73,6 @@
 }
 
 @media (max-width: 700px) {
-  .public-site .show-hero h1 {
-    font-size: clamp(4rem, 17vw, 4.5rem);
-    line-height: 1.05;
-  }
   .admin-app .stats-grid.four-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
@@ -127,64 +86,5 @@
   .admin-app .admin-event-image .badge {
     white-space: normal;
     line-height: 1.4;
-  }
-}
-
-/* One compact signature; consistent spacing through the next-event action. */
-.public-site .show-hero .hero-title {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  font-size: clamp(92px, 8vw, 120px);
-  font-weight: 900;
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-  margin: 24px 0 16px;
-}
-.hero-title .hero-line {
-  padding: 0.04em 0.08em 0.08em;
-  margin: -0.04em -0.08em -0.08em;
-}
-.hero-title .hero-line > span {
-  display: block;
-}
-.hero-title .hero-title-intro {
-  font-size: 0.58em;
-  line-height: 1.12;
-  letter-spacing: -0.035em;
-}
-.public-site .hero-description {
-  color: var(--paper);
-  font-size: clamp(17px, 1.5vw, 22px);
-  font-weight: 500;
-  line-height: 1.5;
-  margin: 0 0 24px;
-  animation-delay: 0.2s;
-}
-@media (max-width: 700px) {
-  .public-site .show-hero .hero-title {
-    font-size: clamp(72px, 21vw, 90px);
-    margin: 20px 0 14px;
-  }
-  .public-site .hero-description {
-    font-size: 17px;
-    margin-bottom: 22px;
-  }
-  .public-site .hero-next {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 3px;
-    margin-bottom: 20px;
-    line-height: 1.45;
-  }
-  .public-site .hero-next b {
-    font-size: 13px;
-  }
-  .public-site .hero-next span {
-    font-size: 14px;
-    white-space: normal;
-    text-wrap: pretty;
   }
 }

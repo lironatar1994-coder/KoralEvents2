@@ -7,7 +7,9 @@ import {
   CalendarPlus,
   Heart,
   Loader2,
+  Lock,
   MessageCircle,
+  Sparkles,
 } from "lucide-react";
 import { SuccessCheck } from "./SuccessCheck";
 import { GuestStepper } from "./GuestStepper";
@@ -87,7 +89,7 @@ export function RegistrationForm({
   if (!open)
     return (
       <div className="registration-closed">
-        <Heart size={22} />
+        <Heart size={24} />
         <h3>ההרשמה לערב הזה נסגרה.</h3>
         <p>הערב הבא כבר מחכה לנו למטה.</p>
       </div>
@@ -133,7 +135,7 @@ export function RegistrationForm({
             <div className="success-actions">
               {success !== "waitlist" && (
                 <a
-                  className="button outline-button"
+                  className="k-btn k-btn-paper"
                   href={calendarUrl}
                   target={apple ? undefined : "_blank"}
                   rel="noreferrer"
@@ -142,7 +144,7 @@ export function RegistrationForm({
                 </a>
               )}
               <a
-                className="button gold-button"
+                className="k-btn k-btn-rose"
                 href={shareUrl()}
                 target="_blank"
                 rel="noreferrer"
@@ -153,9 +155,18 @@ export function RegistrationForm({
           </div>
         ) : (
           <form method="post" onSubmit={submit}>
+            <div className="k-reg-head">
+              <h3>{full ? "רשימת ההמתנה" : "שומרות לך מקום."}</h3>
+              <p>
+                {full
+                  ? "הערב מלא כרגע, אבל מקומות מתפנים."
+                  : "שם וטלפון, וזהו. המנהלת מאשרת וחוזרת אלייך."}
+              </p>
+            </div>
             {full && (
-              <p className="registration-full">
-                הערב מלא. השאירי פרטים, ואם יתפנה מקום נודיע לך.
+              <p className="k-reg-full">
+                <Sparkles size={16} />
+                <span>השאירי פרטים, ואם יתפנה מקום נודיע לך.</span>
               </p>
             )}
             <label>
@@ -194,10 +205,7 @@ export function RegistrationForm({
                 {error}
               </p>
             )}
-            <button
-              className="button gold-button full-width"
-              disabled={!ready || busy}
-            >
+            <button className="k-btn k-btn-rose" disabled={!ready || busy}>
               {busy ? "שולחת…" : cta}
               {busy ? (
                 <Loader2 className="spin" size={18} />
@@ -205,6 +213,9 @@ export function RegistrationForm({
                 <ArrowUpLeft size={20} />
               )}
             </button>
+            <p className="k-reg-note">
+              <Lock size={13} /> הפרטים נשארים אצל המנהלת בלבד.
+            </p>
           </form>
         )}
       </div>
@@ -212,7 +223,7 @@ export function RegistrationForm({
         <div
           className={`mobile-register-bar ${formOnScreen ? "is-hidden" : ""}`}
         >
-          <a className="button gold-button" href="#registration">
+          <a className="k-btn k-btn-rose" href="#registration">
             {full ? "לרשימת ההמתנה" : "אני באה"}
             <ArrowUpLeft size={19} />
           </a>

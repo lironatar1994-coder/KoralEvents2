@@ -1,8 +1,23 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin, ArrowRight, ArrowUpLeft } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpLeft,
+  CalendarDays,
+  Clock3,
+  Info,
+  MapPin,
+  Ticket,
+  Users,
+} from "lucide-react";
 import { getEvent, getEvents } from "@/lib/events";
-import { Header, Footer, EventImage, EventCard } from "@/components/Public";
+import {
+  Header,
+  Footer,
+  EventImage,
+  EventCard,
+  Price,
+} from "@/components/Public";
 import { dateLabel, timeLabel, priceLabel } from "@/lib/types";
 import { RegistrationForm } from "@/components/RegistrationForm";
 import { ScrollReveal } from "@/components/ScrollReveal";
@@ -36,85 +51,137 @@ export default async function EventPage({
   const open = e.state === "published" && new Date(e.starts_at) > new Date();
   const full = e.capacity !== null && e.approved >= e.capacity;
   const flyer = e.image_mode === "contain";
-  const title = (
-    <div className="poster-title">
-      <span className="detail-category glass-tag">{e.category}</span>
-      <h1>{e.title}</h1>
-      <p className="poster-facts">
-        <span>{dateLabel(e.starts_at, { weekday: "long" })}</span>
-        <i />
-        <span>{timeLabel(e.starts_at)}</span>
-        <i />
-        <span>
-          <MapPin size={15} /> {e.location}
-        </span>
-        <b className="poster-price">{priceLabel(e.price)}</b>
-      </p>
-    </div>
-  );
+  const left =
+    e.capacity !== null ? Math.max(0, e.capacity - e.approved) : null;
   return (
     <div className="public-site public-event">
       <Header />
-      <main id="main" className="detail-main">
-        <section className={`event-poster ${flyer ? "is-flyer" : ""}`}>
+      <main id="main">
+        <section className={`k-poster ${flyer ? "is-flyer" : ""}`}>
+          <Link
+            href="/#events"
+            className="k-poster-back"
+            aria-label="כל הערבים"
+          >
+            <ArrowRight size={22} />
+          </Link>
           <div className="detail-visual">
             <EventImage event={e} priority />
-            {!flyer && <div className="poster-shade" aria-hidden="true" />}
-            <Link
-              href="/#events"
-              className="poster-back"
-              aria-label="כל האירועים"
-            >
-              <ArrowRight size={22} />
-            </Link>
-            {!flyer && title}
+            {!flyer && <div className="k-poster-shade" aria-hidden="true" />}
           </div>
-          {flyer && <div className="page-width">{title}</div>}
+          <div className="k-wrap k-poster-title">
+            <span className="k-tag">{e.category}</span>
+            <h1>{e.title}</h1>
+            <p className="k-poster-facts">
+              <span>
+                <CalendarDays size={16} />{" "}
+                {dateLabel(e.starts_at, { weekday: "long" })}
+              </span>
+              <span>
+                <Clock3 size={16} /> {timeLabel(e.starts_at)}
+              </span>
+              <span>
+                <MapPin size={16} /> {e.location}
+              </span>
+              <Price price={e.price} />
+            </p>
+          </div>
         </section>
-        <div className="detail-info page-width">
-          {e.subtitle && (
-            <p className="detail-subtitle" data-reveal>
-              {e.subtitle}
+
+        <div className="k-wrap k-detail">
+          <article className="k-detail-body">
+            {e.subtitle && (
+              <p className="k-detail-sub" data-reveal>
+                {e.subtitle}
+              </p>
+            )}
+            {e.address && (
+              <a
+                data-reveal
+                className="k-map"
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MapPin size={16} />
+                <span>{e.address}</span>
+                <ArrowUpLeft size={16} />
+              </a>
+            )}
+            <p className="k-detail-desc" data-reveal>
+              {e.description}
             </p>
-          )}
-          {e.address && (
-            <a
-              data-reveal
-              className="poster-map"
-              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.address)}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <MapPin size={16} />
-              <span>{e.address}</span>
-              <ArrowUpLeft size={16} />
-            </a>
-          )}
-          <p className="detail-description" data-reveal>
-            {e.description}
-          </p>
-          {e.price > 0 && (
-            <p className="field-hint" data-reveal>
-              התשלום לא באתר. מסדרים אותו עם המנהלת אחרי האישור.
-            </p>
-          )}
-          <RegistrationForm event={e} open={open} full={full} />
+            {e.price > 0 && (
+              <p className="k-detail-hint" data-reveal>
+                <Info size={16} />
+                <span>התשלום לא באתר. מסדרים אותו עם המנהלת אחרי האישור.</span>
+              </p>
+            )}
+            <ul className="k-detail-facts" data-reveal>
+              <li>
+                <CalendarDays size={18} />
+                <div>
+                  <small>מתי</small>
+                  <strong>
+                    {dateLabel(e.starts_at, { weekday: "long" })} ·{" "}
+                    {timeLabel(e.starts_at)}
+                  </strong>
+                </div>
+              </li>
+              <li>
+                <MapPin size={18} />
+                <div>
+                  <small>איפה</small>
+                  <strong>{e.location}</strong>
+                </div>
+              </li>
+              <li>
+                <Ticket size={18} />
+                <div>
+                  <small>עלות</small>
+                  <strong>{priceLabel(e.price)}</strong>
+                </div>
+              </li>
+              <li>
+                <Users size={18} />
+                <div>
+                  <small>מקומות</small>
+                  <strong>
+                    {left === null
+                      ? "ללא הגבלה"
+                      : left === 0
+                        ? "מלא · רשימת המתנה"
+                        : `נשארו ${left} מקומות`}
+                  </strong>
+                </div>
+              </li>
+            </ul>
+          </article>
+          <aside className="k-detail-side">
+            <RegistrationForm event={e} open={open} full={full} />
+          </aside>
         </div>
+
         {others.length > 0 && (
-          <section className="related page-width">
-            <div className="section-heading" data-reveal>
-              <h2>עוד אירועים שמחכים לנו.</h2>
-            </div>
-            <div className="event-list">
-              {others.map((event, index) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  index={index}
-                  variant="compact"
-                  reveal
-                />
-              ))}
+          <section className="k-related">
+            <div className="k-wrap">
+              <header className="k-section-head" data-reveal>
+                <div>
+                  <p className="k-eyebrow">ממשיכות</p>
+                  <h2>עוד ערבים שמחכים לנו.</h2>
+                </div>
+              </header>
+              <div className="k-grid">
+                {others.map((event, index) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    index={index}
+                    variant="compact"
+                    reveal
+                  />
+                ))}
+              </div>
             </div>
           </section>
         )}

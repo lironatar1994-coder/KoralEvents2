@@ -2,26 +2,26 @@
 # One-time setup on the existing lawebs.co.il Nginx host. No demo data is copied.
 set -Eeuo pipefail
 umask 077
-root=/opt/koralevents
+root=/opt/koralevents2
 mkdir -p "$root/shared" "$root/backups"
 if [[ ! -f "$root/shared/app.env" ]]; then
     password=$(openssl rand -hex 24)
-    printf 'APP_ORIGIN=https://lawebs.co.il\nDATABASE_PATH=/opt/koralevents/shared/data/koral.sqlite\nUPLOAD_DIR=/opt/koralevents/shared/uploads\nADMIN_PASSWORD=%s\n' "$password" > "$root/shared/app.env"
+    printf 'APP_ORIGIN=https://lawebs.co.il\nDATABASE_PATH=/opt/koralevents2/shared/data/koral.sqlite\nUPLOAD_DIR=/opt/koralevents2/shared/uploads\nADMIN_PASSWORD=%s\n' "$password" > "$root/shared/app.env"
 fi
 config=/etc/nginx/sites-available/lawebs.co.il.conf
 test -f "$config"
 cp -a "$config" "$root/backups/nginx-$(date +%s).conf"
-cat > /etc/nginx/snippets/koralevents.conf <<'NGINX'
-location = /koralevents {
-    proxy_pass http://127.0.0.1:3110;
-    include /etc/nginx/snippets/koralevents-proxy.conf;
+cat > /etc/nginx/snippets/koralevents2.conf <<'NGINX'
+location = /Koralevents2 {
+    proxy_pass http://127.0.0.1:3111;
+    include /etc/nginx/snippets/koralevents2-proxy.conf;
 }
-location ^~ /koralevents/ {
-    proxy_pass http://127.0.0.1:3110;
-    include /etc/nginx/snippets/koralevents-proxy.conf;
+location ^~ /Koralevents2/ {
+    proxy_pass http://127.0.0.1:3111;
+    include /etc/nginx/snippets/koralevents2-proxy.conf;
 }
 NGINX
-cat > /etc/nginx/snippets/koralevents-proxy.conf <<'NGINX'
+cat > /etc/nginx/snippets/koralevents2-proxy.conf <<'NGINX'
 client_max_body_size 12m;
 proxy_http_version 1.1;
 proxy_set_header Host $host;
@@ -36,7 +36,7 @@ python3 - "$config" <<'PY'
 import pathlib, sys
 p = pathlib.Path(sys.argv[1])
 s = p.read_text()
-include = '    include /etc/nginx/snippets/koralevents.conf;'
+include = '    include /etc/nginx/snippets/koralevents2.conf;'
 anchor = '    server_name lawebs.co.il;'
 if include not in s:
     assert s.count(anchor) == 1, 'Cannot identify HTTPS server block'
