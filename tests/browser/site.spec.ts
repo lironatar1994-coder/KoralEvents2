@@ -32,7 +32,7 @@ test("public site is readable, accessible, and has no overflow at phone and desk
     await expect
       .poll(() =>
         page
-          .locator(".hero-slide.is-active img")
+          .locator(".k-hero-media img")
           .evaluate(
             (image: HTMLImageElement) =>
               image.complete && image.naturalWidth > 0,
