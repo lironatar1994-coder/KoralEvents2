@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { OG_SIZE, OgFrame, asJpeg, ogFonts, photoDataUri } from "@/lib/og";
+import { OG_SIZE, HeroFrame, asJpeg, ogFonts, photoDataUri } from "@/lib/og";
 
 export const alt = "״אישה לאישה מלכה״ — ערבי נשים לזיכוי הרבות";
 export const size = OG_SIZE;
@@ -11,14 +11,6 @@ export default async function Image() {
     ogFonts(),
   ]);
   return asJpeg(
-    new ImageResponse(
-      <OgFrame
-        photo={photo}
-        kicker="לנשים בלבד · ללא מטרות רווח"
-        title="ערבי נשים לזיכוי הרבות."
-        meta="שיעורי תורה · הפרשת חלה · לילות בכותל · ערבי העצמה · מסיבות"
-      />,
-      { ...OG_SIZE, fonts },
-    ),
+    new ImageResponse(<HeroFrame photo={photo} />, { ...OG_SIZE, fonts }),
   );
 }

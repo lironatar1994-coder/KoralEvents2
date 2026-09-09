@@ -1,7 +1,14 @@
 import { ImageResponse } from "next/og";
 import { getEvent } from "@/lib/events";
 import { dateLabel, timeLabel, priceLabel } from "@/lib/types";
-import { OG_SIZE, OgFrame, asJpeg, ogFonts, photoDataUri } from "@/lib/og";
+import {
+  OG_SIZE,
+  HeroFrame,
+  OgFrame,
+  asJpeg,
+  ogFonts,
+  photoDataUri,
+} from "@/lib/og";
 
 export const size = OG_SIZE;
 export const contentType = "image/jpeg";
@@ -16,13 +23,11 @@ export default async function Image({
   if (!e)
     return asJpeg(
       new ImageResponse(
-        <OgFrame
+        <HeroFrame
           photo={await photoDataUri(
             "/brand/hero-signature-landscape.webp",
             "west",
           )}
-          kicker="לנשים בלבד · ללא מטרות רווח"
-          title="ערבי נשים לזיכוי הרבות."
         />,
         { ...OG_SIZE, fonts },
       ),

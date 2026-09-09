@@ -67,8 +67,13 @@ export function titleSize(text: string) {
 
 const fontDir = path.join(process.cwd(), "assets", "fonts");
 export async function ogFonts() {
-  const [frank, cormorant, heebo] = await Promise.all(
-    ["frankruhllibre", "cormorantgaramond", "heebo"].map((f) =>
+  const [frank, frankRegular, cormorant, heebo] = await Promise.all(
+    [
+      "frankruhllibre",
+      "frankruhllibre-regular",
+      "cormorantgaramond",
+      "heebo",
+    ].map((f) =>
       fs.readFile(/* turbopackIgnore: true */ path.join(fontDir, `${f}.ttf`)),
     ),
   );
@@ -77,6 +82,12 @@ export async function ogFonts() {
       name: "FrankRuhl",
       data: frank,
       weight: 700 as const,
+      style: "normal" as const,
+    },
+    {
+      name: "FrankRuhl",
+      data: frankRegular,
+      weight: 400 as const,
       style: "normal" as const,
     },
     {
@@ -299,6 +310,180 @@ export function OgFrame({
             {rtl(meta)}
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* The home preview mirrors the site's first screen: photo on the left, the
+   two-line headline with the gold flourish on the right, tagline beneath. */
+export function HeroFrame({ photo }: { photo: string }) {
+  const night = "rgba(26,17,32,";
+  return (
+    <div
+      style={{
+        width: OG_SIZE.width,
+        height: OG_SIZE.height,
+        display: "flex",
+        position: "relative",
+        background: "#1a1120",
+        fontFamily: "Heebo",
+        color: "#f8f1e6",
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={photo}
+        width={OG_SIZE.width}
+        height={OG_SIZE.height}
+        style={{ position: "absolute", top: 0, left: 0, objectFit: "cover" }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: OG_SIZE.width,
+          height: OG_SIZE.height,
+          background: `linear-gradient(90deg, ${night}0) 34%, ${night}0.55) 58%, ${night}0.92) 78%)`,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: OG_SIZE.width,
+          height: OG_SIZE.height,
+          background: `linear-gradient(0deg, ${night}0.9) 0%, ${night}0.35) 30%, ${night}0) 55%)`,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: OG_SIZE.width,
+          height: OG_SIZE.height,
+          background: `linear-gradient(180deg, ${night}0.6) 0%, ${night}0) 26%)`,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          right: 56,
+          top: 40,
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
+        <div
+          style={{
+            fontFamily: "Cormorant",
+            fontStyle: "italic",
+            fontSize: 30,
+            color: "#f4dfb0",
+            opacity: 0.85,
+          }}
+        >
+          Koral Events
+        </div>
+        <CrownMark size={46} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          right: 56,
+          bottom: 48,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            fontSize: 20,
+            fontWeight: 600,
+            color: "#f4dfb0",
+            marginBottom: 14,
+          }}
+        >
+          <div style={{ width: 40, height: 1, background: "#d9b366" }} />
+          <div
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: 4,
+              background: "#c6405f",
+            }}
+          />
+          <div>{rtl("ערבי נשים · ללא מטרות רווח")}</div>
+        </div>
+        <div
+          style={{
+            fontFamily: "FrankRuhl",
+            fontWeight: 400,
+            fontSize: 54,
+            lineHeight: 1,
+            color: "#f8f1e6",
+          }}
+        >
+          {rtl("״אישה לאישה")}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: 6,
+            marginTop: 2,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "FrankRuhl",
+              fontWeight: 400,
+              fontSize: 80,
+              lineHeight: 1,
+              color: "#f4dfb0",
+              opacity: 0.85,
+              marginTop: 6,
+            }}
+          >
+            ״
+          </div>
+          <div
+            style={{
+              fontFamily: "FrankRuhl",
+              fontWeight: 700,
+              fontSize: 196,
+              lineHeight: 0.92,
+              color: "#f4dfb0",
+            }}
+          >
+            מלכה
+          </div>
+        </div>
+        <svg
+          width={300}
+          height={26}
+          viewBox="0 0 320 26"
+          style={{ marginTop: 6, marginRight: 8 }}
+        >
+          <path
+            d="M3 18 C 60 4, 110 26, 170 12 S 270 4, 317 10"
+            fill="none"
+            stroke="#d9b366"
+            strokeWidth={2.4}
+            strokeLinecap="round"
+          />
+        </svg>
+        <div style={{ fontSize: 28, color: "#f8f1e6", marginTop: 14 }}>
+          {rtl("ערבי נשים לזיכוי הרבות.")}
+        </div>
       </div>
     </div>
   );
