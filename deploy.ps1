@@ -25,7 +25,7 @@ try {
     if ($Target -eq 'Prod') {
         if (@(Run git @('status', '--porcelain')).Count) { throw 'Prod requires a clean working tree; use All to commit and push changes.' }
     } else {
-        $paths = @('.claude','app','assets','components','lib','public','scripts','tests','design','package.json','package-lock.json',
+        $paths = @('.claude','app','assets','components','docs','lib','output','public','scripts','tests','design','package.json','package-lock.json',
             'next.config.ts','next-env.d.ts','tsconfig.json','playwright.config.ts','README.md','AGENTS.md','CLAUDE.md',
             'ASSETS.md','VERIFICATION.md','Dockerfile','compose.yaml','Caddyfile','.dockerignore','.gitignore','.gitattributes','.env.example','deploy.ps1')
         $staged = @(Run git @('diff', '--cached', '--name-only'))

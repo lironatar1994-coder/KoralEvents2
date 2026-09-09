@@ -21,8 +21,8 @@ export default async function Image({
             "/brand/hero-signature-landscape.webp",
             "west",
           )}
-          kicker="ערבי נשים · ללא מטרות רווח"
-          title="״אישה לאישה מלכה״"
+          kicker="לנשים בלבד · ללא מטרות רווח"
+          title="ערבי נשים לזיכוי הרבות."
         />,
         { ...OG_SIZE, fonts },
       ),

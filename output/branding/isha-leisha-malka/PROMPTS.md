@@ -1,0 +1,16 @@
+# Logo variants
+
+Generated using the built-in image_gen tool. Brand text: "אשה לאשה מלכה".
+The SVG files are a simplified manually constructed adaptation of the original human-crown direction with outlined Hebrew typography. The three generated variants are PNG concepts, not vector files.
+
+## Variant 1
+
+Use case: logo-brand. One standalone expertly designed Hebrew logo, square image, flat crisp vector-friendly graphics on solid warm ivory. Exact text INCLUDING visible double quotation marks around the entire brand name: "אשה לאשה מלכה". Spell WITHOUT any yod: אשה, לאשה, מלכה. Readable correct right-to-left Hebrew. The opening quote belongs at the right of the first word אשה and closing quote at left of final word מלכה. No other text, no English, no mockups, no gradients, no shadows. Generous margins. Women’s events and mutual support community. Direction 1: refined warm royal identity. An original compact gold crown formed by three abstract connected women, reduced to strong elegant shapes. Below it bold plum Hebrew editorial lettering on two lines, first line opening quote and אשה לאשה, second line larger מלכה and closing quote. Warm confident and dignified. Polish the human crown concept; avoid stock tiara and beauty salon look.
+
+## Variant 2
+
+Use case: logo-brand. One standalone expertly designed Hebrew logo, square image, flat crisp vector-friendly graphics on solid warm ivory. Exact text INCLUDING visible double quotation marks around the entire brand name: "אשה לאשה מלכה". Spell WITHOUT any yod: אשה, לאשה, מלכה. Readable correct right-to-left Hebrew. The opening quote belongs at the right of the first word אשה and closing quote at left of final word מלכה. No other text, no English, no mockups, no gradients, no shadows. Generous margins. Women’s events and mutual support community. Direction 2: bold contemporary typographic identity. Oversized distinctive rounded bold Hebrew lettering in dark aubergine, artfully stacked with אשה לאשה above larger מלכה. Include both enclosing quotation marks. Small original coral-pink crown integrated above the lettering, like three confident rising strokes suggesting connection. Very minimal, striking, graphic, memorable at phone size. No human silhouettes or ornate decoration.
+
+## Variant 3
+
+Use case: logo-brand. One standalone expertly designed Hebrew logo, square image, flat crisp vector-friendly graphics on solid warm ivory. Exact text INCLUDING visible double quotation marks around the entire brand name: "אשה לאשה מלכה". Spell WITHOUT any yod: אשה, לאשה, מלכה. Readable correct right-to-left Hebrew. The opening quote belongs at the right of the first word אשה and closing quote at left of final word מלכה. No other text, no English, no mockups, no gradients, no shadows. Generous margins. Women’s events and mutual support community. Direction 3: intimate modern community emblem. A beautifully simple continuous-loop symbol of two abstract embracing figures that also forms a crown with an open central peak. Deep teal symbol and typography with one restrained muted gold accent. Below symbol strong warm custom Hebrew typography: אשה לאשה above מלכה with double quotation marks enclosing the whole name. Balanced, welcoming and distinctive; not a beauty salon or wedding logo.

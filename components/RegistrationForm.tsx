@@ -101,7 +101,7 @@ export function RegistrationForm({
       `&text=${encodeURIComponent(event.title)}` +
       `&dates=${calendarStamp(event.starts_at)}/${calendarStamp(event.starts_at, 3)}` +
       `&location=${encodeURIComponent(event.address || event.location)}` +
-      `&details=${encodeURIComponent("Koral Events · לנשים בלבד")}`;
+      `&details=${encodeURIComponent("״אישה לאישה מלכה״ · Koral Events · לנשים בלבד")}`;
   function shareUrl() {
     const link =
       typeof window === "undefined" ? "" : window.location.href.split("#")[0];

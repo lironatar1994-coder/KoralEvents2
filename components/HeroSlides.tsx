@@ -4,10 +4,16 @@ export function HeroSlides() {
   return (
     <div className="k-hero-media" aria-hidden="true">
       <picture className="hero-signature">
-        <img
-          src={appPath("/brand/hero-signature-landscape.webp")}
-          alt=""
+        <source
+          media="(min-width: 700px)"
+          srcSet={appPath("/brand/hero-signature-landscape.webp")}
           width={1536}
+          height={1024}
+        />
+        <img
+          src={appPath("/brand/hero-signature-portrait.webp")}
+          alt=""
+          width={660}
           height={1024}
           fetchPriority="high"
         />

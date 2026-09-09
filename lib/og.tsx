@@ -10,6 +10,26 @@ import sharp from "sharp";
  * for the same reason.
  */
 export const OG_SIZE = { width: 1200, height: 630 };
+export const BRAND = "״אישה לאישה מלכה״";
+/* The queen's crown from the favicon, as inline SVG for the renderer. */
+export function CrownMark({ size = 56 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64">
+      <path
+        d="M11 44 L6 19 L21.5 31 L32 11 L42.5 31 L58 19 L53 44 Z"
+        fill="#f4dfb0"
+      />
+      <path
+        d="M12 47 h40 a3.5 3.5 0 0 1 3.5 3.5 v2 a3.5 3.5 0 0 1 -3.5 3.5 h-40 a3.5 3.5 0 0 1 -3.5 -3.5 v-2 a3.5 3.5 0 0 1 3.5 -3.5 z"
+        fill="#f4dfb0"
+      />
+      <circle cx="6" cy="19" r="3.4" fill="#d9b366" />
+      <circle cx="32" cy="11" r="3.8" fill="#d9b366" />
+      <circle cx="58" cy="19" r="3.4" fill="#d9b366" />
+      <circle cx="32" cy="36" r="3.2" fill="#c6405f" />
+    </svg>
+  );
+}
 
 const KEEP = /[0-9A-Za-z:./%₪+-]+/;
 export function rtl(text: string): string {
@@ -207,25 +227,35 @@ export function OgFrame({
       >
         <div
           style={{
-            fontFamily: "Cormorant",
-            fontStyle: "italic",
-            fontSize: 50,
-            color: "#f4dfb0",
-            lineHeight: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
           }}
         >
-          Koral Events
+          <div
+            style={{
+              fontFamily: "FrankRuhl",
+              fontSize: 40,
+              color: "#f4dfb0",
+              lineHeight: 1,
+            }}
+          >
+            {rtl(BRAND)}
+          </div>
+          <div
+            style={{
+              fontFamily: "Cormorant",
+              fontStyle: "italic",
+              fontSize: 22,
+              color: "#f4dfb0",
+              opacity: 0.8,
+              marginTop: 6,
+            }}
+          >
+            Koral Events
+          </div>
         </div>
-        <div
-          style={{
-            width: 14,
-            height: 14,
-            background: "#d9b366",
-            transform: "rotate(45deg)",
-            borderRadius: 2,
-            marginTop: -18,
-          }}
-        />
+        <CrownMark size={64} />
       </div>
       <div
         style={{

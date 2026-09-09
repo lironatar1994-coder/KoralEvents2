@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { OG_SIZE, OgFrame, asJpeg, ogFonts, photoDataUri } from "@/lib/og";
 
-export const alt = "Koral Events — ערבים לנשים, מהלב";
+export const alt = "״אישה לאישה מלכה״ — ערבי נשים לזיכוי הרבות";
 export const size = OG_SIZE;
 export const contentType = "image/jpeg";
 
@@ -14,9 +14,9 @@ export default async function Image() {
     new ImageResponse(
       <OgFrame
         photo={photo}
-        kicker="ערבי נשים · ללא מטרות רווח"
-        title="״אישה לאישה מלכה״"
-        meta="שיעורי תורה, הפרשת חלה, לילות בכותל, ערבי העצמה ומסיבות"
+        kicker="לנשים בלבד · ללא מטרות רווח"
+        title="ערבי נשים לזיכוי הרבות."
+        meta="שיעורי תורה · הפרשת חלה · לילות בכותל · ערבי העצמה · מסיבות"
       />,
       { ...OG_SIZE, fonts },
     ),

@@ -2142,35 +2142,30 @@
     font-size: 32px;
   }
   .k-hero {
-    --hero-photo-height: clamp(350px, 108vw, 560px);
-    min-height: 100svh;
-    padding: calc(var(--hero-photo-height) - 48px) 0 64px;
-    align-items: flex-start;
-  }
-  .k-hero-media {
-    height: var(--hero-photo-height);
-    bottom: auto;
-  }
-  .k-hero-body {
-    gap: 24px;
+    padding-bottom: 76px;
+    align-items: flex-end;
   }
   .k-hero-shade {
-    height: calc(var(--hero-photo-height) + 1px);
-    bottom: auto;
     background:
       linear-gradient(
         0deg,
         var(--night) 0%,
-        #1a1120b3 14%,
-        #1a112000 42%
+        #1a1120e6 28%,
+        #1a112059 60%,
+        #1a112000 82%
       ),
-      linear-gradient(180deg, #1a112099, #1a112000 24%);
+      linear-gradient(180deg, #1a1120bf, #1a112000 34%);
+  }
+  /* A little wider on phones: the photo ends above the buttons and melts
+     into the night, so the faces sit smaller and more of the table shows. */
+  .k-hero-media {
+    bottom: auto;
+    height: 76%;
+    -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 58%, transparent 100%);
   }
   .k-hero-media img {
-    /* Keep the original women together, with no regenerated mobile faces. */
-    object-position: left top;
-    animation: none;
-    will-change: auto;
+    object-position: 42% 30%;
   }
   .k-kicker {
     font-size: 11.5px;

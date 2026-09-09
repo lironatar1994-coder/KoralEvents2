@@ -37,7 +37,7 @@ export async function generateMetadata({
       ? {
           type: "article",
           locale: "he_IL",
-          siteName: "Koral Events",
+          siteName: "״אישה לאישה מלכה״",
           title: e.title,
           description: e.subtitle || e.description.slice(0, 160),
         }

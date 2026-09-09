@@ -62,5 +62,5 @@ Heebo, Frank Ruhl Libre (Hebrew display serif) and Cormorant Garamond (Latin wor
 ## Link previews, favicon and management theme
 
 - `app/opengraph-image.tsx` and `app/events/[id]/opengraph-image.tsx` render the WhatsApp/Facebook preview images on demand (1200 x 630 JPEG) from the signature photo or the event photo, using `lib/og.tsx`. The renderer lays text out left-to-right only, so `lib/og.tsx` hands it Hebrew in visual order and wraps titles by hand. Static TTF copies of Frank Ruhl Libre, Cormorant Garamond and Heebo for that renderer live in `assets/fonts` (OFL).
-- `public/icon.svg`, `icon-512.png` and `apple-touch-icon.png` are a Cormorant Garamond italic K in champagne on night plum with the gold spark, generated from the wordmark font outline.
+- `public/icon.svg`, `icon-512.png` and `apple-touch-icon.png` are the queen's crown (for ״אישה לאישה מלכה״): champagne crown with gold jewels and a rose centre on night plum. The same crown is drawn inline in `lib/og.tsx` for the link previews, whose wordmark is the Hebrew phrase with "Koral Events" beneath it. Page titles and `og:site_name` use the phrase; the tagline is ״ערבי נשים לזיכוי הרבות״.
 - `app/admin-theme.css` layers the public identity (serif headings, rose buttons, champagne accents) over the management app without changing its layout.

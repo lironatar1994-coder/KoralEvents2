@@ -187,7 +187,7 @@ export default async function Home() {
               <h2 data-reveal>
                 אנחנו <span className="latin">Koral Events</span>.
                 <br />
-                <em>ערבים לנשים, מהלב.</em>
+                <em>ערבי נשים לזיכוי הרבות.</em>
               </h2>
               <p
                 data-reveal
