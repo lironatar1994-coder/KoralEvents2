@@ -464,7 +464,7 @@ export function HeroFrame({ photo }: { photo: string }) {
               color: "#f4dfb0",
             }}
           >
-            מלכה
+            {rtl("מלכה")}
           </div>
         </div>
         <svg
