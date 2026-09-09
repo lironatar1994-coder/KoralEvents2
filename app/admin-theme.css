@@ -1,27 +1,56 @@
 /* =====================================================================
-   Management app: the same evening identity as the public site, kept dark
-   and calm for daily use on a phone. Layered after globals.css.
+   Management app: the same paper, rose and gold as the public site, so the
+   manager works inside the invitation she sends. Layered after globals.css
+   and dashboard.css; every rule here is scoped to .admin-app.
    ===================================================================== */
 .admin-app {
-  --bg: #1a1120;
-  --panel: #23172b;
-  --panel-light: #2b1d34;
-  --text: #f8f1e6;
-  --muted: #c4b3c2;
-  --line: #f4dfb01f;
-  --gold: #e8607f;
+  --bg: #f4ede3;
+  --panel: #ffffff;
+  --panel-light: #fbf7f1;
+  --text: #23161f;
+  --muted: #6f5c6b;
+  --line: #23161f1a;
+  --gold: #c6405f;
+  --rose: #c6405f;
+  --rose-deep: #a3304b;
+  --rose-ink: #8d2741;
+  --rose-soft: #f2d5dc;
   --ink: #23161f;
-  --champagne: #f4dfb0;
+  --ink-soft: #5b4658;
+  --ink-mute: #6f5c6b;
+  --champagne: #b98a3c;
+  --gold-2: #d9b366;
+  --paper: #f7f1e8;
+  --paper-2: #f1e8da;
+  --paper-3: #e9dece;
+  --ok: #1f7a47;
+  --ok-soft: #dff3e6;
+  --warn: #8a5a00;
+  --warn-soft: #fbeccd;
+  --wait: #5b3a8a;
+  --wait-soft: #ebe3f7;
   --radius: 20px;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --shadow: 0 24px 60px -34px #23161f4d;
+  color-scheme: light;
   background:
-    radial-gradient(ellipse 60% 40% at 100% 0%, #c6405f24, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 0% 100%, #b98a3c1c, transparent 70%),
+    radial-gradient(ellipse 55% 35% at 100% 0%, #c6405f1a, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 0% 100%, #b98a3c1f, transparent 70%),
     var(--bg);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
 }
 .admin-app ::selection {
-  background: #c6405f;
+  background: var(--rose);
   color: #fff;
+}
+.admin-app .muted {
+  color: var(--muted);
+}
+.admin-app .gold,
+.admin-app .admin-title-row h1 .gold {
+  color: var(--rose);
 }
 /* Serif display for the moments that name something: the page, the event,
    the participant. Controls stay in Heebo. */
@@ -30,18 +59,21 @@
 .admin-app .attendees-heading h2,
 .admin-app .admin-onboarding h2,
 .admin-app .admin-event-body h2,
-.admin-app .login-form h1,
-.admin-app .editor-preview h2 {
+.admin-app .login-main h1,
+.admin-app .modal-heading h2,
+.admin-app .event-preview h2,
+.admin-app .admin-empty h2,
+.admin-app .admin-empty h3 {
   font-family: var(--display);
   font-weight: 700;
   letter-spacing: -0.01em;
+  color: var(--text);
 }
 .admin-app .admin-title-row h1 {
   font-size: 46px;
 }
-.admin-app .admin-title-row h1 .gold,
-.admin-app .gold {
-  color: #e8607f;
+.admin-app .admin-title-row p {
+  color: var(--muted);
 }
 .admin-app .manager-hero h1 {
   font-size: 40px;
@@ -49,7 +81,6 @@
 }
 .admin-app .admin-event-body h2 {
   font-size: 26px;
-  font-weight: 700;
 }
 .admin-app .attendees-heading h2 {
   font-size: 30px;
@@ -57,123 +88,439 @@
 .admin-app .attendee-card h3 {
   font-weight: 700;
 }
-/* Header: glass bar, like the public one on the way back up. */
+
+/* ---------- Header ---------- */
 .admin-app .admin-header {
-  background: #1a1120d9;
+  background: #f7f1e8d9;
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(18px);
-}
-.admin-app .admin-header .admin-nav a.active {
-  background: #c6405f2b;
   color: var(--text);
 }
-.admin-app .admin-header .admin-nav a.active svg {
-  color: var(--champagne);
+.admin-app .admin-header .brand {
+  color: var(--text);
 }
-/* Surfaces: one radius, one hairline, a little more air. */
+.admin-app .admin-header .admin-nav a {
+  color: var(--ink-soft);
+}
+.admin-app .admin-header .admin-nav a:hover {
+  color: var(--text);
+  background: #23161f0a;
+}
+.admin-app .admin-header .admin-nav a.active {
+  background: var(--rose-soft);
+  color: var(--rose-ink);
+}
+.admin-app .admin-header .admin-nav a.active svg {
+  color: var(--rose);
+}
+.admin-app .text-link {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.admin-app .text-link:hover {
+  color: var(--rose-ink);
+}
+.admin-app .icon-button {
+  color: var(--ink-soft);
+  border-radius: 50%;
+}
+.admin-app .icon-button:hover {
+  background: #23161f0d;
+  color: var(--text);
+}
+.admin-app .back-link {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+.admin-app .back-link:hover {
+  color: var(--rose-ink);
+}
+
+/* ---------- Surfaces ---------- */
 .admin-app .stat-card,
 .admin-app .overview,
 .admin-app .admin-event-card,
 .admin-app .attendee-card,
 .admin-app .admin-onboarding,
-.admin-app .pending-action,
 .admin-app .manager-summary,
 .admin-app .editor-card,
+.admin-app .editor-panel,
+.admin-app .roster-overview,
 .admin-app .login-form,
-.admin-app .modal {
+.admin-app .modal,
+.admin-app .admin-empty {
   border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+.admin-app .dashboard-main .admin-event-card {
+  background: var(--panel);
   border-color: var(--line);
-  background-color: var(--panel);
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.3s var(--ease-out),
+    box-shadow 0.3s,
+    border-color 0.2s;
 }
 .admin-app .admin-event-card:hover {
-  border-color: #f4dfb04d;
+  border-color: #c6405f66;
+  transform: translateY(-2px);
+  box-shadow: 0 30px 60px -30px #23161f59;
+}
+.admin-app .admin-event-image {
+  background: var(--paper-3);
+}
+.admin-app .admin-event-image .badge {
+  background: #ffffffe6;
+  backdrop-filter: blur(8px);
+}
+.admin-app .admin-event-body > p,
+.admin-app .admin-event-counts {
+  color: var(--muted);
+}
+.admin-app .admin-event-counts b,
+.admin-app .dashboard-main .event-date {
+  color: var(--text);
+}
+.admin-app .admin-event-counts .is-hot,
+.admin-app .admin-event-counts .is-hot b,
+.admin-app .dashboard-main .admin-event-counts .is-hot {
+  color: var(--warn);
+}
+.admin-app .admin-event-arrow {
+  color: var(--rose);
+}
+.admin-app .admin-empty {
+  border-style: dashed;
+  border-color: #23161f33;
+  background: var(--panel-light);
+  box-shadow: none;
+}
+.admin-app .admin-empty svg {
+  color: var(--rose);
+}
+.admin-app .admin-empty p {
+  color: var(--muted);
 }
 .admin-app .overview svg {
-  background: #c6405f26;
-  color: #f4a6b8;
+  background: var(--rose-soft);
+  color: var(--rose-ink);
 }
-.admin-app .overview .is-hot strong,
+.admin-app .overview strong,
 .admin-app .stat-card strong {
-  color: var(--champagne);
+  color: var(--text);
+}
+.admin-app .overview .is-hot strong {
+  color: var(--warn);
+}
+.admin-app .overview span,
+.admin-app .stat-card > span {
+  color: var(--muted);
+}
+.admin-app .overview > div + div {
+  border-inline-start: 1px solid var(--line);
+}
+/* Dashboard summary line and the approval call to action. */
+.admin-app .dashboard-summary {
+  color: var(--muted);
+}
+.admin-app .dashboard-summary strong {
+  color: var(--text);
+}
+.admin-app .dashboard-summary .all-clear {
+  color: var(--ok);
+  font-weight: 600;
+}
+.admin-app .pending-action {
+  border: 1px solid #c6405f55;
+  border-radius: 18px;
+  background: #fff;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.admin-app .pending-action strong {
+  color: var(--rose);
+}
+.admin-app .pending-action > span:last-child {
+  color: var(--rose-ink);
+  font-weight: 700;
+}
+.admin-app .pending-action:hover,
+.admin-app .pending-action[aria-pressed="true"] {
+  background: var(--rose-soft);
+  border-color: var(--rose);
+}
+/* Tabs: an underline in rose. */
+.admin-app .tabs {
+  border-bottom: 1px solid var(--line);
+}
+.admin-app .tabs button {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 600;
+}
+.admin-app .tabs button:hover {
+  color: var(--text);
 }
 .admin-app .tabs button.selected {
-  color: var(--champagne);
-  border-color: var(--champagne);
+  color: var(--rose-ink);
+  border-color: var(--rose);
 }
-/* Buttons: the same rose pill as the public site. */
+/* Onboarding: the empty dashboard is an invitation. */
+.admin-app .admin-onboarding {
+  border-color: #c6405f2e;
+  background:
+    radial-gradient(ellipse 60% 80% at 15% 100%, #c6405f14, transparent 70%),
+    radial-gradient(ellipse 50% 70% at 100% 0%, #b98a3c1f, transparent 70%),
+    #fff;
+}
+.admin-app .onboarding-spark {
+  background: var(--rose-soft);
+  color: var(--rose-ink);
+}
+.admin-app .onboarding-copy p {
+  color: var(--ink-soft);
+}
+.admin-app .onboarding-steps li {
+  background: var(--paper);
+  border-color: var(--line);
+}
+.admin-app .onboarding-steps li::before {
+  background: var(--rose);
+  color: #fff;
+}
+.admin-app .onboarding-steps svg {
+  color: var(--rose);
+}
+.admin-app .onboarding-steps span {
+  color: var(--muted);
+}
+
+/* ---------- Badges and status colours ---------- */
+.admin-app .badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  background: var(--paper-2);
+  color: var(--ink-soft);
+}
+.admin-app .state-published,
+.admin-app .status-approved {
+  color: var(--ok);
+  background: var(--ok-soft);
+}
+.admin-app .state-draft,
+.admin-app .status-pending {
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+.admin-app .state-closed,
+.admin-app .status-waitlist {
+  color: var(--wait);
+  background: var(--wait-soft);
+}
+.admin-app .state-archived,
+.admin-app .status-cancelled {
+  color: var(--muted);
+  background: var(--paper-2);
+}
+.admin-app .dashboard-main .admin-event-body > .badge {
+  background: transparent;
+  padding: 0;
+}
+.admin-app .status-bar {
+  background: var(--paper-3);
+}
+.admin-app .status-bar .seg-approved {
+  background: #2f9e5f;
+}
+.admin-app .status-bar .seg-pending {
+  background: #e3a53b;
+}
+.admin-app .status-bar .seg-waitlist {
+  background: #8b6cc7;
+}
+.admin-app .status-bar .seg-cancelled {
+  background: #cdbfca;
+}
+
+/* ---------- Buttons: the same rose pill as the public site ---------- */
 .admin-app .button {
   border-radius: 999px;
   font-weight: 700;
+  transition:
+    transform 0.3s var(--ease-out),
+    background 0.25s,
+    color 0.25s,
+    border-color 0.25s,
+    box-shadow 0.35s;
+}
+.admin-app .button:hover {
+  filter: none;
 }
 .admin-app .gold-button {
-  background: #c6405f;
+  background: var(--rose);
   color: #fff;
-  box-shadow: 0 12px 30px -12px #c6405f99;
+  box-shadow: 0 14px 34px -12px #c6405f80;
 }
 .admin-app .gold-button:hover {
-  background: #a3304b;
+  background: var(--rose-deep);
+  box-shadow: 0 20px 40px -14px #c6405fa6;
 }
 .admin-app .outline-button {
-  border-color: #f4dfb040;
+  background: #fff;
+  border-color: #23161f2b;
+  color: var(--text);
 }
 .admin-app .outline-button:hover {
-  background: #f4dfb00f;
-  border-color: #f4dfb080;
+  background: var(--paper);
+  border-color: #23161f55;
+}
+@media (hover: hover) and (pointer: fine) {
+  .admin-app .button:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+}
+.admin-app .button:not(:disabled):active {
+  transform: scale(0.97);
 }
 .admin-app .small-button {
   border-radius: 999px;
+  font-size: 13px;
 }
-/* Fields */
+.admin-app .whatsapp-button {
+  background: #25d366;
+  color: #0b1a10;
+}
+.admin-app .whatsapp-button:hover {
+  background: #1fc45c;
+}
+.admin-app .delete-button {
+  color: var(--rose-ink);
+  font-weight: 600;
+}
+.admin-app .cancel-button {
+  border-color: #c6405f55;
+  color: var(--rose-ink);
+}
+
+/* ---------- Fields ---------- */
+.admin-app label {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+}
 .admin-app input,
 .admin-app select,
 .admin-app textarea {
-  background: #150d1a;
-  border-color: #f4dfb02b;
+  background: #fff;
+  border: 1px solid #23161f2b;
   border-radius: 14px;
+  color: var(--text);
+  min-height: 50px;
+  font-size: 16px;
+  font-weight: 500;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.35s var(--ease-out);
+}
+.admin-app input::placeholder,
+.admin-app textarea::placeholder {
+  color: #9d8c9a;
+  font-weight: 400;
+}
+@media (hover: hover) and (pointer: fine) {
+  .admin-app input:hover,
+  .admin-app select:hover,
+  .admin-app textarea:hover {
+    border-color: #23161f55;
+  }
 }
 .admin-app input:focus-visible,
 .admin-app select:focus-visible,
 .admin-app textarea:focus-visible {
   outline: none;
-  border-color: #e8607f;
-  box-shadow: 0 0 0 4px #c6405f30;
+  border-color: var(--rose);
+  box-shadow: 0 0 0 4px #c6405f26;
+}
+.admin-app select option {
+  background: #fff;
+  color: var(--text);
 }
 .admin-app button:focus-visible,
 .admin-app a:focus-visible {
-  outline: 2px solid var(--champagne);
+  outline: 2px solid var(--rose);
   outline-offset: 3px;
 }
-/* Status colours stay semantic, only warmed up. */
-.admin-app .status-approved {
-  color: #9be3b4;
+.admin-app .field-hint {
+  color: var(--muted);
 }
-.admin-app .status-pending {
-  color: #f4cd7a;
+.admin-app .date-hint {
+  color: var(--rose-ink);
+  font-weight: 600;
 }
-/* Login: a small invitation card. */
-.admin-app .login-form {
-  border: 1px solid var(--line);
-  box-shadow: 0 40px 80px -40px #000;
+.admin-app .search-field svg {
+  color: var(--muted);
 }
-.admin-app .login-form h1 {
-  font-size: 38px;
+.admin-app .error-message {
+  background: #fbe4e8;
+  border: 1px solid #c6405f55;
+  color: var(--rose-ink);
+  border-radius: 12px;
 }
-.admin-app .login-lock {
-  color: var(--champagne);
-}
-@media (max-width: 700px) {
-  .admin-app .admin-title-row h1 {
-    font-size: 36px;
-  }
-  .admin-app .manager-hero h1 {
-    font-size: 32px;
-  }
-  .admin-app .attendees-heading h2 {
-    font-size: 26px;
-  }
+.admin-app .success-message {
+  background: var(--ok-soft);
+  border: 1px solid #1f7a4744;
+  color: var(--ok);
+  border-radius: 12px;
+  font-weight: 600;
 }
 
-/* Quick edit: the facts line opens the sheet; the sheet is one short form. */
+/* ---------- Login: a small invitation card ---------- */
+.admin-app .login-main > p {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+.admin-app .login-main h1 {
+  font-size: 44px;
+}
+.admin-app .login-form {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  padding: 32px 28px 28px;
+}
+.admin-app .login-form::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--rose), var(--gold-2), var(--rose));
+}
+.admin-app .login-lock {
+  color: var(--rose);
+}
+.admin-app .login-lock svg {
+  width: 52px;
+  height: 52px;
+  padding: 13px;
+  border-radius: 50%;
+  background: var(--rose-soft);
+}
+
+/* ---------- Manager: hero, numbers, roster ---------- */
+.admin-app .manager-hero-image {
+  background: var(--paper-3);
+  box-shadow: var(--shadow);
+}
+.admin-app .manager-hero p {
+  color: var(--muted);
+}
 .admin-app .manager-facts {
   display: inline-flex;
   align-items: center;
@@ -184,7 +531,7 @@
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: var(--muted);
+  color: var(--ink-soft);
   font: inherit;
   font-size: var(--type-detail);
   line-height: 1.6;
@@ -195,16 +542,334 @@
     color 0.2s;
 }
 .admin-app .manager-facts svg {
-  color: var(--champagne);
-  opacity: 0.7;
+  color: var(--rose);
+  opacity: 0.8;
   flex-shrink: 0;
 }
 @media (hover: hover) and (pointer: fine) {
   .admin-app .manager-facts:hover {
-    background: #f4dfb012;
+    background: #23161f0a;
     color: var(--text);
   }
 }
+.admin-app .roster-big strong {
+  font-family: var(--display);
+  color: var(--text);
+}
+.admin-app .roster-big span {
+  color: var(--muted);
+}
+.admin-app .roster-fact {
+  background: var(--paper);
+  border-color: var(--line);
+  color: var(--ink-soft);
+}
+.admin-app .roster-fact b {
+  color: var(--text);
+}
+.admin-app .roster-fact.is-hot {
+  background: var(--warn-soft);
+  border-color: #e3a53b66;
+  color: var(--warn);
+}
+.admin-app .roster-fact.is-hot b {
+  color: var(--warn);
+}
+.admin-app .roster-fact.is-full {
+  background: var(--rose-soft);
+  border-color: #c6405f55;
+  color: var(--rose-ink);
+}
+.admin-app .roster-fact.is-full b {
+  color: var(--rose-ink);
+}
+.admin-app .roster-fact.is-unpaid {
+  border-color: #e3a53b66;
+}
+.admin-app .roster-fact.is-ok b,
+.admin-app .roster-fact.is-inside b {
+  color: var(--ok);
+}
+.admin-app .roster-fact.is-inside {
+  background: var(--ok-soft);
+  border-color: #1f7a4733;
+  color: var(--ok);
+}
+.admin-app .roster-toolbar {
+  background: #f4ede3f2;
+  border-bottom: 1px solid var(--line);
+}
+.admin-app .chip {
+  background: #fff;
+  border-color: #23161f2b;
+  color: var(--ink-soft);
+}
+.admin-app .chip b {
+  color: var(--text);
+}
+.admin-app .chip.selected {
+  background: var(--text);
+  border-color: var(--text);
+  color: #fff;
+}
+.admin-app .chip.selected b {
+  color: #fff;
+}
+.admin-app .chip-pending:not(.selected) b,
+.admin-app .chip-unpaid:not(.selected) b {
+  color: var(--warn);
+}
+.admin-app .chip-approved:not(.selected) b,
+.admin-app .chip-inside:not(.selected) b {
+  color: var(--ok);
+}
+.admin-app .roster-bulk .button:first-child:has(svg.lucide-check-check) {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #fff;
+}
+.admin-app .roster-bulk .button:first-child:has(svg.lucide-check-check):hover {
+  background: var(--rose-deep);
+}
+.admin-app .attendee-row {
+  box-shadow: none;
+  border-radius: 18px;
+  transition: border-color 0.2s;
+}
+.admin-app .attendee-row:hover {
+  border-color: #23161f33;
+}
+.admin-app .avatar,
+.admin-app .row-pending .avatar,
+.admin-app .row-waitlist .avatar {
+  font-family: var(--display);
+  font-weight: 700;
+  background: var(--rose-soft);
+  border-color: transparent;
+  color: var(--rose-ink);
+}
+.admin-app .row-pending .avatar {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.admin-app .row-waitlist .avatar {
+  background: var(--wait-soft);
+  color: var(--wait);
+}
+.admin-app .row-cancelled .avatar {
+  background: var(--paper-2);
+  color: var(--muted);
+}
+.admin-app .row-meta > a,
+.admin-app .row-when {
+  color: var(--muted);
+}
+.admin-app .payment-toggle {
+  border: 1px solid #23161f2b;
+  color: var(--warn);
+  background: #fff;
+  font-weight: 600;
+}
+.admin-app .payment-toggle.is-paid {
+  color: var(--ok);
+  background: var(--ok-soft);
+  border-color: #1f7a4733;
+}
+.admin-app .guests-chip {
+  background: var(--rose);
+  color: #fff;
+}
+.admin-app .row-action {
+  border: 1px solid #23161f2b;
+  background: #fff;
+  color: var(--ink-soft);
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s var(--ease-out);
+}
+.admin-app .row-action:hover {
+  background: var(--paper);
+  color: var(--text);
+  border-color: #23161f55;
+}
+.admin-app .row-action:not(:disabled):active {
+  transform: scale(0.94);
+}
+.admin-app .row-action.approve {
+  background: var(--rose-soft);
+  border: 1.5px solid var(--rose);
+  color: var(--rose-ink);
+}
+.admin-app .row-action.approve:hover,
+.admin-app .row-action.approve:focus-visible {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #fff;
+}
+.admin-app .row-action.whatsapp {
+  background: #25d366;
+  border-color: #25d366;
+  color: #0b1a10;
+}
+.admin-app .row-action.whatsapp:hover {
+  background: #1fc45c;
+  border-color: #1fc45c;
+}
+.admin-app .event-tools {
+  border-top: 1px solid var(--line);
+}
+.admin-app .event-tools h3 {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ---------- Editor ---------- */
+.admin-app .wizard-steps li {
+  color: var(--muted);
+  border-bottom-color: #23161f1f;
+  font-weight: 600;
+}
+.admin-app .wizard-steps li > span {
+  border-color: #23161f33;
+  background: #fff;
+}
+.admin-app .wizard-steps li.is-active {
+  color: var(--text);
+  border-color: var(--rose);
+}
+.admin-app .wizard-steps li.is-active > span {
+  background: var(--rose);
+  border-color: var(--rose);
+  color: #fff;
+}
+.admin-app .wizard-steps li.is-done {
+  color: var(--ink-soft);
+  border-color: #c6405f66;
+}
+.admin-app .wizard-steps li.is-done > span {
+  border-color: var(--rose);
+  color: var(--rose-ink);
+  background: var(--rose-soft);
+}
+.admin-app .upload-zone {
+  background: var(--paper);
+  border: 1.5px dashed #c6405f66;
+  border-radius: 18px;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.admin-app .upload-zone:hover {
+  background: var(--paper-2);
+  border-color: var(--rose);
+}
+.admin-app .upload-zone.has-image {
+  border-style: solid;
+  border-color: var(--line);
+  background: var(--paper-3);
+}
+.admin-app .upload-zone svg {
+  color: var(--rose);
+}
+.admin-app .upload-zone strong {
+  font-weight: 700;
+}
+.admin-app .upload-zone > span,
+.admin-app .upload-zone small {
+  color: var(--muted);
+}
+.admin-app .upload-tip {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--champagne);
+}
+.admin-app .upload-replace {
+  background: #23161fd9;
+  color: #fff !important;
+  font-size: 13px;
+  font-weight: 600;
+}
+.admin-app .upload-overlay {
+  background: #f7f1e8e6;
+  color: var(--text);
+  font-weight: 600;
+}
+.admin-app .upload-zone:focus-within {
+  outline-color: var(--rose);
+}
+.admin-app .remove-wide {
+  color: var(--rose-ink);
+}
+.admin-app .editor-actions {
+  background: #f4ede3f2;
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+.admin-app .event-preview > img {
+  background: var(--paper-3);
+  border-radius: 14px;
+}
+.admin-app .event-preview .eyebrow {
+  color: var(--rose-ink);
+}
+.admin-app .event-preview > p,
+.admin-app .event-preview .detail-description {
+  color: var(--ink-soft);
+}
+.admin-app .preview-facts {
+  color: var(--rose-ink);
+  font-weight: 600;
+}
+
+/* ---------- Modal ---------- */
+.admin-app .modal {
+  color: var(--text);
+  border-color: var(--line);
+  box-shadow: 0 40px 90px -30px #23161f80;
+}
+.admin-app .modal::backdrop {
+  background: #23161f80;
+  backdrop-filter: blur(6px);
+}
+.admin-app .modal-heading h2 {
+  font-size: 26px;
+}
+/* Shared guest stepper (site.css) reads paper tokens; they are set above. */
+.admin-app .guests-field > span {
+  font-size: 14px;
+  font-weight: 700;
+}
+.admin-app .guests-field small {
+  color: var(--muted);
+}
+.admin-app .stepper {
+  background: var(--paper);
+  border-color: #23161f2b;
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 700px) {
+  .admin-app .admin-title-row h1 {
+    font-size: 36px;
+  }
+  .admin-app .manager-hero h1 {
+    font-size: 32px;
+  }
+  .admin-app .attendees-heading h2 {
+    font-size: 26px;
+  }
+  .admin-app .login-main h1 {
+    font-size: 38px;
+  }
+  .admin-app .roster-toolbar {
+    background: #f4ede3f2;
+  }
+}
+
+/* ---------- Quick edit ---------- */
 .admin-app .quick-edit {
   display: grid;
   gap: 2px;
@@ -216,7 +881,6 @@
 }
 .admin-app .quick-edit .date-hint {
   margin: -8px 0 14px;
-  color: var(--champagne);
 }
 .admin-app .quick-edit .gold-button {
   margin-top: 8px;
@@ -225,6 +889,7 @@
   text-align: center;
   margin: 12px 0 0;
 }
+
 /* ---------- QR entry ---------- */
 .admin-app .manager-badges {
   display: flex;
@@ -233,37 +898,28 @@
 }
 .admin-app .badge-qr {
   gap: 5px;
-  color: var(--champagne);
-  background: #f4dfb014;
+  color: var(--rose-ink);
+  background: var(--rose-soft);
 }
 .admin-app .badge-qr::before {
   display: none;
 }
 .admin-app .status-inside {
-  color: #8ff0b4;
-  background: #8ff0b414;
-}
-.admin-app .roster-fact.is-inside {
-  color: #c8f2d8;
-  border-color: #8ff0b444;
-}
-.admin-app .roster-fact.is-inside b {
-  color: #8ff0b4;
-}
-.admin-app .chip-inside:not(.selected) b {
-  color: #8ff0b4;
+  color: var(--ok);
+  background: var(--ok-soft);
 }
 .admin-app .row-action.qr {
-  color: var(--champagne);
-  border-color: #f4dfb03d;
-}
-.admin-app .row-action.qr.is-inside {
-  color: #8ff0b4;
-  border-color: #8ff0b444;
-  background: #8ff0b412;
+  color: var(--rose-ink);
+  border-color: #c6405f55;
 }
 .admin-app .row-action.qr:hover {
-  background: #f4dfb01f;
+  background: var(--rose-soft);
+  border-color: var(--rose);
+}
+.admin-app .row-action.qr.is-inside {
+  color: var(--ok);
+  border-color: #1f7a4744;
+  background: var(--ok-soft);
 }
 /* The on/off switch. */
 .admin-app .switch-row {
@@ -275,15 +931,15 @@
   padding: 14px 16px;
   border-radius: 16px;
   border: 1px solid var(--line);
-  background: #f4dfb008;
+  background: var(--paper);
   cursor: pointer;
   transition:
     border-color 0.25s,
     background 0.25s;
 }
 .admin-app .switch-row.is-on {
-  border-color: #e8607f66;
-  background: #e8607f12;
+  border-color: #c6405f66;
+  background: #fdf3f5;
 }
 .admin-app .switch-text {
   display: flex;
@@ -310,6 +966,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  min-height: 0;
   margin: 0;
   opacity: 0;
   cursor: pointer;
@@ -318,8 +975,8 @@
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: #ffffff24;
-  border: 1px solid #ffffff2b;
+  background: #d8cdd5;
+  border: 1px solid #23161f1a;
   transition: background 0.25s;
 }
 .admin-app .switch i::after {
@@ -331,18 +988,18 @@
   height: 22px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 2px 6px #0006;
-  transition: transform 0.3s var(--ease-out, ease);
+  box-shadow: 0 2px 6px #23161f4d;
+  transition: transform 0.3s var(--ease-out);
 }
 .admin-app .switch input:checked + i {
-  background: var(--gold);
-  border-color: var(--gold);
+  background: var(--rose);
+  border-color: var(--rose);
 }
 .admin-app .switch input:checked + i::after {
   transform: translateX(-22px);
 }
 .admin-app .switch input:focus-visible + i {
-  outline: 2px solid var(--gold);
+  outline: 2px solid var(--rose);
   outline-offset: 3px;
 }
 /* The ticket sheet inside the manager. */
@@ -358,18 +1015,20 @@
   gap: 8px;
   padding: 16px;
   border-radius: 20px;
-  background: #fff;
+  background: var(--paper);
+  border: 1px solid var(--line);
 }
 .admin-app .ticket-sheet-code {
   width: min(220px, 60vw);
   height: auto;
   color: #23161f;
+  border-radius: 12px;
 }
 .admin-app .ticket-sheet .ticket-code {
   font-family: var(--latin);
   font-size: 15px;
   letter-spacing: 0.2em;
-  color: #6f5c6b;
+  color: var(--ink-mute);
 }
 .admin-app .ticket-sheet .field-hint {
   margin: 0;
@@ -388,6 +1047,15 @@
   white-space: nowrap;
 }
 .admin-app .ticket-sheet .checkin-manual {
-  color: #8ff0b4;
-  border-color: #8ff0b444;
+  color: var(--ok);
+  border-color: #1f7a4755;
+}
+.admin-app .manager-hero-actions .icon-button {
+  border: 1px solid #23161f2b;
+  background: #fff;
+  color: var(--ink-soft);
+}
+.admin-app .manager-hero-actions .icon-button:hover {
+  background: var(--paper);
+  color: var(--rose-ink);
 }
