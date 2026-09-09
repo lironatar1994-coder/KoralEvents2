@@ -403,28 +403,6 @@ export function HeroFrame({ photo }: { photo: string }) {
       >
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            fontSize: 20,
-            fontWeight: 600,
-            color: "#f4dfb0",
-            marginBottom: 14,
-          }}
-        >
-          <div style={{ width: 40, height: 1, background: "#d9b366" }} />
-          <div
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: 4,
-              background: "#c6405f",
-            }}
-          />
-          <div>{rtl("ערבי נשים · ללא מטרות רווח")}</div>
-        </div>
-        <div
-          style={{
             fontFamily: "FrankRuhl",
             fontWeight: 400,
             fontSize: 54,
