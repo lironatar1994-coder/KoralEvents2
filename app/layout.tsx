@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   description:
     "ערבי נשים לזיכוי הרבות: שיעורי תורה, הפרשת חלה, לילות בכותל, ערבי העצמה ומסיבות. לנשים בלבד, ללא מטרות רווח. נרשמות בשם ובטלפון, והמקום שלך שמור.",
-  robots: { index: true, follow: true },
+  robots: { index: false, follow: false },
   openGraph: {
     type: "website",
     locale: "he_IL",

@@ -4,14 +4,18 @@ import sharp from "sharp";
 
 /* Entrance animations fade text in; let them finish before axe samples colours. */
 const settle = (page: import("@playwright/test").Page) =>
-  page.evaluate(() =>
-    Promise.all(
-      document
+  page.evaluate(async () => {
+    // Scroll reveals can start a moment after a screenshot restores the
+    // viewport, so keep waiting until a quiet frame has no finite animations.
+    for (let round = 0; round < 8; round++) {
+      const running = document
         .getAnimations()
-        .filter((a) => a.effect?.getTiming().iterations !== Infinity)
-        .map((a) => a.finished.catch(() => undefined)),
-    ),
-  );
+        .filter((a) => a.effect?.getTiming().iterations !== Infinity);
+      if (!running.length) break;
+      await Promise.all(running.map((a) => a.finished.catch(() => undefined)));
+      await new Promise((r) => setTimeout(r, 120));
+    }
+  });
 
 test.beforeAll(() => {
   if (!process.env.DATABASE_PATH?.endsWith("demo.sqlite"))
@@ -158,6 +162,15 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
   await expect(page).toHaveURL(/\/admin\/events\/[a-f0-9-]{36}$/);
   const id = page.url().split("/").pop()!;
   const endpoint = `/api/admin/events/${id}`;
+  await page.getByRole("button", { name: "עריכה מהירה" }).click();
+  const sheet = page.getByRole("dialog");
+  await expect(sheet).toBeVisible();
+  await sheet.getByLabel("שם המקום").fill("מקום בדיקה מעודכן");
+  await sheet.getByRole("button", { name: "שמירת השינויים" }).click();
+  await expect(sheet).not.toBeVisible();
+  await expect(page.locator(".manager-facts")).toContainText(
+    "מקום בדיקה מעודכן",
+  );
   const guest = await browser.newContext({
     viewport: { width: 390, height: 844 },
     baseURL: process.env.APP_ORIGIN,

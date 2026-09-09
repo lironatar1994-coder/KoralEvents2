@@ -11,6 +11,7 @@ import {
   Search,
   Check,
   Pencil,
+  Zap,
   Share2,
   Copy,
   Archive,
@@ -38,6 +39,7 @@ import { api } from "@/lib/client";
 import { EventImage } from "./Public";
 import { Modal } from "./Modal";
 import { GuestStepper } from "./GuestStepper";
+import { QuickEdit, type QuickField } from "./QuickEdit";
 export function EventManager({
   initialEvent,
   initialRegistrations,
@@ -56,6 +58,7 @@ export function EventManager({
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [editing, setEditing] = useState<Registration | "new" | null>(null);
+  const [quick, setQuick] = useState<QuickField | null>(null);
   const [guests, setGuests] = useState(1);
   function open(target: Registration | "new") {
     setError("");
@@ -145,11 +148,27 @@ export function EventManager({
             {eventStateLabels[event.state]}
           </span>
           <h1>{event.title}</h1>
-          <p>
-            {dateLabel(event.starts_at)} · {timeLabel(event.starts_at)} ·{" "}
-            {event.location}
-          </p>
+          <button
+            type="button"
+            className="manager-facts"
+            onClick={() => setQuick("starts_at")}
+            title="עריכה מהירה של התאריך והמקום"
+          >
+            <span>
+              {dateLabel(event.starts_at)} · {timeLabel(event.starts_at)} ·{" "}
+              {event.location}
+            </span>
+            <Pencil size={13} aria-hidden="true" />
+          </button>
           <div className="manager-hero-actions">
+            <button
+              type="button"
+              className="button gold-button small-button"
+              onClick={() => setQuick("starts_at")}
+            >
+              <Zap size={16} />
+              עריכה מהירה
+            </button>
             <Link
               className="button outline-button small-button"
               href={`/admin/events/${event.id}/edit`}
@@ -595,6 +614,18 @@ export function EventManager({
           )}
         </div>
       </section>
+      {quick && (
+        <QuickEdit
+          event={event}
+          focus={quick}
+          onClose={() => setQuick(null)}
+          onSaved={async () => {
+            setQuick(null);
+            await refresh();
+            setNotice("הפרטים עודכנו");
+          }}
+        />
+      )}
       {editing && (
         <Modal
           title={editing === "new" ? "הוספת משתתפת" : "עריכת משתתפת"}

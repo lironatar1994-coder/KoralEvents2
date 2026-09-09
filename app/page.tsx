@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUpLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { getEvents, womenSoFar } from "@/lib/events";
+import { getEvents } from "@/lib/events";
 import { dateLabel, timeLabel } from "@/lib/types";
 import {
   Header,
@@ -41,7 +41,7 @@ const steps = [
 ];
 
 export default async function Home() {
-  const [events, women] = await Promise.all([getEvents(), womenSoFar()]);
+  const events = await getEvents();
   const [featured, ...rest] = events;
   const openCount = events.filter((e) => e.state === "published").length;
   return (
@@ -123,26 +123,15 @@ export default async function Home() {
         <section className="k-events" id="events">
           <div className="k-wrap">
             <header className="k-section-head" data-reveal>
-              <div>
-                <p className="k-eyebrow">מה שמחכה לנו</p>
-                <h2>
-                  הערבים <em>הקרובים</em>
-                </h2>
-              </div>
-              {women >= 50 ? (
-                <p className="k-section-note k-proof">
-                  <Spark />
-                  כבר <b>{women.toLocaleString("he-IL")}</b> נשים הגיעו לערבים
-                  שלנו
+              <h2>
+                הערבים <em>הקרובים</em>
+              </h2>
+              {openCount > 0 && (
+                <p className="k-section-note">
+                  {openCount === 1
+                    ? "ערב אחד פתוח להרשמה"
+                    : `${openCount} ערבים פתוחים להרשמה`}
                 </p>
-              ) : (
-                openCount > 0 && (
-                  <p className="k-section-note">
-                    {openCount === 1
-                      ? "ערב אחד פתוח להרשמה"
-                      : `${openCount} ערבים פתוחים להרשמה`}
-                  </p>
-                )
               )}
             </header>
             {featured ? (

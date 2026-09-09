@@ -172,3 +172,56 @@
     font-size: 26px;
   }
 }
+
+/* Quick edit: the facts line opens the sheet; the sheet is one short form. */
+.admin-app .manager-facts {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 6px 10px 6px 8px;
+  margin-inline-start: -10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--type-detail);
+  line-height: 1.6;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.admin-app .manager-facts svg {
+  color: var(--champagne);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .admin-app .manager-facts:hover {
+    background: #f4dfb012;
+    color: var(--text);
+  }
+}
+.admin-app .quick-edit {
+  display: grid;
+  gap: 2px;
+}
+.admin-app .quick-edit-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.admin-app .quick-edit .date-hint {
+  margin: -8px 0 14px;
+  color: var(--champagne);
+}
+.admin-app .quick-edit .gold-button {
+  margin-top: 8px;
+}
+.admin-app .quick-edit-note {
+  text-align: center;
+  margin: 12px 0 0;
+}

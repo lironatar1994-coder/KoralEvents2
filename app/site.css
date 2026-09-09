@@ -100,7 +100,7 @@
   --paper-3: #e9dece;
   --ink: #23161f;
   --ink-soft: #5b4658;
-  --ink-mute: #7c6a79;
+  --ink-mute: #6f5c6b;
   --cream: #f8f1e6;
   --cream-mute: #cdbfca;
   --rose: #c6405f;
@@ -1586,23 +1586,6 @@
     border-color: var(--ink);
     transform: translateY(-1px);
   }
-}
-.k-proof {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--ink-soft);
-}
-.k-proof svg {
-  width: 12px;
-  height: 12px;
-  fill: var(--gold);
-}
-.k-proof b {
-  font-family: var(--display);
-  font-size: 22px;
-  color: var(--rose);
-  line-height: 1;
 }
 .k-detail-hint {
   display: flex;
