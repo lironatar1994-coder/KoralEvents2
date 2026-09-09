@@ -3,7 +3,13 @@ import Link from "next/link";
 import { ArrowDown, ArrowUpLeft, Clock3, MapPin, Sparkles } from "lucide-react";
 import { Brand } from "./Brand";
 import { HeaderScroll } from "./HeaderScroll";
-import { KoralEvent, dateLabel, timeLabel, priceLabel } from "@/lib/types";
+import {
+  KoralEvent,
+  dateLabel,
+  timeLabel,
+  priceLabel,
+  weekdayLabel,
+} from "@/lib/types";
 
 /* Day and month, pulled apart for the calendar leaf. */
 export function dateParts(value: string) {
@@ -11,10 +17,9 @@ export function dateParts(value: string) {
     timeZone: "Asia/Jerusalem",
     day: "numeric",
     month: "short",
-    weekday: "long",
   }).formatToParts(new Date(value));
   const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
-  return { day: get("day"), month: get("month"), weekday: get("weekday") };
+  return { day: get("day"), month: get("month") };
 }
 
 /* Calendar days from now until the evening, in Jerusalem time. */
@@ -102,7 +107,9 @@ export function Footer() {
         <div className="k-footer-row">
           <div>
             <Brand small />
-            <p className="k-footer-tag">ערבים לנשים, מהלב. ללא מטרות רווח.</p>
+            <p className="k-footer-tag">
+              ״אישה לאישה מלכה״ · ערבי נשים לזיכוי הרבות.
+            </p>
           </div>
           <div className="k-footer-links">
             <Link href="/#events">הערבים הקרובים</Link>
@@ -195,7 +202,7 @@ export function EventCard({
     "--reveal-delay": `${Math.min(index, 4) * 60}ms`,
   } as React.CSSProperties;
   const revealAttr = reveal ? { "data-reveal": "" } : {};
-  const { weekday } = dateParts(event.starts_at);
+  const weekday = weekdayLabel(event.starts_at);
   if (variant === "compact")
     return (
       <Link

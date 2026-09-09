@@ -47,13 +47,29 @@ export const eventStateLabels: Record<EventState, string> = {
 export const dateLabel = (
   value: string,
   options?: Intl.DateTimeFormatOptions,
-) =>
-  new Intl.DateTimeFormat("he-IL", {
+) => {
+  const label = new Intl.DateTimeFormat("he-IL", {
     timeZone: "Asia/Jerusalem",
     day: "numeric",
     month: "long",
     ...options,
   }).format(new Date(value));
+  return options?.weekday && isJerusalemSaturday(value)
+    ? label.replace(/יום שבת|שבת/, "מוצאי שבת")
+    : label;
+};
+export const isJerusalemSaturday = (value: string) =>
+  new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jerusalem",
+    weekday: "short",
+  }).format(new Date(value)) === "Sat";
+export const weekdayLabel = (value: string) =>
+  isJerusalemSaturday(value)
+    ? "מוצאי שבת"
+    : new Intl.DateTimeFormat("he-IL", {
+        timeZone: "Asia/Jerusalem",
+        weekday: "long",
+      }).format(new Date(value));
 export const timeLabel = (value: string) =>
   dateLabel(value, {
     day: undefined,
