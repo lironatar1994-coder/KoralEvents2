@@ -2298,11 +2298,15 @@
     flex-wrap: wrap;
     gap: 6px 20px;
   }
+  /* Phones: a shorter poster anchored to the lower part of the photo, so the
+     first screen shows the people, the title, the facts and the start of the
+     details, and the fixed "אני באה" bar never covers the date and place. */
   .k-poster:not(.is-flyer) .detail-visual {
-    min-height: 100svh;
+    min-height: 72svh;
+    max-height: 640px;
   }
   .k-poster:not(.is-flyer) .detail-visual img {
-    object-position: center 55%;
+    object-position: center 78%;
   }
   .k-poster-back {
     top: 14px;
@@ -2310,7 +2314,11 @@
     height: 42px;
   }
   .k-poster-title {
-    padding-bottom: 36px;
+    padding-bottom: 28px;
+  }
+  .public-event .k-detail {
+    padding-top: 28px;
+    padding-bottom: 120px;
   }
   .k-poster-title h1 {
     font-size: clamp(42px, 12.5vw, 60px);
