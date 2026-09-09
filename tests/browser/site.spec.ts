@@ -293,3 +293,125 @@ test("manager creates a flyer event, approves requests, handles capacity and pay
   ).toBeVisible();
   await guest.close();
 });
+
+test("QR entry: the guest gets a ticket, the door needs a login, one tap checks her in", async ({
+  page,
+  browser,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/admin/login");
+  await page.getByLabel("הסיסמה שלך").fill(process.env.ADMIN_PASSWORD!);
+  await page.getByRole("button", { name: "כניסה לניהול" }).click();
+  await expect(page).toHaveURL(/\/admin$/);
+  const headers = { Origin: process.env.APP_ORIGIN! };
+  const created = await page.request.post("/api/admin/events", {
+    headers,
+    data: {
+      title: "ערב עם QR",
+      subtitle: "",
+      description: "",
+      starts_at: new Date(Date.now() + 86400000 * 30).toISOString(),
+      location: "אולם בדיקה",
+      address: "",
+      price: 0,
+      capacity: null,
+      image: "",
+      image_mode: "cover",
+      image_wide: "",
+      state: "draft",
+      category: "בדיקה",
+      qr_enabled: true,
+    },
+  });
+  const { id } = await created.json();
+  const endpoint = `/api/admin/events/${id}`;
+  await page.request.post(`${endpoint}/registrations`, {
+    headers,
+    data: { name: "אורחת עם כרטיס", phone: "0509999911", guests: 2 },
+  });
+  const [row] = await (
+    await page.request.get(`${endpoint}/registrations`)
+  ).json();
+  expect(row.ticket_token).toMatch(/^[a-f0-9]{32}$/);
+  const guest = await browser.newContext({
+    viewport: { width: 390, height: 844 },
+    baseURL: process.env.APP_ORIGIN,
+  });
+  const visitor = await guest.newPage();
+  // Not approved yet: the link works, the code waits.
+  await visitor.goto(`/tickets/${row.ticket_token}`);
+  await expect(
+    visitor.getByRole("heading", { name: "הכרטיס בדרך." }),
+  ).toBeVisible();
+  await expect(visitor.locator(".ticket-qr-code")).toHaveCount(0);
+  await page.request.patch(`${endpoint}/registrations/${row.id}`, {
+    headers,
+    data: { ...row, status: "approved" },
+  });
+  await visitor.reload();
+  await expect(visitor.locator(".ticket-qr-code")).toBeVisible();
+  await expect(visitor.getByText("אורחת עם כרטיס")).toBeVisible();
+  await expect(visitor.getByText("היא ועוד 1")).toBeVisible();
+  await expect
+    .poll(() =>
+      visitor.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    )
+    .toBe(true);
+  await settle(visitor);
+  const ticketAxe = await new AxeBuilder({ page: visitor })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .analyze();
+  expect(ticketAxe.violations).toEqual([]);
+  // The door: a stranger scanning the code only reaches the login.
+  await visitor.goto(`/checkin/${row.ticket_token}`);
+  await expect(visitor).toHaveURL(/admin\/login\?next=%2Fcheckin%2F/);
+  expect(
+    (
+      await visitor.request.post("/api/admin/checkin", {
+        headers,
+        data: { token: row.ticket_token },
+      })
+    ).status(),
+  ).toBe(401);
+  await guest.close();
+  // The manager's phone sees the ticket is real and lets her in.
+  await page.goto(`/checkin/${row.ticket_token}`);
+  await expect(page.getByRole("heading", { name: "כרטיס תקין" })).toBeVisible();
+  await page.getByRole("button", { name: /אישור כניסה/ }).click();
+  await expect(
+    page.getByRole("heading", { name: "נכנסה. ברוכה הבאה!" }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: "שימי לב: כבר נכנסה" }),
+  ).toBeVisible();
+  await settle(page);
+  const doorAxe = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+    .analyze();
+  expect(doorAxe.violations).toEqual([]);
+  await page.goto(`/admin/events/${id}`);
+  await expect(page.locator(".status-inside")).toBeVisible();
+  await page
+    .getByRole("button", { name: "כרטיס QR של אורחת עם כרטיס" })
+    .click();
+  const sheet = page.getByRole("dialog");
+  await expect(
+    sheet.getByRole("link", { name: "שליחת הכרטיס בוואטסאפ" }),
+  ).toHaveAttribute(
+    "href",
+    /^https:\/\/wa.me\/972509999911\?text=.*tickets%2F[a-f0-9]{32}/,
+  );
+  await sheet.getByRole("button", { name: "ביטול סימון הכניסה" }).click();
+  await expect(sheet).not.toBeVisible();
+  await expect(page.locator(".status-inside")).toHaveCount(0);
+  await page.request.patch(endpoint, {
+    headers,
+    data: {
+      ...(await (await page.request.get(endpoint)).json()),
+      state: "archived",
+    },
+  });
+});

@@ -10,6 +10,7 @@ import {
   saveEvent,
   updateRegistration,
   rateLimit,
+  setCheckedIn,
 } from "@/lib/events";
 import { ZodError } from "zod";
 import sharp from "sharp";
@@ -174,6 +175,10 @@ async function handler(
       return ok(await getEvents(true));
     if (route === "admin/events" && method === "POST")
       return ok({ id: await saveEvent(await json(req)) });
+    if (route === "admin/checkin" && method === "POST") {
+      const data = await json(req);
+      return ok(await setCheckedIn(data?.token, data?.checked_in !== false));
+    }
     if (route === "admin/upload" && method === "POST") {
       const bytes = await body(req, 12 * 1024 * 1024);
       const form = await new Request(req.url, {

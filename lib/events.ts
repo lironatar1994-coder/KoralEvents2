@@ -1,6 +1,7 @@
 import { query, transaction } from "./db";
-import type { KoralEvent, Registration } from "./types";
-import { randomUUID } from "node:crypto";
+import type { KoralEvent, Registration, Ticket } from "./types";
+import { ticketState } from "./tickets";
+import { randomBytes, randomUUID } from "node:crypto";
 import { z } from "zod";
 export class AppError extends Error {
   constructor(
@@ -56,12 +57,16 @@ export const eventSchema = z.object({
     .refine((v) => v === "" || /^\/api\/media\/[a-f0-9-]+\.webp$/.test(v)),
   state: z.enum(["draft", "published", "closed", "archived"]),
   category: z.string().trim().min(1).max(60),
+  qr_enabled: z.boolean().default(false),
 });
+export const ticketTokenSchema = z.string().regex(/^[a-f0-9]{32}$/);
+const newTicketToken = () => randomBytes(16).toString("hex");
 const select = `SELECT e.*, (SELECT coalesce(sum(guests),0) FROM registrations r WHERE r.event_id=e.id AND status='approved') AS approved, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND status='pending') AS pending, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND status='waitlist') AS waitlist, (SELECT count(*) FROM registrations r WHERE r.event_id=e.id AND paid=true) AS paid FROM events e`;
 function clean(e: KoralEvent): KoralEvent {
   return {
     ...e,
     price: Number(e.price),
+    qr_enabled: Boolean(e.qr_enabled),
     starts_at: new Date(e.starts_at).toISOString(),
     created_at: new Date(e.created_at).toISOString(),
   };
@@ -138,8 +143,16 @@ export async function register(eventId: string, input: unknown, admin = false) {
         ? "waitlist"
         : "pending";
     const result = await sql.query(
-      "INSERT INTO registrations(id,event_id,name,phone,status,guests) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT(event_id,phone) DO NOTHING RETURNING id",
-      [randomUUID(), eventId, data.name, data.phone, status, data.guests],
+      "INSERT INTO registrations(id,event_id,name,phone,status,guests,ticket_token) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(event_id,phone) DO NOTHING RETURNING id",
+      [
+        randomUUID(),
+        eventId,
+        data.name,
+        data.phone,
+        status,
+        data.guests,
+        newTicketToken(),
+      ],
     );
     if (admin && !result.rows.length)
       throw new AppError("המספר כבר מופיע ברשימת האירוע");
@@ -205,7 +218,83 @@ export async function registrations(eventId: string) {
     "SELECT * FROM registrations WHERE event_id=$1 ORDER BY created_at DESC",
     [eventId],
   );
-  return rows.map((r) => ({ ...r, paid: Boolean(r.paid) }));
+  return rows.map(cleanRegistration);
+}
+const cleanRegistration = (r: Registration): Registration => ({
+  ...r,
+  paid: Boolean(r.paid),
+  checked_in_at: r.checked_in_at
+    ? new Date(r.checked_in_at).toISOString()
+    : null,
+});
+/** The ticket behind a secret link, or null when the link is not ours. */
+export async function getTicket(token: unknown): Promise<Ticket | null> {
+  const parsed = ticketTokenSchema.safeParse(token);
+  if (!parsed.success) return null;
+  const { rows } = await query<Registration>(
+    "SELECT * FROM registrations WHERE ticket_token=$1",
+    [parsed.data],
+  );
+  if (!rows[0]) return null;
+  const event = await getEvent(rows[0].event_id, true);
+  if (!event) return null;
+  const registration = cleanRegistration(rows[0]);
+  return { registration, event, state: ticketState(event, registration) };
+}
+/**
+ * The door confirms she is in. Only an approved registration of an event
+ * with QR entry can be checked in; the first check-in time is kept, so a
+ * second scan shows "already inside" instead of quietly overwriting it.
+ */
+export async function setCheckedIn(token: unknown, checkedIn: boolean) {
+  return transaction(async (sql) => {
+    const parsed = ticketTokenSchema.safeParse(token);
+    if (!parsed.success) throw new AppError("הכרטיס לא נמצא", 404);
+    const { rows } = await sql.query<Registration>(
+      "SELECT * FROM registrations WHERE ticket_token=$1",
+      [parsed.data],
+    );
+    const current = rows[0];
+    if (!current) throw new AppError("הכרטיס לא נמצא", 404);
+    const events = await sql.query<KoralEvent>(
+      "SELECT * FROM events WHERE id=$1",
+      [current.event_id],
+    );
+    const event = events.rows[0];
+    if (!event) throw new AppError("האירוע לא נמצא", 404);
+    if (checkedIn) {
+      const state = ticketState(
+        { qr_enabled: Boolean(event.qr_enabled) },
+        current,
+      );
+      if (state === "qr-off")
+        throw new AppError(
+          "כניסה עם QR כבויה לאירוע הזה. אפשר להדליק אותה בעריכת האירוע.",
+        );
+      if (state === "cancelled") throw new AppError("ההרשמה הזו בוטלה.");
+      if (state === "not-approved")
+        throw new AppError(
+          "ההרשמה עוד לא אושרה. אפשר לאשר אותה ברשימת המשתתפות.",
+        );
+      if (state === "valid")
+        await sql.query(
+          "UPDATE registrations SET checked_in_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id=$1 AND checked_in_at IS NULL",
+          [current.id],
+        );
+    } else
+      await sql.query(
+        "UPDATE registrations SET checked_in_at=NULL WHERE id=$1",
+        [current.id],
+      );
+    const updated = await sql.query<Registration>(
+      "SELECT * FROM registrations WHERE id=$1",
+      [current.id],
+    );
+    return {
+      already: checkedIn && Boolean(current.checked_in_at),
+      registration: cleanRegistration(updated.rows[0]),
+    };
+  });
 }
 export async function removeRegistration(eventId: string, id: string) {
   await query("DELETE FROM registrations WHERE id=$1 AND event_id=$2", [

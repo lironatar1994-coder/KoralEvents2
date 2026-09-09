@@ -9,7 +9,7 @@ export interface Sql {
 }
 const globalDb = globalThis as unknown as { koralDb?: Store };
 const store = (globalDb.koralDb ??= { queue: Promise.resolve() });
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 type Store = {
   db?: Database.Database;
   queue: Promise<unknown>;
@@ -49,7 +49,29 @@ function migrate(db: Database.Database) {
     db.exec(
       "ALTER TABLE registrations ADD COLUMN guests INTEGER NOT NULL DEFAULT 1",
     );
-  db.pragma("user_version = 3");
+  // Schema v4: QR entry. Each event can switch it on; every registration
+  // carries a secret ticket token and remembers when she walked in.
+  const ecols = db.prepare("PRAGMA table_info(events)").all() as {
+    name: string;
+  }[];
+  if (!ecols.some((c) => c.name === "qr_enabled"))
+    db.exec(
+      "ALTER TABLE events ADD COLUMN qr_enabled INTEGER NOT NULL DEFAULT 0 CHECK(qr_enabled IN(0,1))",
+    );
+  const tcols = db.prepare("PRAGMA table_info(registrations)").all() as {
+    name: string;
+  }[];
+  if (!tcols.some((c) => c.name === "ticket_token"))
+    db.exec("ALTER TABLE registrations ADD COLUMN ticket_token TEXT");
+  if (!tcols.some((c) => c.name === "checked_in_at"))
+    db.exec("ALTER TABLE registrations ADD COLUMN checked_in_at TEXT");
+  db.exec(
+    "UPDATE registrations SET ticket_token=lower(hex(randomblob(16))) WHERE ticket_token IS NULL",
+  );
+  db.exec(
+    "CREATE UNIQUE INDEX IF NOT EXISTS registrations_ticket ON registrations(ticket_token)",
+  );
+  db.pragma("user_version = 4");
 }
 function database() {
   if (store.db) {

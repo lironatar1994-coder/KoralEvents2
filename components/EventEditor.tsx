@@ -16,6 +16,7 @@ import {
 import { KoralEvent, dateLabel, timeLabel, priceLabel } from "@/lib/types";
 import { api, toLocalInput, fromLocalInput } from "@/lib/client";
 import { Modal } from "./Modal";
+import { Switch } from "./Switch";
 const steps = ["תמונה ושם", "מתי ואיפה", "מקומות ועלות"];
 type Control = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 function firstInvalid(scope: HTMLElement): Control | null {
@@ -41,6 +42,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
     image_wide: event?.image_wide || "",
     image_mode: event?.image_mode || "cover",
     category: event?.category || "מפגש לנשים",
+    qr_enabled: event?.qr_enabled ?? false,
   });
   const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -75,7 +77,7 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
       document.removeEventListener("click", leave, true);
     };
   }, [dirty]);
-  function set(key: string, value: string | number) {
+  function set(key: string, value: string | number | boolean) {
     setDirty(true);
     setForm((p) => ({ ...p, [key]: value }));
   }
@@ -434,6 +436,18 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
             כשהמקומות נגמרים, בקשות חדשות נכנסות לרשימת המתנה. את מאשרת כל אחת
             בעצמך.
           </p>
+          <Switch
+            checked={form.qr_enabled}
+            onChange={(v) => set("qr_enabled", v)}
+            label="כניסה עם QR"
+            hint="כל מאושרת מקבלת כרטיס עם קוד QR לשליחה בוואטסאפ. בכניסה סורקים אותו עם מצלמת הטלפון."
+          />
+          {form.qr_enabled && (
+            <p className="field-hint">
+              הסריקה פותחת עמוד בדיקה. הטלפון שסורק צריך להיות מחובר לניהול,
+              ובלחיצה אחת מאשרים את הכניסה.
+            </p>
+          )}
         </fieldset>
         {error && (
           <p className="error-message" role="alert">

@@ -225,3 +225,169 @@
   text-align: center;
   margin: 12px 0 0;
 }
+/* ---------- QR entry ---------- */
+.admin-app .manager-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.admin-app .badge-qr {
+  gap: 5px;
+  color: var(--champagne);
+  background: #f4dfb014;
+}
+.admin-app .badge-qr::before {
+  display: none;
+}
+.admin-app .status-inside {
+  color: #8ff0b4;
+  background: #8ff0b414;
+}
+.admin-app .roster-fact.is-inside {
+  color: #c8f2d8;
+  border-color: #8ff0b444;
+}
+.admin-app .roster-fact.is-inside b {
+  color: #8ff0b4;
+}
+.admin-app .chip-inside:not(.selected) b {
+  color: #8ff0b4;
+}
+.admin-app .row-action.qr {
+  color: var(--champagne);
+  border-color: #f4dfb03d;
+}
+.admin-app .row-action.qr.is-inside {
+  color: #8ff0b4;
+  border-color: #8ff0b444;
+  background: #8ff0b412;
+}
+.admin-app .row-action.qr:hover {
+  background: #f4dfb01f;
+}
+/* The on/off switch. */
+.admin-app .switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 6px 0 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #f4dfb008;
+  cursor: pointer;
+  transition:
+    border-color 0.25s,
+    background 0.25s;
+}
+.admin-app .switch-row.is-on {
+  border-color: #e8607f66;
+  background: #e8607f12;
+}
+.admin-app .switch-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 14px;
+}
+.admin-app .switch-text strong {
+  font-weight: 700;
+}
+.admin-app .switch-text small {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.admin-app .switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 52px;
+  height: 30px;
+}
+.admin-app .switch input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.admin-app .switch i {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: #ffffff24;
+  border: 1px solid #ffffff2b;
+  transition: background 0.25s;
+}
+.admin-app .switch i::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px #0006;
+  transition: transform 0.3s var(--ease-out, ease);
+}
+.admin-app .switch input:checked + i {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.admin-app .switch input:checked + i::after {
+  transform: translateX(-22px);
+}
+.admin-app .switch input:focus-visible + i {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+/* The ticket sheet inside the manager. */
+.admin-app .ticket-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.admin-app .ticket-sheet-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 20px;
+  background: #fff;
+}
+.admin-app .ticket-sheet-code {
+  width: min(220px, 60vw);
+  height: auto;
+  color: #23161f;
+}
+.admin-app .ticket-sheet .ticket-code {
+  font-family: var(--latin);
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  color: #6f5c6b;
+}
+.admin-app .ticket-sheet .field-hint {
+  margin: 0;
+  text-align: center;
+}
+.admin-app .ticket-sheet-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.admin-app .ticket-sheet-row .button {
+  min-height: 46px;
+  padding-inline: 12px;
+  gap: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.admin-app .ticket-sheet .checkin-manual {
+  color: #8ff0b4;
+  border-color: #8ff0b444;
+}

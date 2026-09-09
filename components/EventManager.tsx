@@ -25,6 +25,10 @@ import {
   CheckCheck,
   ClipboardCopy,
   Download,
+  QrCode as QrIcon,
+  DoorOpen,
+  Link2,
+  ExternalLink,
 } from "lucide-react";
 import {
   KoralEvent,
@@ -40,6 +44,8 @@ import { EventImage } from "./Public";
 import { Modal } from "./Modal";
 import { GuestStepper } from "./GuestStepper";
 import { QuickEdit, type QuickField } from "./QuickEdit";
+import { QrCode } from "./QrCode";
+import { ticketPath, ticketCode } from "@/lib/tickets";
 export function EventManager({
   initialEvent,
   initialRegistrations,
@@ -60,6 +66,14 @@ export function EventManager({
   const [editing, setEditing] = useState<Registration | "new" | null>(null);
   const [quick, setQuick] = useState<QuickField | null>(null);
   const [guests, setGuests] = useState(1);
+  const [ticketFor, setTicketFor] = useState<Registration | null>(null);
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const ticketLink = (row: Registration) =>
+    `${origin}${ticketPath(row.ticket_token)}`;
+  const ticketMessage = (row: Registration) =>
+    `היי ${row.name}, הנה כרטיס הכניסה שלך ל״${event.title}״ 🎟️\n${ticketLink(row)}\nשמרי את הקישור. בכניסה מציגות את קוד ה-QR שבמסך, וזהו.\nנפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}.\nKoral Events`;
+  const whatsapp = (row: Registration, text: string) =>
+    `https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(text)}`;
   function open(target: Registration | "new") {
     setError("");
     setGuests(target === "new" ? 1 : target.guests);
@@ -115,7 +129,9 @@ export function EventManager({
         (filter === "all" ||
           (filter === "unpaid"
             ? !r.paid && r.status === "approved"
-            : r.status === filter)) &&
+            : filter === "inside"
+              ? Boolean(r.checked_in_at)
+              : r.status === filter)) &&
         `${r.name} ${r.phone}`.includes(search.trim()),
     );
   async function share() {
@@ -144,9 +160,16 @@ export function EventManager({
           <EventImage event={event} />
         </div>
         <div>
-          <span className={`badge state-${event.state}`}>
-            {eventStateLabels[event.state]}
-          </span>
+          <div className="manager-badges">
+            <span className={`badge state-${event.state}`}>
+              {eventStateLabels[event.state]}
+            </span>
+            {event.qr_enabled && (
+              <span className="badge badge-qr">
+                <QrIcon size={11} /> כניסה עם QR
+              </span>
+            )}
+          </div>
           <h1>{event.title}</h1>
           <button
             type="button"
@@ -202,6 +225,7 @@ export function EventManager({
         const count = (k: string) => rows.filter((r) => r.status === k).length;
         const approvedRows = rows.filter((r) => r.status === "approved");
         const unpaid = approvedRows.filter((r) => !r.paid).length;
+        const inside = rows.filter((r) => r.checked_in_at).length;
         const total = rows.length || 1;
         const seg = (k: string) => `${(count(k) / total) * 100}%`;
         const left =
@@ -214,6 +238,7 @@ export function EventManager({
           ["approved", "מאושרות", count("approved")],
           ["waitlist", "בהמתנה", count("waitlist")],
           ["unpaid", "לא שילמו", event.price > 0 ? unpaid : 0],
+          ["inside", "נכנסו", event.qr_enabled ? inside : 0],
           ["cancelled", "בוטלו", count("cancelled")],
         ];
         return (
@@ -247,6 +272,15 @@ export function EventManager({
                     <span className="roster-fact">
                       <b>{event.waitlist}</b> ברשימת המתנה
                     </span>
+                  )}
+                  {event.qr_enabled && inside > 0 && (
+                    <button
+                      className="roster-fact is-inside"
+                      onClick={() => setFilter("inside")}
+                    >
+                      <DoorOpen size={14} />
+                      <b>{inside}</b> נכנסו
+                    </button>
                   )}
                   {event.price > 0 && approvedRows.length > 0 && (
                     <button
@@ -451,6 +485,14 @@ export function EventManager({
                 <span className={`badge status-${row.status}`}>
                   {statusLabels[row.status]}
                 </span>
+                {row.checked_in_at && (
+                  <span
+                    className="badge status-inside"
+                    title={`נכנסה ${dateLabel(row.checked_in_at)}`}
+                  >
+                    נכנסה {timeLabel(row.checked_in_at)}
+                  </span>
+                )}
                 {row.guests > 1 && (
                   <span
                     className="guests-chip"
@@ -513,12 +555,29 @@ export function EventManager({
                   className="row-action whatsapp"
                   aria-label="שליחת אישור בוואטסאפ"
                   title="שליחת אישור בוואטסאפ"
-                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${typeof window !== "undefined" ? window.location.origin : ""}${appPath(`/events/${event.id}`)}\nמחכה לראותך, Koral Events`)}`}
+                  href={whatsapp(
+                    row,
+                    `היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${origin}${appPath(`/events/${event.id}`)}${event.qr_enabled ? `\n🎟️ כרטיס הכניסה שלך עם קוד QR, להצגה בכניסה: ${ticketLink(row)}` : ""}\nמחכה לראותך, Koral Events`,
+                  )}
                   target="_blank"
                   rel="noreferrer"
                 >
                   <MessageCircle size={19} />
                 </a>
+              )}
+              {event.qr_enabled && row.status === "approved" && (
+                <button
+                  className={`row-action qr ${row.checked_in_at ? "is-inside" : ""}`}
+                  aria-label={`כרטיס QR של ${row.name}`}
+                  title="כרטיס QR: שליחה, קישור וסימון כניסה"
+                  disabled={busy}
+                  onClick={() => {
+                    setError("");
+                    setTicketFor(row);
+                  }}
+                >
+                  <QrIcon size={18} />
+                </button>
               )}
               <button
                 className="row-action"
@@ -614,6 +673,95 @@ export function EventManager({
           )}
         </div>
       </section>
+      {ticketFor && (
+        <Modal
+          title={`הכרטיס של ${ticketFor.name}`}
+          onClose={() => {
+            if (!busy) setTicketFor(null);
+          }}
+        >
+          <div className="ticket-sheet">
+            <div className="ticket-sheet-qr">
+              <QrCode
+                value={`${origin}${appPath(`/checkin/${ticketFor.ticket_token}`)}`}
+                className="ticket-sheet-code"
+                label={`קוד QR לכניסה של ${ticketFor.name}`}
+              />
+              <span className="ticket-code" dir="ltr">
+                {ticketCode(ticketFor.ticket_token)}
+              </span>
+            </div>
+            <p className="field-hint">
+              {ticketFor.checked_in_at
+                ? `נכנסה ב-${timeLabel(ticketFor.checked_in_at)} · ${dateLabel(ticketFor.checked_in_at)}.`
+                : "עוד לא נכנסה. בכניסה סורקים את הקוד מהמסך שלה, או מסמנים כאן ידנית."}
+            </p>
+            <a
+              className="button whatsapp-button full-width"
+              href={whatsapp(ticketFor, ticketMessage(ticketFor))}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MessageCircle size={18} />
+              שליחת הכרטיס בוואטסאפ
+            </a>
+            <div className="ticket-sheet-row">
+              <button
+                type="button"
+                className="button outline-button"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(ticketLink(ticketFor));
+                    setNotice("קישור הכרטיס הועתק.");
+                    setTicketFor(null);
+                  } catch {
+                    setError("לא הצלחנו להעתיק. נסי שוב.");
+                  }
+                }}
+              >
+                <Link2 size={16} /> העתקת הקישור
+              </button>
+              <a
+                className="button outline-button"
+                href={ticketPath(ticketFor.ticket_token)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <ExternalLink size={16} /> פתיחת הכרטיס
+              </a>
+            </div>
+            {error && (
+              <p className="error-message" role="alert">
+                {error}
+              </p>
+            )}
+            <button
+              type="button"
+              className={`button outline-button full-width ${ticketFor.checked_in_at ? "" : "checkin-manual"}`}
+              disabled={busy}
+              onClick={async () => {
+                const checked = !ticketFor.checked_in_at;
+                const success = await action(
+                  () =>
+                    api("/api/admin/checkin", "POST", {
+                      token: ticketFor.ticket_token,
+                      checked_in: checked,
+                    }),
+                  checked
+                    ? `${ticketFor.name} סומנה כנכנסה`
+                    : "סימון הכניסה בוטל",
+                );
+                if (success) setTicketFor(null);
+              }}
+            >
+              <DoorOpen size={16} />
+              {ticketFor.checked_in_at
+                ? "ביטול סימון הכניסה"
+                : "סימון כניסה ידני"}
+            </button>
+          </div>
+        </Modal>
+      )}
       {quick && (
         <QuickEdit
           event={event}

@@ -16,6 +16,7 @@ export interface KoralEvent {
   image_wide: string;
   state: EventState;
   category: string;
+  qr_enabled: boolean;
   created_at: string;
   approved: number;
   pending: number;
@@ -30,8 +31,25 @@ export interface Registration {
   status: RegistrationState;
   paid: boolean;
   guests: number;
+  ticket_token: string;
+  checked_in_at: string | null;
   created_at: string;
 }
+/** What the door sees when a ticket link is opened. */
+export type TicketState =
+  "valid" | "checked-in" | "not-approved" | "cancelled" | "qr-off";
+export interface Ticket {
+  registration: Registration;
+  event: KoralEvent;
+  state: TicketState;
+}
+export const ticketStateLabels: Record<TicketState, string> = {
+  valid: "כרטיס תקין",
+  "checked-in": "כבר נכנסה",
+  "not-approved": "ההרשמה עוד לא אושרה",
+  cancelled: "ההרשמה בוטלה",
+  "qr-off": "כניסה עם QR כבויה לאירוע הזה",
+};
 export const statusLabels: Record<RegistrationState, string> = {
   pending: "ממתינה לאישור",
   approved: "מאושרת",

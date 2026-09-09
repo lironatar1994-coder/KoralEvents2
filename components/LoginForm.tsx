@@ -4,7 +4,7 @@ import { appPath } from "@/lib/paths";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff, LockKeyhole } from "lucide-react";
-export function LoginForm() {
+export function LoginForm({ next = "/admin" }: { next?: string }) {
   const router = useRouter();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -28,7 +28,7 @@ export function LoginForm() {
           });
           const data = await r.json();
           if (!r.ok) throw Error(data.error);
-          router.replace("/admin");
+          router.replace(next);
           router.refresh();
         } catch (e) {
           setError(

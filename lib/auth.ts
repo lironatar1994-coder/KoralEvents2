@@ -25,6 +25,11 @@ export async function bootstrapAdmin() {
       [hashPassword(process.env.ADMIN_PASSWORD)],
     );
 }
+/* Only our own pages may be the way back after login. */
+export const safeNext = (value?: string | string[]) =>
+  typeof value === "string" && /^\/(?!\/)[\w\-./?=&%]*$/.test(value)
+    ? value
+    : "/admin";
 export async function isAdmin() {
   const token = (await cookies()).get("koral_session")?.value;
   if (!token || token.length !== 64) return false;

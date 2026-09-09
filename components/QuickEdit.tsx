@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { Modal } from "./Modal";
+import { Switch } from "./Switch";
 import { api, fromLocalInput, toLocalInput } from "@/lib/client";
 import { KoralEvent, dateLabel, timeLabel } from "@/lib/types";
 
@@ -34,6 +35,7 @@ export function QuickEdit({
     price: String(event.price),
     capacity: event.capacity === null ? "" : String(event.capacity),
     state: event.state,
+    qr_enabled: event.qr_enabled,
   });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -41,7 +43,7 @@ export function QuickEdit({
   useEffect(() => {
     first.current?.focus();
   }, []);
-  const set = (key: keyof typeof form, value: string) =>
+  const set = (key: keyof typeof form, value: string | boolean) =>
     setForm((f) => ({ ...f, [key]: value }));
   let dateHint = "";
   try {
@@ -73,6 +75,7 @@ export function QuickEdit({
           price: Number(form.price) || 0,
           capacity,
           state: form.state,
+          qr_enabled: form.qr_enabled,
         },
       );
       onSaved(saved);
@@ -188,6 +191,12 @@ export function QuickEdit({
             required
           />
         </label>
+        <Switch
+          checked={form.qr_enabled}
+          onChange={(v) => set("qr_enabled", v)}
+          label="כניסה עם QR"
+          hint="כרטיס עם קוד QR לכל מאושרת, לשליחה בוואטסאפ ולסריקה בכניסה."
+        />
         {error && (
           <p className="error-message" role="alert">
             {error}

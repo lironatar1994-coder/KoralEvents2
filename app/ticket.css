@@ -1,0 +1,548 @@
+/* =====================================================================
+   The ticket: what a guest opens from WhatsApp and holds up at the door,
+   and the door's own view of the same link. Night sky, one paper card.
+   ===================================================================== */
+.ticket-page {
+  min-height: 100svh;
+  background: var(--night);
+  color: var(--cream);
+  overflow: clip;
+}
+.ticket-sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% -5%, #c6405f4d, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 100% 70%, #b98a3c33, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 0% 95%, #c6405f26, transparent 70%);
+}
+.ticket-sky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ticket-main {
+  position: relative;
+  width: min(460px, calc(100% - 32px));
+  margin-inline: auto;
+  padding: 26px 0 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.ticket-main > .brand {
+  color: var(--cream);
+  animation: ticket-rise 0.7s var(--ease-out) both;
+}
+.ticket-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--gold-2);
+  animation: ticket-rise 0.7s var(--ease-out) 0.05s both;
+}
+
+/* ---------- The card ---------- */
+.ticket {
+  position: relative;
+  width: 100%;
+  border-radius: 26px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow:
+    0 40px 90px -30px #000000b3,
+    0 0 0 1px #f4dfb01a,
+    0 0 120px -40px #c6405f66;
+  animation: ticket-rise 0.9s var(--ease-out) 0.12s both;
+  overflow: hidden;
+}
+.ticket-head {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--night-2);
+  overflow: hidden;
+}
+.ticket-head img,
+.ticket-head .image-placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+.ticket-head .image-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--champagne);
+  background: var(--night-3);
+}
+.ticket-head img.image-contain {
+  object-fit: cover;
+}
+.ticket-head-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    #1a1120f2 0%,
+    #1a112099 45%,
+    #1a112014 80%,
+    transparent 100%
+  );
+}
+.ticket-head-text {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 18px 22px 20px;
+  color: var(--cream);
+}
+.ticket-head-text .k-tag {
+  margin-bottom: 10px;
+}
+.ticket-head-text h1 {
+  font-size: clamp(26px, 7vw, 32px);
+  line-height: 1.1;
+  color: #fff;
+  text-shadow: 0 2px 20px #0000008c;
+}
+.ticket-when {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--champagne);
+}
+.ticket-when span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+/* The tear line, with two bites out of the edges. */
+.ticket-notch {
+  position: relative;
+  height: 0;
+  border-top: 2px dashed #23161f2b;
+  margin: 0 18px;
+}
+.ticket-notch::before,
+.ticket-notch::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--night);
+  box-shadow: inset 0 0 0 1px #f4dfb01a;
+}
+.ticket-notch::before {
+  right: -32px;
+}
+.ticket-notch::after {
+  left: -32px;
+}
+.ticket-body {
+  padding: 24px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.ticket-guest {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+.ticket-guest small {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--rose-ink);
+}
+.ticket-guest strong {
+  font-family: var(--display);
+  font-size: clamp(30px, 8vw, 36px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.ticket-guests {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 6px auto 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--rose-soft);
+  color: var(--rose-ink);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+/* ---------- The QR ---------- */
+.ticket-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.ticket-qr-frame {
+  position: relative;
+  width: min(260px, 72vw);
+  aspect-ratio: 1;
+  padding: 14px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow:
+    0 22px 50px -24px #23161f80,
+    inset 0 0 0 1px #23161f14;
+  animation: ticket-glow 3.6s ease-in-out 1s infinite;
+}
+.ticket-qr-frame::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: 27px;
+  background: linear-gradient(135deg, var(--rose), var(--gold-2), var(--rose));
+  opacity: 0.9;
+}
+.ticket-qr-code {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: #23161f;
+  border-radius: 10px;
+}
+.ticket-code {
+  font-family: var(--latin);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--ink-mute);
+}
+.ticket-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: -2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.ticket-note svg {
+  color: var(--rose);
+}
+/* Once she is in, the code dims behind a gold seal. */
+.ticket-inside {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 24px;
+  background: #fffffff0;
+  backdrop-filter: blur(2px);
+  color: var(--ink);
+}
+.ticket-inside-mark {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  color: #fff;
+  box-shadow: 0 14px 30px -12px #b98a3c99;
+}
+.ticket-inside strong {
+  font-family: var(--display);
+  font-size: 30px;
+}
+.ticket-inside small {
+  font-size: 13px;
+  color: var(--ink-mute);
+}
+.ticket.is-inside .ticket-qr-frame {
+  animation: none;
+}
+/* Not ready yet: the same card, a quiet message instead of a code. */
+.ticket-waiting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 26px 18px;
+  border-radius: 20px;
+  border: 1px dashed #23161f33;
+  background: var(--paper-2);
+  text-align: center;
+}
+.ticket-waiting-mark {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 4px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--gold);
+}
+.ticket-waiting h2 {
+  font-size: 24px;
+}
+.ticket-waiting p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 30ch;
+}
+.ticket-facts {
+  list-style: none;
+  margin: 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--line-paper);
+}
+.ticket-facts li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.ticket-facts svg {
+  margin-top: 3px;
+  color: var(--rose);
+}
+.ticket-facts div {
+  display: flex;
+  flex-direction: column;
+}
+.ticket-facts small {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-mute);
+}
+.ticket-facts strong {
+  font-size: 16px;
+}
+.ticket-facts span {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.ticket-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 22px 16px;
+  font-family: var(--latin);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-mute);
+  background: var(--paper-2);
+}
+.ticket-foot i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+.ticket-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  animation: ticket-rise 0.9s var(--ease-out) 0.3s both;
+}
+.ticket-actions .k-btn {
+  flex: 1 1 160px;
+  min-height: 50px;
+  font-size: 14.5px;
+}
+.ticket-tip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--cream-mute);
+  animation: ticket-rise 0.9s var(--ease-out) 0.4s both;
+}
+.ticket-tip svg {
+  color: var(--gold-2);
+}
+@keyframes ticket-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ticket-glow {
+  50% {
+    box-shadow:
+      0 22px 50px -24px #23161f80,
+      inset 0 0 0 1px #23161f14,
+      0 0 0 6px #c6405f1a;
+  }
+}
+
+/* ---------- The door's view ---------- */
+.checkin-card {
+  width: 100%;
+  padding: 30px 22px 24px;
+  border-radius: 26px;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 40px 90px -30px #000000b3;
+  animation: ticket-rise 0.7s var(--ease-out) 0.1s both;
+}
+.checkin-mark {
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  margin-bottom: 6px;
+  color: #fff;
+}
+.tone-ok .checkin-mark {
+  background: linear-gradient(135deg, #2f9e5f, #1f7a47);
+  box-shadow: 0 18px 40px -16px #1f7a4799;
+}
+.tone-warn .checkin-mark {
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  box-shadow: 0 18px 40px -16px #b98a3c99;
+}
+.tone-bad .checkin-mark {
+  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+  box-shadow: 0 18px 40px -16px #c6405f99;
+}
+.checkin-card.is-fresh .checkin-mark {
+  animation: checkin-pop 0.6s var(--ease-pop) both;
+}
+@keyframes checkin-pop {
+  from {
+    transform: scale(0.4);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: none;
+  }
+}
+.checkin-card h1 {
+  font-size: clamp(26px, 7vw, 32px);
+  line-height: 1.15;
+}
+.tone-bad h1 {
+  color: var(--rose-ink);
+}
+.checkin-sub {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 34ch;
+}
+.checkin-guest {
+  width: 100%;
+  margin-top: 10px;
+  padding: 18px 16px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid var(--line-paper);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.checkin-guest strong {
+  font-family: var(--display);
+  font-size: 30px;
+  line-height: 1.1;
+}
+.checkin-guest-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+.checkin-guest-meta > * {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.checkin-guest-meta .ticket-code {
+  font-size: 14px;
+  letter-spacing: 0.16em;
+}
+.checkin-event {
+  font-size: 13px;
+  color: var(--ink-mute);
+}
+.checkin-card .error-message {
+  width: 100%;
+  margin: 4px 0 0;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  background: #fbe4e8;
+  border: 1px solid #c6405f55;
+  color: var(--rose-ink);
+  font-size: 13.5px;
+}
+.checkin-button {
+  width: 100%;
+  margin-top: 10px;
+  min-height: 60px;
+  font-size: 18px;
+}
+.checkin-undo {
+  margin-top: 6px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #c6405f55;
+  font-size: 14px;
+  padding: 0;
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-main > .brand,
+  .ticket-kicker,
+  .ticket,
+  .ticket-actions,
+  .ticket-tip,
+  .checkin-card,
+  .checkin-card.is-fresh .checkin-mark,
+  .ticket-qr-frame {
+    animation: none;
+  }
+}

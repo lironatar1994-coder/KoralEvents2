@@ -223,3 +223,56 @@ test("guests count as seats: a party larger than the free seats goes to the wait
     }),
   );
 });
+test("every registration carries a unique secret ticket token", async () => {
+  const id = await saveEvent({ ...base, capacity: null });
+  await register(id, person(60));
+  await register(id, person(61));
+  const rows = await registrations(id);
+  assert.equal(rows.length, 2);
+  for (const r of rows) assert.match(r.ticket_token, /^[a-f0-9]{32}$/);
+  assert.notEqual(rows[0].ticket_token, rows[1].ticket_token);
+  assert.equal(rows[0].checked_in_at, null);
+});
+test("a ticket is valid only when QR entry is on and the registration is approved", async () => {
+  const { getTicket, setCheckedIn } = await import("../lib/events");
+  const id = await saveEvent({ ...base, capacity: null });
+  assert.equal((await getEvent(id, true))!.qr_enabled, false);
+  await register(id, person(62));
+  const [row] = await registrations(id);
+  assert.equal(await getTicket("not-a-token"), null);
+  assert.equal(await getTicket("0".repeat(32)), null);
+  assert.equal((await getTicket(row.ticket_token))!.state, "qr-off");
+  await assert.rejects(setCheckedIn(row.ticket_token, true), /QR/);
+  await saveEvent({ ...base, capacity: null, qr_enabled: true }, id);
+  assert.equal((await getEvent(id, true))!.qr_enabled, true);
+  assert.equal((await getTicket(row.ticket_token))!.state, "not-approved");
+  await assert.rejects(setCheckedIn(row.ticket_token, true), /אושרה/);
+  await updateRegistration(id, row.id, { ...row, status: "approved" });
+  const ticket = (await getTicket(row.ticket_token))!;
+  assert.equal(ticket.state, "valid");
+  assert.equal(ticket.event.id, id);
+  assert.equal(ticket.registration.name, person(62).name);
+});
+test("check-in keeps the first time, flags a second scan, and can be undone", async () => {
+  const { getTicket, setCheckedIn } = await import("../lib/events");
+  const id = await saveEvent({ ...base, capacity: null, qr_enabled: true });
+  await register(id, person(63));
+  const [row] = await registrations(id);
+  await updateRegistration(id, row.id, { ...row, status: "approved" });
+  const first = await setCheckedIn(row.ticket_token, true);
+  assert.equal(first.already, false);
+  assert.ok(first.registration.checked_in_at);
+  assert.equal((await getTicket(row.ticket_token))!.state, "checked-in");
+  const second = await setCheckedIn(row.ticket_token, true);
+  assert.equal(second.already, true);
+  assert.equal(
+    second.registration.checked_in_at,
+    first.registration.checked_in_at,
+  );
+  const undone = await setCheckedIn(row.ticket_token, false);
+  assert.equal(undone.registration.checked_in_at, null);
+  assert.equal((await getTicket(row.ticket_token))!.state, "valid");
+  await updateRegistration(id, row.id, { ...row, status: "cancelled" });
+  assert.equal((await getTicket(row.ticket_token))!.state, "cancelled");
+  await assert.rejects(setCheckedIn(row.ticket_token, true), /בוטלה/);
+});

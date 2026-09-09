@@ -5,6 +5,7 @@ import "./typography.css";
 import "./dashboard.css";
 import "./site.css";
 import "./admin-theme.css";
+import "./ticket.css";
 export const metadata: Metadata = {
   metadataBase: new URL(
     appPath("/"),
