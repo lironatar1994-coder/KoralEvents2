@@ -174,7 +174,7 @@ export default async function Home() {
                 מי אנחנו
               </p>
               <h2 data-reveal>
-                אנחנו <span className="latin">Koral Events</span>.
+                אנחנו <span className="k-nowrap">״אישה לאישה מלכה״</span>.
                 <br />
                 <em>ערבי נשים לזיכוי הרבות.</em>
               </h2>

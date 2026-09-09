@@ -61,14 +61,18 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
       {pending > 0 && (
         <button
           className="pending-action"
-          onClick={() => setTab("pending")}
+          onClick={() => setTab(tab === "pending" ? "upcoming" : "pending")}
           aria-pressed={tab === "pending"}
         >
           <span>
             <strong>{pending}</strong> בקשות ממתינות לאישור
+            {tab === "pending" && (
+              <small>מוצגים רק אירועים עם בקשות, לפי הדחיפות</small>
+            )}
           </span>
           <span>
-            לטיפול <ArrowLeft size={18} />
+            {tab === "pending" ? "הצגת כל האירועים" : "לטיפול"}
+            <ArrowLeft size={18} />
           </span>
         </button>
       )}
@@ -76,6 +80,7 @@ export function AdminDashboard({ events }: { events: KoralEvent[] }) {
         <div className="tabs" aria-label="סינון אירועים">
           {[
             ["upcoming", "קרובים"],
+            ...(pending > 0 ? [["pending", "ממתינות לאישור"]] : []),
             ["draft", "טיוטות"],
             ["archive", "עברו וארכיון"],
           ].map(([key, label]) => (

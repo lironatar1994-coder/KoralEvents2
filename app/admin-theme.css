@@ -1059,3 +1059,12 @@
   background: var(--paper);
   color: var(--rose-ink);
 }
+
+/* The pending bar explains itself while it filters. */
+.admin-app .pending-action small {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 2px;
+}

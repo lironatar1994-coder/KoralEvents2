@@ -1158,6 +1158,9 @@
   line-height: 1.02;
   margin: 0 0 24px;
 }
+.k-about h2 .k-nowrap {
+  white-space: nowrap;
+}
 .k-about h2 em {
   font-style: normal;
   color: var(--champagne);

@@ -15,6 +15,8 @@ export function dashboardGroups(events: KoralEvent[], now = Date.now()) {
         e.state === "archived" ||
         (e.state !== "draft" && new Date(e.starts_at).getTime() <= now),
     ),
-    pending: upcoming.filter((e) => e.pending > 0),
+    pending: upcoming
+      .filter((e) => e.pending > 0)
+      .sort((a, b) => b.pending - a.pending),
   };
 }
