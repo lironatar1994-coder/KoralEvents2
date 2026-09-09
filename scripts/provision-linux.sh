@@ -12,11 +12,11 @@ config=/etc/nginx/sites-available/lawebs.co.il.conf
 test -f "$config"
 cp -a "$config" "$root/backups/nginx-$(date +%s).conf"
 cat > /etc/nginx/snippets/koralevents2.conf <<'NGINX'
-location = /Koralevents2 {
+location = /Koralevents {
     proxy_pass http://127.0.0.1:3111;
     include /etc/nginx/snippets/koralevents2-proxy.conf;
 }
-location ^~ /Koralevents2/ {
+location ^~ /Koralevents/ {
     proxy_pass http://127.0.0.1:3111;
     include /etc/nginx/snippets/koralevents2-proxy.conf;
 }

@@ -1,0 +1,174 @@
+/* =====================================================================
+   Management app: the same evening identity as the public site, kept dark
+   and calm for daily use on a phone. Layered after globals.css.
+   ===================================================================== */
+.admin-app {
+  --bg: #1a1120;
+  --panel: #23172b;
+  --panel-light: #2b1d34;
+  --text: #f8f1e6;
+  --muted: #c4b3c2;
+  --line: #f4dfb01f;
+  --gold: #e8607f;
+  --ink: #23161f;
+  --champagne: #f4dfb0;
+  --radius: 20px;
+  background:
+    radial-gradient(ellipse 60% 40% at 100% 0%, #c6405f24, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 0% 100%, #b98a3c1c, transparent 70%),
+    var(--bg);
+  color: var(--text);
+}
+.admin-app ::selection {
+  background: #c6405f;
+  color: #fff;
+}
+/* Serif display for the moments that name something: the page, the event,
+   the participant. Controls stay in Heebo. */
+.admin-app .admin-title-row h1,
+.admin-app .manager-hero h1,
+.admin-app .attendees-heading h2,
+.admin-app .admin-onboarding h2,
+.admin-app .admin-event-body h2,
+.admin-app .login-form h1,
+.admin-app .editor-preview h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.admin-app .admin-title-row h1 {
+  font-size: 46px;
+}
+.admin-app .admin-title-row h1 .gold,
+.admin-app .gold {
+  color: #e8607f;
+}
+.admin-app .manager-hero h1 {
+  font-size: 40px;
+  line-height: 1.08;
+}
+.admin-app .admin-event-body h2 {
+  font-size: 26px;
+  font-weight: 700;
+}
+.admin-app .attendees-heading h2 {
+  font-size: 30px;
+}
+.admin-app .attendee-card h3 {
+  font-weight: 700;
+}
+/* Header: glass bar, like the public one on the way back up. */
+.admin-app .admin-header {
+  background: #1a1120d9;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
+.admin-app .admin-header .admin-nav a.active {
+  background: #c6405f2b;
+  color: var(--text);
+}
+.admin-app .admin-header .admin-nav a.active svg {
+  color: var(--champagne);
+}
+/* Surfaces: one radius, one hairline, a little more air. */
+.admin-app .stat-card,
+.admin-app .overview,
+.admin-app .admin-event-card,
+.admin-app .attendee-card,
+.admin-app .admin-onboarding,
+.admin-app .pending-action,
+.admin-app .manager-summary,
+.admin-app .editor-card,
+.admin-app .login-form,
+.admin-app .modal {
+  border-radius: var(--radius);
+  border-color: var(--line);
+  background-color: var(--panel);
+}
+.admin-app .admin-event-card:hover {
+  border-color: #f4dfb04d;
+}
+.admin-app .overview svg {
+  background: #c6405f26;
+  color: #f4a6b8;
+}
+.admin-app .overview .is-hot strong,
+.admin-app .stat-card strong {
+  color: var(--champagne);
+}
+.admin-app .tabs button.selected {
+  color: var(--champagne);
+  border-color: var(--champagne);
+}
+/* Buttons: the same rose pill as the public site. */
+.admin-app .button {
+  border-radius: 999px;
+  font-weight: 700;
+}
+.admin-app .gold-button {
+  background: #c6405f;
+  color: #fff;
+  box-shadow: 0 12px 30px -12px #c6405f99;
+}
+.admin-app .gold-button:hover {
+  background: #a3304b;
+}
+.admin-app .outline-button {
+  border-color: #f4dfb040;
+}
+.admin-app .outline-button:hover {
+  background: #f4dfb00f;
+  border-color: #f4dfb080;
+}
+.admin-app .small-button {
+  border-radius: 999px;
+}
+/* Fields */
+.admin-app input,
+.admin-app select,
+.admin-app textarea {
+  background: #150d1a;
+  border-color: #f4dfb02b;
+  border-radius: 14px;
+}
+.admin-app input:focus-visible,
+.admin-app select:focus-visible,
+.admin-app textarea:focus-visible {
+  outline: none;
+  border-color: #e8607f;
+  box-shadow: 0 0 0 4px #c6405f30;
+}
+.admin-app button:focus-visible,
+.admin-app a:focus-visible {
+  outline: 2px solid var(--champagne);
+  outline-offset: 3px;
+}
+/* Status colours stay semantic, only warmed up. */
+.admin-app .status-approved {
+  color: #9be3b4;
+}
+.admin-app .status-pending {
+  color: #f4cd7a;
+}
+/* Login: a small invitation card. */
+.admin-app .login-form {
+  border: 1px solid var(--line);
+  box-shadow: 0 40px 80px -40px #000;
+}
+.admin-app .login-form h1 {
+  font-size: 38px;
+}
+.admin-app .login-lock {
+  color: var(--champagne);
+}
+@media (max-width: 700px) {
+  .admin-app .admin-title-row h1 {
+    font-size: 36px;
+  }
+  .admin-app .manager-hero h1 {
+    font-size: 32px;
+  }
+  .admin-app .attendees-heading h2 {
+    font-size: 26px;
+  }
+}

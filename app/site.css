@@ -1550,6 +1550,60 @@
   overflow-wrap: anywhere;
   margin: 12px 0 0;
 }
+.k-share-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 22px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-mute);
+}
+.public-site .k-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid #23161f2b;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 0.25s,
+    background 0.25s,
+    transform 0.3s var(--ease-out);
+}
+.public-site .k-share svg {
+  color: #25d366;
+}
+@media (hover: hover) and (pointer: fine) {
+  .public-site .k-share:hover {
+    border-color: var(--ink);
+    transform: translateY(-1px);
+  }
+}
+.k-proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-soft);
+}
+.k-proof svg {
+  width: 12px;
+  height: 12px;
+  fill: var(--gold);
+}
+.k-proof b {
+  font-family: var(--display);
+  font-size: 22px;
+  color: var(--rose);
+  line-height: 1;
+}
 .k-detail-hint {
   display: flex;
   gap: 10px;
@@ -2088,22 +2142,35 @@
     font-size: 32px;
   }
   .k-hero {
-    padding-bottom: 76px;
-    align-items: flex-end;
+    --hero-photo-height: clamp(350px, 108vw, 560px);
+    min-height: 100svh;
+    padding: calc(var(--hero-photo-height) - 48px) 0 64px;
+    align-items: flex-start;
+  }
+  .k-hero-media {
+    height: var(--hero-photo-height);
+    bottom: auto;
+  }
+  .k-hero-body {
+    gap: 24px;
   }
   .k-hero-shade {
+    height: calc(var(--hero-photo-height) + 1px);
+    bottom: auto;
     background:
       linear-gradient(
         0deg,
         var(--night) 0%,
-        #1a1120e6 28%,
-        #1a112059 60%,
-        #1a112000 82%
+        #1a1120b3 14%,
+        #1a112000 42%
       ),
-      linear-gradient(180deg, #1a1120bf, #1a112000 34%);
+      linear-gradient(180deg, #1a112099, #1a112000 24%);
   }
   .k-hero-media img {
-    object-position: center 60%;
+    /* Keep the original women together, with no regenerated mobile faces. */
+    object-position: left top;
+    animation: none;
+    will-change: auto;
   }
   .k-kicker {
     font-size: 11.5px;

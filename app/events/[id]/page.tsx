@@ -22,6 +22,7 @@ import {
 import { dateLabel, timeLabel, priceLabel } from "@/lib/types";
 import { RegistrationForm } from "@/components/RegistrationForm";
 import { ScrollReveal } from "@/components/ScrollReveal";
+import { ShareEvent } from "@/components/ShareEvent";
 export const dynamic = "force-dynamic";
 export async function generateMetadata({
   params,
@@ -34,9 +35,11 @@ export async function generateMetadata({
     description: e?.subtitle || e?.description.slice(0, 160),
     openGraph: e
       ? {
+          type: "article",
+          locale: "he_IL",
+          siteName: "Koral Events",
           title: e.title,
-          description: e.subtitle,
-          images: e.image ? [e.image] : [],
+          description: e.subtitle || e.description.slice(0, 160),
         }
       : undefined,
   };
@@ -113,6 +116,13 @@ export default async function EventPage({
             <p className="k-detail-desc" data-reveal>
               {e.description}
             </p>
+            <div className="k-share-row" data-reveal>
+              <ShareEvent
+                title={e.title}
+                when={`${dateLabel(e.starts_at, { weekday: "long" })} ב-${timeLabel(e.starts_at)}`}
+              />
+              <span>רוצה לבוא עם מישהי? שלחי לה קודם.</span>
+            </div>
             {e.price > 0 && (
               <p className="k-detail-hint" data-reveal>
                 <Info size={16} />

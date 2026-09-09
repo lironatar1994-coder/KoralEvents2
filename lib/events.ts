@@ -213,6 +213,13 @@ export async function removeRegistration(eventId: string, id: string) {
     eventId,
   ]);
 }
+/* Women who actually came so far, across every evening including archived ones. */
+export async function womenSoFar() {
+  const { rows } = await query<{ total: number }>(
+    "SELECT coalesce(sum(guests),0) AS total FROM registrations WHERE status='approved'",
+  );
+  return Number(rows[0]?.total ?? 0);
+}
 export async function rateLimit(key: string, limit: number, seconds: number) {
   await query(
     "DELETE FROM rate_limits WHERE expires_at<strftime('%Y-%m-%dT%H:%M:%fZ','now')",

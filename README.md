@@ -27,7 +27,7 @@ Node.js 22.14 ומעלה נדרש.
 
 ## עדכון GitHub ופרוד
 
-הכתובת: https://lawebs.co.il/Koralevents2 — ניהול: https://lawebs.co.il/Koralevents2/admin.
+הכתובת: https://lawebs.co.il/Koralevents — ניהול: https://lawebs.co.il/Koralevents/admin.
 המאגר הפרטי: https://github.com/lironatar1994-coder/KoralEvents2.
 
 מתיקיית הפרויקט ב־PowerShell:
@@ -42,14 +42,14 @@ Node.js 22.14 ומעלה נדרש.
 נדרשים Node.js, Git, גישה לחשבון GitHub וחיבור SSH ל־`root@vee-app.co.il`.
 הסקריפט בודק טיפוסים וטסטים ומעלה את הקוד. השרת מושך מ־GitHub רק את השינויים באמצעות deploy key לקריאה בלבד, ובונה ארכיון של אותו commit בדיוק; אין העלאה חוזרת מהמחשב של כל התמונות. בשרת מתבצעת בניית Linux עם worker יחיד ומגבלת זיכרון; האתר הקודם ממשיך לפעול עד שהבנייה מסתיימת. החלפת הגרסה מפעילה מחדש את השירות ולכן צפויה הפסקה קצרה. אם בדיקת הבריאות המקומית או הציבורית נכשלת, קוד הגרסה הקודמת מופעל מחדש. מסד הנתונים אינו משוחזר אוטומטית.
 
-השירות `koralevents2` מאזין רק ב־`127.0.0.1:3111`, מאחורי Nginx וה־HTTPS הקיים. `NEXT_PUBLIC_BASE_PATH=/Koralevents2` נקבע בזמן הבנייה. הנתונים והתמונות נשמרים ב־`/opt/koralevents2/shared`, מחוץ לתיקיות הגרסאות. הסיסמה הראשונית נוצרת אקראית ונשמרת רק בשרת ב־`/opt/koralevents2/shared/app.env`; היא אינה מופיעה ב־GitHub. קובצי הדגמה מקומיים אינם מועתקים.
+השירות `koralevents2` מאזין רק ב־`127.0.0.1:3111`, מאחורי Nginx וה־HTTPS הקיים. `NEXT_PUBLIC_BASE_PATH=/Koralevents` נקבע בזמן הבנייה. הנתונים והתמונות נשמרים ב־`/opt/koralevents2/shared`, מחוץ לתיקיות הגרסאות. הסיסמה הראשונית נוצרת אקראית ונשמרת רק בשרת ב־`/opt/koralevents2/shared/app.env`; היא אינה מופיעה ב־GitHub. קובצי הדגמה מקומיים אינם מועתקים.
 
 לפני עדכון מסד קיים נוצר גיבוי SQLite עקבי ב־`/opt/koralevents2/backups`. תיקיות גרסאות וגיבויים נשמרות; יש לנטר מקום בדיסק ולמחוק גרסאות ישנות ידנית תוך שמירת `current` והנתיב הרשום ב־`previous-release`. הגיבוי האוטומטי לפני עדכון אינו תחליף לגיבוי יומי וחיצוני של מסד הנתונים והתמונות.
 
 ```sh
 systemctl status koralevents2
 journalctl -u koralevents2 -n 100 --no-pager
-curl -f https://lawebs.co.il/Koralevents2/api/health
+curl -f https://lawebs.co.il/Koralevents/api/health
 ```
 
 ההקמה החד־פעמית של השירות מתועדת ב־`scripts/provision-linux.sh`; היא מיועדת לשרת הקיים בלבד. בנוסף מוגדר מאגר bare ב־`/opt/koralevents2/source.git` שמצביע למאגר GitHub. עדכונים שוטפים אינם משנים את Nginx. `/api/health` מחזיר גם את ה־commit הפעיל.

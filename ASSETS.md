@@ -58,3 +58,9 @@ Secondary demo images are downloaded from Unsplash by `scripts/seed.ts`:
 - `photo-1514525253161-7a46d19cd819` — concert lights.
 
 Heebo, Frank Ruhl Libre (Hebrew display serif) and Cormorant Garamond (Latin wordmark) are self-hosted in `public/fonts` under the SIL Open Font License, included in `public/fonts/OFL.txt`. The public identity lives in `app/site.css`. Interface icons use lucide-react. The wordmark and favicon are rendered in code.
+
+## Link previews, favicon and management theme
+
+- `app/opengraph-image.tsx` and `app/events/[id]/opengraph-image.tsx` render the WhatsApp/Facebook preview images on demand (1200 x 630 JPEG) from the signature photo or the event photo, using `lib/og.tsx`. The renderer lays text out left-to-right only, so `lib/og.tsx` hands it Hebrew in visual order and wraps titles by hand. Static TTF copies of Frank Ruhl Libre, Cormorant Garamond and Heebo for that renderer live in `assets/fonts` (OFL).
+- `public/icon.svg`, `icon-512.png` and `apple-touch-icon.png` are a Cormorant Garamond italic K in champagne on night plum with the gold spark, generated from the wordmark font outline.
+- `app/admin-theme.css` layers the public identity (serif headings, rose buttons, champagne accents) over the management app without changing its layout.

@@ -243,6 +243,9 @@ export function EventEditor({ event }: { event?: KoralEvent }) {
                 <ImagePlus size={36} />
                 <strong>התמונה של הערב</strong>
                 <span>לחצי לבחירת תמונה או פלייר מהטלפון</span>
+                <small className="upload-tip">
+                  פנים, חיוך, אור חם. לא גב למצלמה.
+                </small>
                 <small>JPG, PNG, WebP · עד 10MB</small>
               </>
             )}

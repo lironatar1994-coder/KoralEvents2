@@ -25,7 +25,7 @@ try {
     if ($Target -eq 'Prod') {
         if (@(Run git @('status', '--porcelain')).Count) { throw 'Prod requires a clean working tree; use All to commit and push changes.' }
     } else {
-        $paths = @('.claude','app','components','lib','public','scripts','tests','design','package.json','package-lock.json',
+        $paths = @('.claude','app','assets','components','lib','public','scripts','tests','design','package.json','package-lock.json',
             'next.config.ts','next-env.d.ts','tsconfig.json','playwright.config.ts','README.md','AGENTS.md','CLAUDE.md',
             'ASSETS.md','VERIFICATION.md','Dockerfile','compose.yaml','Caddyfile','.dockerignore','.gitignore','.gitattributes','.env.example','deploy.ps1')
         $staged = @(Run git @('diff', '--cached', '--name-only'))
@@ -58,7 +58,7 @@ mv "$archive" '/opt/koralevents2/incoming/__REV__.tar.gz'
     Run ssh @('-o','BatchMode=yes','-o','ConnectTimeout=15',$SSHHost,$prepare.Replace('__REV__',$revision).Replace([string][char]13,''))
     # The deployment code comes from the exact archive published to GitHub.
     Run ssh @('-o','BatchMode=yes',$SSHHost,"tar -xOf /opt/koralevents2/incoming/$revision.tar.gz scripts/deploy-linux.sh | bash -s -- $revision")
-    $health = Invoke-RestMethod 'https://lawebs.co.il/Koralevents2/api/health'
+    $health = Invoke-RestMethod 'https://lawebs.co.il/Koralevents/api/health'
     if (-not $health.ok -or $health.revision -ne $revision) { throw 'Public health/revision verification failed.' }
-    Write-Host "Live: https://lawebs.co.il/Koralevents2 ($revision)" -ForegroundColor Green
+    Write-Host "Live: https://lawebs.co.il/Koralevents ($revision)" -ForegroundColor Green
 } finally { Pop-Location }

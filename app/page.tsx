@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUpLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { getEvents } from "@/lib/events";
+import { getEvents, womenSoFar } from "@/lib/events";
 import { dateLabel, timeLabel } from "@/lib/types";
 import {
   Header,
@@ -41,7 +41,7 @@ const steps = [
 ];
 
 export default async function Home() {
-  const events = await getEvents();
+  const [events, women] = await Promise.all([getEvents(), womenSoFar()]);
   const [featured, ...rest] = events;
   const openCount = events.filter((e) => e.state === "published").length;
   return (
@@ -129,12 +129,20 @@ export default async function Home() {
                   הערבים <em>הקרובים</em>
                 </h2>
               </div>
-              {openCount > 0 && (
-                <p className="k-section-note">
-                  {openCount === 1
-                    ? "ערב אחד פתוח להרשמה"
-                    : `${openCount} ערבים פתוחים להרשמה`}
+              {women >= 50 ? (
+                <p className="k-section-note k-proof">
+                  <Spark />
+                  כבר <b>{women.toLocaleString("he-IL")}</b> נשים הגיעו לערבים
+                  שלנו
                 </p>
+              ) : (
+                openCount > 0 && (
+                  <p className="k-section-note">
+                    {openCount === 1
+                      ? "ערב אחד פתוח להרשמה"
+                      : `${openCount} ערבים פתוחים להרשמה`}
+                  </p>
+                )
               )}
             </header>
             {featured ? (

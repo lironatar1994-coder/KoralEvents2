@@ -18,7 +18,7 @@ build=$(mktemp -d "$root/build.XXXXXXXX")
 trap 'rm -rf -- "$build"' EXIT
 tar -xzf "$root/incoming/$revision.tar.gz" -C "$build"
 cd "$build"
-export NEXT_PUBLIC_BASE_PATH=/Koralevents2 NEXT_TELEMETRY_DISABLED=1
+export NEXT_PUBLIC_BASE_PATH=/Koralevents NEXT_TELEMETRY_DISABLED=1
 export APP_ORIGIN=https://lawebs.co.il NODE_OPTIONS=--max-old-space-size=640
 nice -n 10 npm ci --no-audit --no-fund
 nice -n 10 npm run build
@@ -80,13 +80,13 @@ rollback() {
 systemctl restart koralevents2 || rollback
 healthy=0
 for attempt in {1..30}; do
-    if curl -fsS http://127.0.0.1:3111/Koralevents2/api/health | grep -q "$revision"; then healthy=1; break; fi
+    if curl -fsS http://127.0.0.1:3111/Koralevents/api/health | grep -q "$revision"; then healthy=1; break; fi
     sleep 2
 done
 [[ "$healthy" = 1 ]] || rollback
-if ! curl -fsS https://lawebs.co.il/Koralevents2/api/health | grep -q "$revision"; then rollback; fi
+if ! curl -fsS https://lawebs.co.il/Koralevents/api/health | grep -q "$revision"; then rollback; fi
 for asset in icon.svg apple-touch-icon.png icon-512.png; do
-    if ! curl -fsS "https://lawebs.co.il/Koralevents2/$asset" | cmp -s "$release/public/$asset" -; then rollback; fi
+    if ! curl -fsS "https://lawebs.co.il/Koralevents/$asset" | cmp -s "$release/public/$asset" -; then rollback; fi
 done
 printf '%s\n' "$previous" > "$root/previous-release"
 echo "Healthy release: $revision"
