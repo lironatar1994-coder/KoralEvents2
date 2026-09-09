@@ -71,7 +71,7 @@ export function EventManager({
   const ticketLink = (row: Registration) =>
     `${origin}${ticketPath(row.ticket_token)}`;
   const ticketMessage = (row: Registration) =>
-    `היי ${row.name}, הנה כרטיס הכניסה שלך ל״${event.title}״ 🎟️\n${ticketLink(row)}\nשמרי את הקישור. בכניסה מציגות את קוד ה-QR שבמסך, וזהו.\nנפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}.\nKoral Events`;
+    `היי ${row.name}, הנה כרטיס הכניסה שלך ל״${event.title}״ 🎟️\n${ticketLink(row)}\nשמרי את הקישור. בכניסה מציגות את קוד ה-QR שבמסך, וזהו.\nנפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}.\n״אישה לאישה מלכה״`;
   const whatsapp = (row: Registration, text: string) =>
     `https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(text)}`;
   function open(target: Registration | "new") {
@@ -543,7 +543,7 @@ export function EventManager({
                   className="row-action whatsapp"
                   aria-label={`וואטסאפ ל${row.name}`}
                   title="וואטסאפ"
-                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, כאן Koral Events לגבי ״${event.title}״. `)}`}
+                  href={`https://wa.me/972${row.phone.slice(1)}?text=${encodeURIComponent(`היי ${row.name}, כאן ״אישה לאישה מלכה״ לגבי ״${event.title}״. `)}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -557,7 +557,7 @@ export function EventManager({
                   title="שליחת אישור בוואטסאפ"
                   href={whatsapp(
                     row,
-                    `היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${origin}${appPath(`/events/${event.id}`)}${event.qr_enabled ? `\n🎟️ כרטיס הכניסה שלך עם קוד QR, להצגה בכניסה: ${ticketLink(row)}` : ""}\nמחכה לראותך, Koral Events`,
+                    `היי ${row.name}, ההשתתפות שלך ב״${event.title}״ אושרה! נפגשות ב-${dateLabel(event.starts_at)} בשעה ${timeLabel(event.starts_at)}, ${event.location}${event.address ? `, ${event.address}` : ""}. ${event.price > 0 ? `עלות ההשתתפות: ₪${event.price}. התשלום בתיאום איתי. ` : ""}כל הפרטים: ${origin}${appPath(`/events/${event.id}`)}${event.qr_enabled ? `\n🎟️ כרטיס הכניסה שלך עם קוד QR, להצגה בכניסה: ${ticketLink(row)}` : ""}\nמחכה לראותך, ״אישה לאישה מלכה״`,
                   )}
                   target="_blank"
                   rel="noreferrer"
